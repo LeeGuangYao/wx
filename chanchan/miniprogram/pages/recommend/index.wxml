@@ -1,0 +1,128 @@
+<view class="page">
+  <view class="bg-decor"></view>
+
+  <view class="topbar">
+    <view class="topbar-left">
+      <text class="topbar-date">{{today}} · {{weekday}}</text>
+      <text class="topbar-title">今天吃什么</text>
+    </view>
+    <view class="topbar-fav" bindtap="onTapFavList">
+      <text class="topbar-fav-icon">♥</text>
+      <text class="topbar-fav-num">{{favCount}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{slot}}" class="slot-row">
+    <view class="slot-chip">
+      <text class="slot-label">{{slot.label}}推荐</text>
+    </view>
+    <text class="slot-hint">{{slot.hint}}</text>
+  </view>
+
+  <view wx:if="{{loading && !recipe}}" class="state">
+    <view class="state-dot"></view>
+    <text class="state-text">正在为你挑选一道菜…</text>
+  </view>
+
+  <view wx:elif="{{error}}" class="state">
+    <text class="state-text error">{{error}}</text>
+    <view class="state-btn" bindtap="onTapChange">重新推荐</view>
+  </view>
+
+  <block wx:elif="{{recipe}}">
+    <view class="hero" bindtap="onTapCard">
+      <view class="hero-inner" style="background: {{gradient}};">
+        <view class="hero-top">
+          <view wx:if="{{recipe.type_name}}" class="hero-tag">{{recipe.type_name}}</view>
+          <view
+            class="fav-btn {{favorited ? 'fav-on' : ''}}"
+            catchtap="onToggleFavorite"
+          >
+            <text class="fav-icon">{{favorited ? '♥' : '♡'}}</text>
+          </view>
+        </view>
+
+        <view class="hero-body">
+          <view class="hero-badge">
+            <text class="hero-initial">{{initial}}</text>
+          </view>
+          <text class="hero-name">{{recipe.cp_name}}</text>
+          <text wx:if="{{recipe.texing}}" class="hero-sub">{{recipe.texing}}</text>
+        </view>
+
+        <view class="stats-row">
+          <view class="stat">
+            <text class="stat-num">{{ingCount}}</text>
+            <text class="stat-label">原料</text>
+          </view>
+          <view class="stat-divider"></view>
+          <view class="stat">
+            <text class="stat-num">{{seaCount}}</text>
+            <text class="stat-label">调料</text>
+          </view>
+          <view class="stat-divider"></view>
+          <view class="stat">
+            <text class="stat-num">{{stepCount}}</text>
+            <text class="stat-label">步骤</text>
+          </view>
+        </view>
+
+        <view class="hero-cta">
+          <text class="hero-cta-text">查看完整做法</text>
+          <text class="hero-cta-arrow">→</text>
+        </view>
+      </view>
+    </view>
+
+    <view wx:if="{{ingredients.length}}" class="preview-card">
+      <view class="preview-head">
+        <view class="preview-bar"></view>
+        <text class="preview-title">所需食材一览</text>
+      </view>
+      <view class="preview-chips">
+        <text wx:for="{{ingredients}}" wx:key="index" class="preview-chip">{{item}}</text>
+        <text wx:if="{{ingCount > ingredients.length}}" class="preview-more">+{{ingCount - ingredients.length}}</text>
+      </view>
+      <view wx:if="{{seasonings.length}}" class="preview-chips preview-chips-alt">
+        <text wx:for="{{seasonings}}" wx:key="index" class="preview-chip preview-chip-alt">{{item}}</text>
+        <text wx:if="{{seaCount > seasonings.length}}" class="preview-more">+{{seaCount - seasonings.length}}</text>
+      </view>
+    </view>
+
+    <view class="btn-row">
+      <view class="btn btn-primary {{loading ? 'btn-disabled' : ''}}" bindtap="onTapChange">
+        <text class="btn-ico">↻</text>
+        <text class="btn-label">换一道</text>
+      </view>
+      <view class="btn btn-ghost" bindtap="onTapCard">
+        <text class="btn-ico">›</text>
+        <text class="btn-label">查看做法</text>
+      </view>
+    </view>
+
+    <view wx:if="{{history.length > 1}}" class="history">
+      <view class="history-head">
+        <text class="history-title">近期挑过的菜</text>
+      </view>
+      <scroll-view class="history-scroll" scroll-x enable-flex>
+        <view
+          wx:for="{{history}}"
+          wx:key="id"
+          class="history-item"
+          data-id="{{item.id}}"
+          bindtap="onTapHistory"
+        >
+          <view class="history-avatar" style="background: {{item._gradient}};">
+            <text class="history-initial">{{item._initial}}</text>
+          </view>
+          <text class="history-name">{{item.cp_name}}</text>
+          <text wx:if="{{item.type_name}}" class="history-tag">{{item.type_name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <view class="tip-row">
+      <text class="tip-text">数据来源 · 天行菜谱 · 每次随机挑选</text>
+    </view>
+  </block>
+</view>

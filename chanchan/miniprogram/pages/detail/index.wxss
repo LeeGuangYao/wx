@@ -1,0 +1,392 @@
+page {
+  background: #F7F4EF;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+}
+
+/* ── State ── */
+.state-text {
+  text-align: center;
+  color: #8A7865;
+  margin-top: 140rpx;
+  font-size: 28rpx;
+}
+
+.state-text.error {
+  color: #E84B3C;
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  padding: 48rpx 44rpx 60rpx;
+  border-bottom-left-radius: 52rpx;
+  border-bottom-right-radius: 52rpx;
+  color: #fff;
+  box-shadow: 0 24rpx 64rpx rgba(255, 94, 58, 0.24);
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  right: -70rpx;
+  top: -70rpx;
+  width: 340rpx;
+  height: 340rpx;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  left: -50rpx;
+  bottom: -50rpx;
+  width: 220rpx;
+  height: 220rpx;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 50%;
+}
+
+.hero-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-tag {
+  font-size: 24rpx;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 10rpx 26rpx;
+  border-radius: 999rpx;
+  font-weight: 500;
+  letter-spacing: 0.5rpx;
+}
+
+.fav-btn {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fav-btn.fav-on {
+  background: #fff;
+}
+
+.fav-icon {
+  font-size: 38rpx;
+  color: #fff;
+  line-height: 1;
+}
+
+.fav-btn.fav-on .fav-icon {
+  color: #FF5E3A;
+}
+
+.hero-body {
+  position: relative;
+  z-index: 1;
+  margin-top: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-badge {
+  width: 124rpx;
+  height: 124rpx;
+  border-radius: 34rpx;
+  background: rgba(255, 255, 255, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid rgba(255, 255, 255, 0.28);
+}
+
+.hero-initial {
+  font-size: 62rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.hero-name {
+  margin-top: 32rpx;
+  font-size: 54rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+  letter-spacing: 2rpx;
+}
+
+.hero-sub {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1.65;
+}
+
+/* ── Meta stats ── */
+.meta-row {
+  position: relative;
+  z-index: 1;
+  margin-top: 48rpx;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 28rpx;
+  padding: 28rpx 0;
+}
+
+.meta-cell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.meta-num {
+  font-size: 42rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.meta-label {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.80);
+  letter-spacing: 0.5rpx;
+}
+
+.meta-divider {
+  width: 1.5rpx;
+  height: 52rpx;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Content sections ── */
+.content {
+  padding: 36rpx 28rpx 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.card {
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 36rpx;
+  box-shadow: 0 4rpx 20rpx rgba(42, 33, 24, 0.055), 0 1rpx 4rpx rgba(42, 33, 24, 0.04);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 28rpx;
+}
+
+.card-bar {
+  width: 6rpx;
+  height: 34rpx;
+  background: linear-gradient(180deg, #FF8A5B, #FF5E3A);
+  border-radius: 3rpx;
+  margin-right: 18rpx;
+}
+
+.card-bar-alt {
+  background: linear-gradient(180deg, #FFB38A, #FF8A3D);
+}
+
+.card-title {
+  flex: 1;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2A2118;
+  letter-spacing: 0.5rpx;
+}
+
+.card-count {
+  font-size: 24rpx;
+  color: #C4B5A5;
+  font-weight: 500;
+}
+
+/* ── Ingredient chips ── */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.chip {
+  font-size: 26rpx;
+  color: #4A3D32;
+  background: #FFF5EE;
+  padding: 14rpx 26rpx;
+  border-radius: 18rpx;
+  border: 1rpx solid #FFE4D0;
+  font-weight: 500;
+}
+
+.chip-alt {
+  background: #FFF9F0;
+  color: #8A5A2B;
+  border-color: #FFE9C7;
+}
+
+/* ── Steps ── */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+}
+
+.step-num {
+  flex-shrink: 0;
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 18rpx;
+  background: linear-gradient(135deg, #FF8A5B, #FF5E3A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6rpx 16rpx rgba(255, 94, 58, 0.28);
+  margin-top: 4rpx;
+}
+
+.step-num-text {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.step-body {
+  flex: 1;
+  background: #FBF7F2;
+  border-radius: 24rpx;
+  padding: 24rpx 28rpx;
+  border: 1rpx solid #F0E8DD;
+}
+
+.step-text {
+  font-size: 28rpx;
+  color: #3A2F25;
+  line-height: 1.8;
+}
+
+/* ── Tip card ── */
+.tip-card {
+  background: linear-gradient(135deg, #FFF8EC 0%, #FFF2DC 100%);
+  border: 1.5rpx solid #FFE3B0;
+}
+
+.tip-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.tip-icon {
+  font-size: 28rpx;
+  color: #E8973B;
+  margin-right: 14rpx;
+}
+
+.tip-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #8A5A2B;
+  letter-spacing: 0.5rpx;
+}
+
+.tip-text {
+  font-size: 28rpx;
+  color: #6B4A20;
+  line-height: 1.8;
+}
+
+.footer-space {
+  height: 48rpx;
+}
+
+/* ── Fixed action bar ── */
+.action-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20rpx 28rpx calc(24rpx + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24rpx);
+  display: flex;
+  gap: 20rpx;
+  border-top: 1rpx solid #EDE6DC;
+}
+
+.action-btn {
+  flex: 1;
+  height: 96rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12rpx;
+  font-weight: 600;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+
+.action-btn:active {
+  opacity: 0.82;
+}
+
+.action-primary {
+  background: #FFF5EE;
+  color: #FF5E3A;
+  border: 1.5rpx solid #FFD4BF;
+}
+
+.action-primary-on {
+  background: linear-gradient(135deg, #FF8A5B, #FF5E3A);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 10rpx 28rpx rgba(255, 94, 58, 0.32);
+}
+
+.action-share {
+  background: linear-gradient(135deg, #3D2E24, #2A1F17);
+  color: #fff;
+}
+
+.action-share::after {
+  border: none;
+}
+
+.action-icon {
+  font-size: 32rpx;
+  line-height: 1;
+}
+
+.action-label {
+  font-size: 28rpx;
+}

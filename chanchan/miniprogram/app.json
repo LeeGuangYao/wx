@@ -1,0 +1,33 @@
+{
+  "pages": [
+    "pages/list/index",
+    "pages/recommend/index",
+    "pages/detail/index"
+  ],
+  "tabBar": {
+    "color": "#B5A99B",
+    "selectedColor": "#FF5E3A",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/list/index",
+        "text": "菜谱"
+      },
+      {
+        "pagePath": "pages/recommend/index",
+        "text": "今天吃什么"
+      }
+    ]
+  },
+  "window": {
+    "backgroundColor": "#F7F4EF",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#FF6B35",
+    "navigationBarTitleText": "菜谱查询",
+    "navigationBarTextStyle": "white"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

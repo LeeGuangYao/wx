@@ -1,0 +1,103 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="state-text">加载中…</view>
+  <view wx:elif="{{error}}" class="state-text error">{{error}}</view>
+
+  <block wx:elif="{{recipe}}">
+    <view class="hero" style="background: {{gradient}};">
+      <view class="hero-top">
+        <view wx:if="{{recipe.type_name}}" class="hero-tag">{{recipe.type_name}}</view>
+        <view class="fav-btn {{favorited ? 'fav-on' : ''}}" bindtap="onToggleFavorite">
+          <text class="fav-icon">{{favorited ? '♥' : '♡'}}</text>
+        </view>
+      </view>
+
+      <view class="hero-body">
+        <view class="hero-badge">
+          <text class="hero-initial">{{initial}}</text>
+        </view>
+        <text class="hero-name">{{recipe.cp_name}}</text>
+        <text wx:if="{{recipe.texing}}" class="hero-sub">{{recipe.texing}}</text>
+      </view>
+
+      <view class="meta-row">
+        <view class="meta-cell">
+          <text class="meta-num">{{ingredients.length}}</text>
+          <text class="meta-label">原料</text>
+        </view>
+        <view class="meta-divider"></view>
+        <view class="meta-cell">
+          <text class="meta-num">{{seasonings.length}}</text>
+          <text class="meta-label">调料</text>
+        </view>
+        <view class="meta-divider"></view>
+        <view class="meta-cell">
+          <text class="meta-num">{{steps.length}}</text>
+          <text class="meta-label">步骤</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="content">
+      <view wx:if="{{ingredients.length}}" class="card">
+        <view class="card-head">
+          <view class="card-bar"></view>
+          <text class="card-title">所需原料</text>
+          <text class="card-count">共 {{ingredients.length}} 项</text>
+        </view>
+        <view class="chips">
+          <text wx:for="{{ingredients}}" wx:key="index" class="chip">{{item}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{seasonings.length}}" class="card">
+        <view class="card-head">
+          <view class="card-bar card-bar-alt"></view>
+          <text class="card-title">调味配料</text>
+          <text class="card-count">共 {{seasonings.length}} 项</text>
+        </view>
+        <view class="chips">
+          <text wx:for="{{seasonings}}" wx:key="index" class="chip chip-alt">{{item}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{steps.length}}" class="card">
+        <view class="card-head">
+          <view class="card-bar"></view>
+          <text class="card-title">烹饪步骤</text>
+          <text class="card-count">共 {{steps.length}} 步</text>
+        </view>
+        <view class="steps">
+          <view wx:for="{{steps}}" wx:key="index" class="step">
+            <view class="step-num">
+              <text class="step-num-text">{{index + 1}}</text>
+            </view>
+            <view class="step-body">
+              <text class="step-text">{{item}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view wx:if="{{recipe.tishi}}" class="card tip-card">
+        <view class="tip-head">
+          <text class="tip-icon">✦</text>
+          <text class="tip-title">小贴士</text>
+        </view>
+        <text class="tip-text">{{recipe.tishi}}</text>
+      </view>
+
+      <view class="footer-space"></view>
+    </view>
+
+    <view class="action-bar">
+      <view class="action-btn action-primary {{favorited ? 'action-primary-on' : ''}}" bindtap="onToggleFavorite">
+        <text class="action-icon">{{favorited ? '♥' : '♡'}}</text>
+        <text class="action-label">{{favorited ? '已收藏' : '收藏菜谱'}}</text>
+      </view>
+      <button class="action-btn action-share" open-type="share">
+        <text class="action-icon">↗</text>
+        <text class="action-label">分享给好友</text>
+      </button>
+    </view>
+  </block>
+</view>
