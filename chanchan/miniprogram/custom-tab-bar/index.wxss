@@ -1,0 +1,105 @@
+/* ============================================================
+ *  自定义 TabBar
+ *  · 未选中：#B5A99B（温和暖灰），SVG outline
+ *  · 选中：  #FF6B35（主色·暖珊瑚），SVG 填充 + 下方圆点 + 背后柔光
+ *  · 背景：  米白 + 顶部柔和分隔线
+ * ============================================================ */
+
+.tab-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(110rpx + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 100;
+}
+
+.tab-bar-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
+  border-top: 1rpx solid var(--color-divider);
+  box-shadow: 0 -6rpx 24rpx rgba(42, 33, 24, 0.04);
+  z-index: 0;
+}
+
+.tab-item {
+  position: relative;
+  flex: 1;
+  height: 110rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4rpx;
+  z-index: 1;
+  transition: transform 0.2s ease;
+}
+
+.tab-item:active {
+  transform: scale(0.94);
+}
+
+.tab-icon-wrap {
+  position: relative;
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tab-icon {
+  width: 44rpx;
+  height: 44rpx;
+  position: relative;
+  z-index: 1;
+  transition: transform 0.25s ease;
+}
+
+.tab-item-on .tab-icon {
+  transform: translateY(-2rpx) scale(1.08);
+}
+
+.tab-glow {
+  position: absolute;
+  width: 84rpx;
+  height: 84rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 53, 0.18) 0%, rgba(255, 107, 53, 0) 70%);
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tab-label {
+  font-size: 20rpx;
+  color: var(--color-text-4);
+  letter-spacing: 0.5rpx;
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 4rpx;
+  transition: color 0.2s ease;
+}
+
+.tab-item-on .tab-label {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.tab-dot {
+  position: absolute;
+  bottom: 10rpx;
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: var(--color-primary);
+  box-shadow: 0 0 8rpx rgba(255, 107, 53, 0.5);
+}

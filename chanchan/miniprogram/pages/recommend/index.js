@@ -76,6 +76,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 })
+    }
     const recipe = this.data.recipe
     this.setData({
       favorited: recipe ? isFavorite(recipe.id) : false,

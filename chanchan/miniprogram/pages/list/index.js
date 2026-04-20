@@ -61,6 +61,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 0 })
+    }
     const favs = getFavorites()
     const favIds = favs.map((f) => String(f.id))
     const recipes = this.data.recipes.map((r) => ({

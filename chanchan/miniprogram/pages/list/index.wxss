@@ -1,29 +1,46 @@
+/* ============================================================
+ *  菜谱列表页（List）
+ *  · 顶部暖色渐变头图（主色）
+ *  · 毛玻璃搜索框
+ *  · 方形圆角卡片 + 原料摘要
+ * ============================================================ */
 page {
-  background: #F7F4EF;
+  background: var(--color-bg);
 }
 
 .page {
   position: relative;
   min-height: 100vh;
-  padding-bottom: 80rpx;
+  padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
 }
 
-/* ── Background gradient ── */
+/* ── 顶部暖色渐变 ── */
 .top-bg {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 420rpx;
-  background: linear-gradient(175deg, #FF6035 0%, #FF8A5B 58%, rgba(247, 244, 239, 0) 100%);
+  height: 460rpx;
+  background: linear-gradient(175deg, #FF6B35 0%, #FF8A5B 50%, rgba(250, 246, 240, 0) 100%);
   z-index: 0;
+}
+
+.top-bg::before {
+  content: '';
+  position: absolute;
+  right: -60rpx;
+  top: 40rpx;
+  width: 260rpx;
+  height: 260rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
 }
 
 /* ── Header ── */
 .header {
   position: relative;
   z-index: 1;
-  padding: 48rpx 40rpx 24rpx;
+  padding: 56rpx var(--sp-5) var(--sp-3);
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
@@ -35,7 +52,7 @@ page {
 }
 
 .brand-title {
-  font-size: 56rpx;
+  font-size: var(--fs-display);
   font-weight: 700;
   color: #fff;
   line-height: 1.15;
@@ -45,7 +62,7 @@ page {
 .brand-sub {
   margin-top: 12rpx;
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.80);
+  color: rgba(255, 255, 255, 0.82);
   letter-spacing: 1rpx;
 }
 
@@ -54,15 +71,16 @@ page {
   flex-direction: column;
   align-items: center;
   background: rgba(255, 255, 255, 0.20);
-  backdrop-filter: blur(12rpx);
+  backdrop-filter: blur(14rpx);
+  -webkit-backdrop-filter: blur(14rpx);
   padding: 16rpx 28rpx;
-  border-radius: 24rpx;
-  border: 1.5rpx solid rgba(255, 255, 255, 0.30);
-  min-width: 100rpx;
+  border-radius: var(--r-lg);
+  border: 1.5rpx solid rgba(255, 255, 255, 0.34);
+  min-width: 104rpx;
 }
 
 .stat-num {
-  font-size: 40rpx;
+  font-size: var(--fs-h1);
   font-weight: 700;
   color: #fff;
   line-height: 1;
@@ -71,52 +89,52 @@ page {
 .stat-label {
   margin-top: 6rpx;
   font-size: 20rpx;
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(255, 255, 255, 0.90);
   letter-spacing: 1rpx;
 }
 
-/* ── Search ── */
+/* ── 搜索框 ── */
 .search-wrap {
   position: relative;
   z-index: 1;
-  padding: 20rpx 32rpx 0;
+  padding: var(--sp-3) var(--sp-4) 0;
 }
 
 .search {
   display: flex;
   align-items: center;
-  background: #fff;
-  border-radius: 32rpx;
-  padding: 0 28rpx;
-  height: 88rpx;
-  box-shadow: 0 12rpx 36rpx rgba(42, 33, 24, 0.10);
+  background: var(--color-surface);
+  border-radius: var(--r-xl);
+  padding: 0 var(--sp-3);
+  height: 92rpx;
+  box-shadow: 0 14rpx 40rpx rgba(42, 33, 24, 0.12);
 }
 
 .search-icon {
   font-size: 36rpx;
-  color: #FF6B35;
+  color: var(--color-primary);
   margin-right: 16rpx;
   line-height: 1;
-  opacity: 0.85;
+  opacity: 0.88;
 }
 
 .search-input {
   flex: 1;
-  font-size: 28rpx;
-  color: #2A2118;
-  height: 88rpx;
+  font-size: var(--fs-body);
+  color: var(--color-text-1);
+  height: 92rpx;
 }
 
 .search-placeholder {
-  color: #C4B5A5;
-  font-size: 28rpx;
+  color: var(--color-text-4);
+  font-size: var(--fs-body);
 }
 
 .search-clear {
   width: 44rpx;
   height: 44rpx;
   border-radius: 50%;
-  background: #F0E7DB;
+  background: var(--color-primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -124,7 +142,7 @@ page {
 
 .search-clear-icon {
   font-size: 30rpx;
-  color: #8A7865;
+  color: var(--color-text-3);
   line-height: 1;
 }
 
@@ -132,9 +150,9 @@ page {
 .tabs {
   position: relative;
   z-index: 1;
-  padding: 32rpx 40rpx 16rpx;
+  padding: var(--sp-4) var(--sp-5) var(--sp-2);
   display: flex;
-  gap: 32rpx;
+  gap: var(--sp-4);
 }
 
 .tab {
@@ -146,8 +164,8 @@ page {
 }
 
 .tab-label {
-  font-size: 28rpx;
-  color: rgba(255, 255, 255, 0.60);
+  font-size: var(--fs-body);
+  color: rgba(255, 255, 255, 0.66);
   font-weight: 500;
   letter-spacing: 0.5rpx;
 }
@@ -155,16 +173,16 @@ page {
 .tab-on .tab-label {
   color: #fff;
   font-weight: 700;
-  font-size: 32rpx;
+  font-size: var(--fs-h2);
 }
 
 .tab-badge {
-  background: rgba(255, 255, 255, 0.90);
-  color: #FF5E3A;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-primary-deep);
   font-size: 20rpx;
   font-weight: 700;
   padding: 3rpx 14rpx;
-  border-radius: 999rpx;
+  border-radius: var(--r-full);
   line-height: 1.6;
 }
 
@@ -178,20 +196,20 @@ page {
   border-radius: 2rpx;
 }
 
-/* ── List wrapper ── */
+/* ── 列表容器 ── */
 .list-wrap {
   position: relative;
   z-index: 1;
-  padding: 8rpx 28rpx 0;
+  padding: var(--sp-1) var(--sp-4) 0;
 }
 
-/* ── State / Loading ── */
+/* ── 加载/错误/空态 ── */
 .state {
   padding: 140rpx 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28rpx;
+  gap: var(--sp-3);
 }
 
 .state-dot {
@@ -199,35 +217,32 @@ page {
   height: 52rpx;
   border-radius: 50%;
   border: 4rpx solid #FFD4BF;
-  border-top-color: #FF5E3A;
+  border-top-color: var(--color-primary);
   animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 .state-text {
-  font-size: 28rpx;
-  color: #8A7865;
+  font-size: var(--fs-body);
+  color: var(--color-text-3);
 }
 
 .state-text.error {
-  color: #E84B3C;
+  color: var(--color-error);
 }
 
 .state-btn {
   margin-top: 8rpx;
   padding: 20rpx 48rpx;
-  background: #FF5E3A;
+  background: var(--grad-primary);
   color: #fff;
-  font-size: 28rpx;
+  font-size: var(--fs-body);
   font-weight: 500;
-  border-radius: 999rpx;
-  box-shadow: 0 8rpx 20rpx rgba(255, 94, 58, 0.28);
+  border-radius: var(--r-full);
+  box-shadow: var(--shadow-primary);
 }
 
-/* ── Empty state ── */
 .empty {
   padding: 140rpx 48rpx;
   display: flex;
@@ -236,21 +251,22 @@ page {
 }
 
 .empty-ico {
-  width: 152rpx;
-  height: 152rpx;
+  width: 160rpx;
+  height: 160rpx;
   border-radius: 50%;
-  background: #FFF0E6;
+  background: var(--color-primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 72rpx;
-  color: #FF8A5B;
-  margin-bottom: 32rpx;
+  color: var(--color-primary-soft);
+  margin-bottom: var(--sp-4);
+  box-shadow: inset 0 0 0 2rpx rgba(255, 138, 91, 0.16);
 }
 
 .empty-title {
   font-size: 34rpx;
-  color: #4A3D32;
+  color: var(--color-text-2);
   font-weight: 600;
   margin-bottom: 12rpx;
   letter-spacing: 1rpx;
@@ -258,51 +274,67 @@ page {
 
 .empty-sub {
   font-size: 26rpx;
-  color: #B5A99B;
+  color: var(--color-text-4);
   text-align: center;
   line-height: 1.7;
   max-width: 480rpx;
 }
 
-/* ── Recipe list ── */
+/* ── 菜谱列表 ── */
 .list {
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: var(--sp-3);
 }
 
-/* ── Recipe card ── */
 .card {
   display: flex;
   gap: 28rpx;
-  background: #fff;
-  border-radius: 32rpx;
-  padding: 32rpx;
-  box-shadow: 0 4rpx 20rpx rgba(42, 33, 24, 0.055), 0 1rpx 4rpx rgba(42, 33, 24, 0.04);
-  transition: transform 0.15s;
+  background: var(--color-surface);
+  border-radius: var(--r-xl);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 
 .card:active {
   transform: scale(0.982);
-  box-shadow: 0 2rpx 8rpx rgba(42, 33, 24, 0.06);
+  box-shadow: var(--shadow-sm);
 }
 
+/* 彩色渐变头像（食欲感） */
 .card-avatar {
+  position: relative;
   flex-shrink: 0;
-  width: 136rpx;
-  height: 136rpx;
-  border-radius: 28rpx;
+  width: 144rpx;
+  height: 144rpx;
+  border-radius: var(--r-lg);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8rpx 24rpx rgba(255, 94, 58, 0.22);
+  box-shadow: 0 10rpx 28rpx rgba(255, 94, 58, 0.26);
+  overflow: hidden;
+}
+
+.card-avatar::after {
+  content: '';
+  position: absolute;
+  right: -30rpx;
+  bottom: -30rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
 }
 
 .card-initial {
-  font-size: 60rpx;
+  position: relative;
+  z-index: 1;
+  font-size: 64rpx;
   font-weight: 700;
   color: #fff;
   line-height: 1;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
 }
 
 .card-body {
@@ -323,7 +355,7 @@ page {
   flex: 1;
   font-size: 34rpx;
   font-weight: 700;
-  color: #2A2118;
+  color: var(--color-text-1);
   line-height: 1.3;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -338,24 +370,27 @@ page {
   width: 60rpx;
   height: 60rpx;
   border-radius: 50%;
-  background: #FBF4EC;
+  background: var(--color-surface-soft);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s;
 }
 
 .card-fav-on {
-  background: #FFE8DD;
+  background: var(--color-primary-bg-2);
 }
+
+.card-fav:active { transform: scale(0.88); }
 
 .card-fav-icon {
   font-size: 30rpx;
-  color: #D4C5B3;
+  color: var(--color-text-5);
   line-height: 1;
 }
 
 .card-fav-on .card-fav-icon {
-  color: #FF5E3A;
+  color: var(--color-primary);
 }
 
 .card-tag-row {
@@ -365,8 +400,8 @@ page {
 .card-tag {
   display: inline-block;
   font-size: 22rpx;
-  color: #FF6B35;
-  background: #FFF0E6;
+  color: var(--color-primary);
+  background: var(--color-primary-bg);
   padding: 5rpx 18rpx;
   border-radius: 10rpx;
   font-weight: 500;
@@ -374,7 +409,7 @@ page {
 
 .card-desc {
   font-size: 25rpx;
-  color: #8A7865;
+  color: var(--color-text-3);
   line-height: 1.65;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -389,22 +424,22 @@ page {
   align-items: center;
   justify-content: space-between;
   padding-top: 12rpx;
-  border-top: 1rpx solid #F5EEE6;
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .card-meta-text {
   font-size: 23rpx;
-  color: #C4B5A5;
+  color: var(--color-text-4);
   letter-spacing: 0.5rpx;
 }
 
 .card-arrow {
   font-size: 36rpx;
-  color: #E0D0C0;
+  color: var(--color-text-5);
   line-height: 1;
 }
 
-/* ── List end ── */
+/* ── 列表底部 ── */
 .list-end {
   padding: 48rpx 0 24rpx;
   text-align: center;
@@ -412,6 +447,6 @@ page {
 
 .list-end-text {
   font-size: 22rpx;
-  color: #D4C5B3;
+  color: var(--color-text-5);
   letter-spacing: 3rpx;
 }

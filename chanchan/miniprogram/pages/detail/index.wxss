@@ -1,32 +1,37 @@
+/* ============================================================
+ *  菜谱详情
+ *  · 顶部 Hero：主色渐变 + 大标题 + 统计数字
+ *  · 原料 / 调料 / 步骤 / 小贴士 四段式卡片
+ *  · 固定底部操作栏（收藏 + 分享）
+ *  注：详情页非 Tab 页，不需 tabBar 预留空间
+ * ============================================================ */
 page {
-  background: #F7F4EF;
+  background: var(--color-bg);
 }
 
 .page {
   min-height: 100vh;
-  padding-bottom: 180rpx;
+  padding-bottom: 200rpx;
 }
 
-/* ── State ── */
+/* ── 状态 ── */
 .state-text {
   text-align: center;
-  color: #8A7865;
+  color: var(--color-text-3);
   margin-top: 140rpx;
-  font-size: 28rpx;
+  font-size: var(--fs-body);
 }
 
-.state-text.error {
-  color: #E84B3C;
-}
+.state-text.error { color: var(--color-error); }
 
 /* ── Hero ── */
 .hero {
   position: relative;
-  padding: 48rpx 44rpx 60rpx;
+  padding: var(--sp-6) 44rpx 60rpx;
   border-bottom-left-radius: 52rpx;
   border-bottom-right-radius: 52rpx;
   color: #fff;
-  box-shadow: 0 24rpx 64rpx rgba(255, 94, 58, 0.24);
+  box-shadow: 0 24rpx 64rpx rgba(255, 94, 58, 0.28);
   overflow: hidden;
 }
 
@@ -37,18 +42,18 @@ page {
   top: -70rpx;
   width: 340rpx;
   height: 340rpx;
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 50%;
 }
 
 .hero::after {
   content: '';
   position: absolute;
-  left: -50rpx;
-  bottom: -50rpx;
-  width: 220rpx;
-  height: 220rpx;
-  background: rgba(255, 255, 255, 0.07);
+  left: -60rpx;
+  bottom: -60rpx;
+  width: 240rpx;
+  height: 240rpx;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
 }
 
@@ -61,11 +66,11 @@ page {
 }
 
 .hero-tag {
-  font-size: 24rpx;
+  font-size: var(--fs-small);
   color: #fff;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.24);
   padding: 10rpx 26rpx;
-  border-radius: 999rpx;
+  border-radius: var(--r-full);
   font-weight: 500;
   letter-spacing: 0.5rpx;
 }
@@ -74,15 +79,15 @@ page {
   width: 76rpx;
   height: 76rpx;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s;
 }
 
-.fav-btn.fav-on {
-  background: #fff;
-}
+.fav-btn.fav-on { background: #fff; }
+.fav-btn:active { transform: scale(0.9); }
 
 .fav-icon {
   font-size: 38rpx;
@@ -90,39 +95,37 @@ page {
   line-height: 1;
 }
 
-.fav-btn.fav-on .fav-icon {
-  color: #FF5E3A;
-}
+.fav-btn.fav-on .fav-icon { color: var(--color-primary); }
 
 .hero-body {
   position: relative;
   z-index: 1;
-  margin-top: 40rpx;
+  margin-top: var(--sp-5);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
 .hero-badge {
-  width: 124rpx;
-  height: 124rpx;
-  border-radius: 34rpx;
-  background: rgba(255, 255, 255, 0.22);
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: var(--r-lg);
+  background: rgba(255, 255, 255, 0.24);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2rpx solid rgba(255, 255, 255, 0.28);
+  border: 2rpx solid rgba(255, 255, 255, 0.30);
 }
 
 .hero-initial {
-  font-size: 62rpx;
+  font-size: 64rpx;
   font-weight: 700;
   color: #fff;
   line-height: 1;
 }
 
 .hero-name {
-  margin-top: 32rpx;
+  margin-top: var(--sp-4);
   font-size: 54rpx;
   font-weight: 700;
   color: #fff;
@@ -133,28 +136,25 @@ page {
 .hero-sub {
   margin-top: 16rpx;
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.82);
+  color: rgba(255, 255, 255, 0.86);
   line-height: 1.65;
 }
 
-/* ── Meta stats ── */
+/* ── 统计 ── */
 .meta-row {
   position: relative;
   z-index: 1;
-  margin-top: 48rpx;
+  margin-top: var(--sp-6);
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.16);
-  border-radius: 28rpx;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: var(--r-lg);
   padding: 28rpx 0;
+  backdrop-filter: blur(6rpx);
+  -webkit-backdrop-filter: blur(6rpx);
 }
 
-.meta-cell {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+.meta-cell { flex: 1; display: flex; flex-direction: column; align-items: center; }
 
 .meta-num {
   font-size: 42rpx;
@@ -165,30 +165,30 @@ page {
 
 .meta-label {
   margin-top: 8rpx;
-  font-size: 22rpx;
-  color: rgba(255, 255, 255, 0.80);
+  font-size: var(--fs-tiny);
+  color: rgba(255, 255, 255, 0.84);
   letter-spacing: 0.5rpx;
 }
 
 .meta-divider {
   width: 1.5rpx;
   height: 52rpx;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.24);
 }
 
-/* ── Content sections ── */
+/* ── 内容卡片 ── */
 .content {
-  padding: 36rpx 28rpx 0;
+  padding: var(--sp-4) 28rpx 0;
   display: flex;
   flex-direction: column;
-  gap: 28rpx;
+  gap: var(--sp-3);
 }
 
 .card {
-  background: #fff;
-  border-radius: 32rpx;
-  padding: 36rpx;
-  box-shadow: 0 4rpx 20rpx rgba(42, 33, 24, 0.055), 0 1rpx 4rpx rgba(42, 33, 24, 0.04);
+  background: var(--color-surface);
+  border-radius: var(--r-xl);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow-md);
 }
 
 .card-head {
@@ -200,30 +200,30 @@ page {
 .card-bar {
   width: 6rpx;
   height: 34rpx;
-  background: linear-gradient(180deg, #FF8A5B, #FF5E3A);
+  background: var(--grad-primary);
   border-radius: 3rpx;
   margin-right: 18rpx;
 }
 
 .card-bar-alt {
-  background: linear-gradient(180deg, #FFB38A, #FF8A3D);
+  background: var(--grad-honey);
 }
 
 .card-title {
   flex: 1;
   font-size: 32rpx;
   font-weight: 700;
-  color: #2A2118;
+  color: var(--color-text-1);
   letter-spacing: 0.5rpx;
 }
 
 .card-count {
-  font-size: 24rpx;
-  color: #C4B5A5;
+  font-size: var(--fs-small);
+  color: var(--color-text-4);
   font-weight: 500;
 }
 
-/* ── Ingredient chips ── */
+/* ── 食材 chips ── */
 .chips {
   display: flex;
   flex-wrap: wrap;
@@ -232,21 +232,21 @@ page {
 
 .chip {
   font-size: 26rpx;
-  color: #4A3D32;
-  background: #FFF5EE;
+  color: var(--color-text-2);
+  background: var(--color-primary-bg);
   padding: 14rpx 26rpx;
   border-radius: 18rpx;
-  border: 1rpx solid #FFE4D0;
+  border: 1rpx solid var(--color-border-warm);
   font-weight: 500;
 }
 
 .chip-alt {
-  background: #FFF9F0;
+  background: var(--color-accent-bg);
   color: #8A5A2B;
-  border-color: #FFE9C7;
+  border-color: var(--color-accent-bd);
 }
 
-/* ── Steps ── */
+/* ── 步骤 ── */
 .steps {
   display: flex;
   flex-direction: column;
@@ -256,7 +256,7 @@ page {
 .step {
   display: flex;
   align-items: flex-start;
-  gap: 24rpx;
+  gap: var(--sp-3);
 }
 
 .step-num {
@@ -264,11 +264,11 @@ page {
   width: 56rpx;
   height: 56rpx;
   border-radius: 18rpx;
-  background: linear-gradient(135deg, #FF8A5B, #FF5E3A);
+  background: var(--grad-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6rpx 16rpx rgba(255, 94, 58, 0.28);
+  box-shadow: 0 8rpx 16rpx rgba(255, 94, 58, 0.30);
   margin-top: 4rpx;
 }
 
@@ -281,22 +281,22 @@ page {
 
 .step-body {
   flex: 1;
-  background: #FBF7F2;
-  border-radius: 24rpx;
+  background: var(--color-surface-warm);
+  border-radius: var(--r-lg);
   padding: 24rpx 28rpx;
-  border: 1rpx solid #F0E8DD;
+  border: 1rpx solid var(--color-border);
 }
 
 .step-text {
-  font-size: 28rpx;
-  color: #3A2F25;
+  font-size: var(--fs-body);
+  color: var(--color-text-2);
   line-height: 1.8;
 }
 
-/* ── Tip card ── */
+/* ── 小贴士 ── */
 .tip-card {
   background: linear-gradient(135deg, #FFF8EC 0%, #FFF2DC 100%);
-  border: 1.5rpx solid #FFE3B0;
+  border: 1.5rpx solid var(--color-accent-bd);
 }
 
 .tip-head {
@@ -307,7 +307,7 @@ page {
 
 .tip-icon {
   font-size: 28rpx;
-  color: #E8973B;
+  color: var(--color-warm-yolk);
   margin-right: 14rpx;
 }
 
@@ -319,16 +319,14 @@ page {
 }
 
 .tip-text {
-  font-size: 28rpx;
+  font-size: var(--fs-body);
   color: #6B4A20;
   line-height: 1.8;
 }
 
-.footer-space {
-  height: 48rpx;
-}
+.footer-space { height: 48rpx; }
 
-/* ── Fixed action bar ── */
+/* ── 固定操作栏 ── */
 .action-bar {
   position: fixed;
   left: 0;
@@ -337,15 +335,16 @@ page {
   padding: 20rpx 28rpx calc(24rpx + env(safe-area-inset-bottom));
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(24rpx);
+  -webkit-backdrop-filter: blur(24rpx);
   display: flex;
   gap: 20rpx;
-  border-top: 1rpx solid #EDE6DC;
+  border-top: 1rpx solid var(--color-divider);
 }
 
 .action-btn {
   flex: 1;
   height: 96rpx;
-  border-radius: 30rpx;
+  border-radius: var(--r-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -353,24 +352,22 @@ page {
   font-weight: 600;
   padding: 0;
   line-height: 1;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s, transform 0.15s;
 }
 
-.action-btn:active {
-  opacity: 0.82;
-}
+.action-btn:active { opacity: 0.85; transform: scale(0.98); }
 
 .action-primary {
-  background: #FFF5EE;
-  color: #FF5E3A;
-  border: 1.5rpx solid #FFD4BF;
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+  border: 1.5rpx solid var(--color-border-warm);
 }
 
 .action-primary-on {
-  background: linear-gradient(135deg, #FF8A5B, #FF5E3A);
+  background: var(--grad-primary);
   color: #fff;
   border-color: transparent;
-  box-shadow: 0 10rpx 28rpx rgba(255, 94, 58, 0.32);
+  box-shadow: var(--shadow-primary);
 }
 
 .action-share {
@@ -378,15 +375,7 @@ page {
   color: #fff;
 }
 
-.action-share::after {
-  border: none;
-}
+.action-share::after { border: none; }
 
-.action-icon {
-  font-size: 32rpx;
-  line-height: 1;
-}
-
-.action-label {
-  font-size: 28rpx;
-}
+.action-icon { font-size: 32rpx; line-height: 1; }
+.action-label { font-size: 28rpx; }

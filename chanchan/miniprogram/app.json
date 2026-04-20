@@ -2,11 +2,14 @@
   "pages": [
     "pages/list/index",
     "pages/recommend/index",
+    "pages/meal/index",
+    "pages/meal-list/index",
     "pages/detail/index"
   ],
   "tabBar": {
+    "custom": true,
     "color": "#B5A99B",
-    "selectedColor": "#FF5E3A",
+    "selectedColor": "#FF6B35",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
@@ -17,14 +20,18 @@
       {
         "pagePath": "pages/recommend/index",
         "text": "今天吃什么"
+      },
+      {
+        "pagePath": "pages/meal/index",
+        "text": "食记"
       }
     ]
   },
   "window": {
-    "backgroundColor": "#F7F4EF",
+    "backgroundColor": "#FAF6F0",
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#FF6B35",
-    "navigationBarTitleText": "菜谱查询",
+    "navigationBarTitleText": "馋馋",
     "navigationBarTextStyle": "white"
   },
   "sitemapLocation": "sitemap.json",

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node *)",
+      "Bash(curl -s http://localhost:3000/api/health)",
+      "Read(//private/tmp/**)",
+      "Bash(printf '\\\\x89PNG\\\\r\\\\n\\\\x1a\\\\n\\\\x00\\\\x00\\\\x00\\\\rIHDR\\\\x00\\\\x00\\\\x00\\\\x01\\\\x00\\\\x00\\\\x00\\\\x01\\\\x08\\\\x02\\\\x00\\\\x00\\\\x00\\\\x90wS\\\\xde\\\\x00\\\\x00\\\\x00\\\\x0cIDATx\\\\x9cc\\\\xf8\\\\xcf\\\\xc0\\\\x00\\\\x00\\\\x00\\\\x03\\\\x00\\\\x01[\\\\x9eP\\\\xc3\\\\x00\\\\x00\\\\x00\\\\x00IEND\\\\xaeB`\\\\x82')",
+      "Bash(cp t1.png t2.png)",
+      "Bash(curl -s -X POST http://localhost:3000/api/meal/create -F title=今天的午饭 -F content=吃了牛肉面，很好吃！ -F images=@/tmp/t1.png -F images=@/tmp/t2.png)",
+      "Bash(curl -s -X POST http://localhost:3000/api/meal/create -F \"title=只标题\")",
+      "Bash(kill %1)",
+      "Bash(kill b7fzh8jt3 *)",
+      "Bash(pkill -f \"node server.js\")",
+      "Bash(rm /tmp/t1.png /tmp/t2.png)",
+      "Bash(curl -s http://localhost:3000/api/meal/1)",
+      "Bash(curl -s -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/api/meal/999)",
+      "Bash(curl -s -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/api/meal/abc)",
+      "Bash(curl -s -X DELETE http://localhost:3000/api/meal/1)",
+      "Bash(curl -s -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/api/meal/1)",
+      "Bash(kill bz1gzorkn *)",
+      "Bash(npm start *)",
+      "Bash(kill bos4lkg1c *)"
+    ]
+  }
+}

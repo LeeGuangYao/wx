@@ -1,0 +1,81 @@
+<view class="page">
+  <view class="bg-decor"></view>
+
+  <view class="topbar">
+    <view class="topbar-left">
+      <text class="topbar-sub">FOOD DIARY</text>
+      <text class="topbar-title">我的食记</text>
+    </view>
+    <view class="topbar-count" wx:if="{{total > 0}}">
+      <text class="topbar-count-num">{{total}}</text>
+      <text class="topbar-count-label">条</text>
+    </view>
+  </view>
+
+  <!-- 初次加载 -->
+  <view wx:if="{{loading && list.length === 0}}" class="state">
+    <view class="state-dot"></view>
+    <text class="state-text">加载中…</text>
+  </view>
+
+  <!-- 错误态 -->
+  <view wx:elif="{{error && list.length === 0}}" class="state">
+    <text class="state-emoji">😵</text>
+    <text class="state-text error">{{error}}</text>
+    <view class="state-btn" bindtap="reload">重试</view>
+  </view>
+
+  <!-- 空态 -->
+  <view wx:elif="{{!loading && list.length === 0}}" class="state">
+    <text class="state-emoji">🍽️</text>
+    <text class="state-text">还没有食记，去记录第一餐吧</text>
+    <view class="state-btn" bindtap="goCreate">去记录</view>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:else class="list">
+    <view
+      wx:for="{{list}}"
+      wx:key="id"
+      class="card"
+    >
+      <view class="card-head">
+        <view class="card-dot"></view>
+        <text class="card-time">{{item.created_at}}</text>
+      </view>
+
+      <view wx:if="{{item.title}}" class="card-title">{{item.title}}</view>
+      <view wx:if="{{item.content}}" class="card-content">{{item.content}}</view>
+
+      <view
+        wx:if="{{item.image_urls && item.image_urls.length}}"
+        class="card-imgs grid-{{item.image_urls.length === 1 ? 1 : (item.image_urls.length === 2 || item.image_urls.length === 4 ? 2 : 3)}}"
+      >
+        <image
+          wx:for="{{item.image_urls}}"
+          wx:for-item="url"
+          wx:for-index="urlIdx"
+          wx:key="*this"
+          class="card-img"
+          src="{{url}}"
+          mode="aspectFill"
+          data-urls="{{item.image_urls}}"
+          data-current="{{url}}"
+          bindtap="onPreview"
+          lazy-load="{{true}}"
+        ></image>
+      </view>
+    </view>
+
+    <view class="footer">
+      <text wx:if="{{loadingMore}}" class="footer-text">加载中…</text>
+      <text wx:elif="{{!hasMore}}" class="footer-text">— 没有更多了 —</text>
+      <text wx:else class="footer-text" bindtap="loadMore">上拉加载更多</text>
+    </view>
+  </view>
+
+  <!-- 浮动按钮：新增 -->
+  <view class="fab" bindtap="goCreate" hover-class="fab-hover">
+    <text class="fab-ico">+</text>
+  </view>
+</view>

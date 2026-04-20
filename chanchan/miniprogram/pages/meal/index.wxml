@@ -1,0 +1,109 @@
+<view class="page">
+  <view class="bg-decor"></view>
+
+  <view class="topbar">
+    <view class="topbar-left">
+      <text class="topbar-date">{{today}}</text>
+      <text class="topbar-title">今日食记</text>
+    </view>
+    <view class="topbar-entry" bindtap="goList" hover-class="topbar-entry-hover">
+      <text class="topbar-entry-ico">📖</text>
+      <text class="topbar-entry-text">我的食记</text>
+    </view>
+  </view>
+
+  <view class="hint-row">
+    <text class="hint-text">记录一餐一味，留住当下的好胃口</text>
+  </view>
+
+  <!-- 图片选择（最多 9 张） -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-bar"></view>
+      <text class="card-title">来张食物照</text>
+      <text class="card-sub">{{images.length}}/{{maxCount}}</text>
+    </view>
+
+    <view class="img-area">
+      <block wx:for="{{images}}" wx:key="*this">
+        <view class="img-wrap">
+          <image
+            class="img-thumb"
+            src="{{item}}"
+            mode="aspectFill"
+            data-index="{{index}}"
+            bindtap="onPreview"
+          ></image>
+          <view
+            class="img-remove"
+            data-index="{{index}}"
+            catchtap="onRemoveImage"
+          >
+            <text class="img-remove-ico">×</text>
+          </view>
+        </view>
+      </block>
+      <view
+        wx:if="{{images.length < maxCount}}"
+        class="img-add"
+        bindtap="onChooseImage"
+      >
+        <text class="img-add-plus">+</text>
+        <text class="img-add-text">添加图片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 标题 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-bar"></view>
+      <text class="card-title">标题</text>
+      <text class="card-sub">{{title.length}}/30</text>
+    </view>
+    <input
+      class="input"
+      placeholder="例如：雨天里的一碗热汤面"
+      placeholder-class="input-ph"
+      maxlength="30"
+      value="{{title}}"
+      bindinput="onTitleInput"
+    />
+  </view>
+
+  <!-- 内容 -->
+  <view class="card">
+    <view class="card-head">
+      <view class="card-bar"></view>
+      <text class="card-title">这一餐</text>
+      <text class="card-sub">{{content.length}}/500</text>
+    </view>
+    <textarea
+      class="textarea"
+      placeholder="和谁一起？什么味道？有没有什么小故事…"
+      placeholder-class="input-ph"
+      maxlength="500"
+      value="{{content}}"
+      bindinput="onContentInput"
+      auto-height
+      show-confirm-bar="{{false}}"
+    ></textarea>
+  </view>
+
+  <!-- 提交 -->
+  <view class="submit-row">
+    <button
+      class="btn btn-primary {{canSubmit ? '' : 'btn-disabled'}}"
+      disabled="{{!canSubmit || submitting}}"
+      bindtap="onSubmit"
+      hover-class="btn-hover"
+    >
+      <text class="btn-ico">{{submitting ? '⏳' : '✓'}}</text>
+      <text class="btn-label">{{submitting ? '上传中…' : '发布食记'}}</text>
+    </button>
+  </view>
+
+  <view class="tip-row">
+    <text class="tip-text">最多 9 张，jpg / png / gif / webp，单张 ≤ 10MB</text>
+  </view>
+</view>

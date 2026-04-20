@@ -1,23 +1,150 @@
+/* ============================================================
+ *  馋馋 · 设计令牌（Design Tokens）
+ *  统一的颜色 / 间距 / 圆角 / 阴影 / 字号层级
+ *  风格：温馨治愈 · 暖色系 · 食欲感
+ * ============================================================ */
 page {
-  background: #F7F4EF;
-  color: #2A2118;
+  /* ── 主色（暖橙/珊瑚） ── */
+  --color-primary:        #FF6B35;
+  --color-primary-soft:   #FF8A5B;
+  --color-primary-deep:   #E8573C;
+  --color-primary-bg:     #FFF5EE;
+  --color-primary-bg-2:   #FFEEDC;
+
+  /* ── 辅助色 ── */
+  --color-accent:         #F4A261;     /* 暖琥珀（提示/次级强调） */
+  --color-accent-bg:      #FFF8EC;
+  --color-accent-bd:      #FFE3B0;
+  --color-warm-yolk:      #E8973B;     /* 蛋黄色（小贴士） */
+
+  /* ── 背景 & 表面 ── */
+  --color-bg:             #FAF6F0;     /* 奶油米（比 #F7F4EF 稍暖） */
+  --color-surface:        #FFFFFF;
+  --color-surface-soft:   #FBF7F0;
+  --color-surface-warm:   #FFF9F2;
+
+  /* ── 文字层级 ── */
+  --color-text-1:         #2A1F17;     /* 主标题 · 深咖啡 */
+  --color-text-2:         #4A3D32;     /* 正文 */
+  --color-text-3:         #8A7865;     /* 次要 · 描述 */
+  --color-text-4:         #B5A99B;     /* 禁用 · 占位 */
+  --color-text-5:         #D4C5B3;     /* 极浅 · 分隔注释 */
+
+  /* ── 边框 & 分隔 ── */
+  --color-border:         #F0E8DD;
+  --color-divider:        #F5EEE6;
+  --color-border-warm:    #FFE4D0;
+
+  /* ── 状态色 ── */
+  --color-error:          #E84B3C;
+  --color-success:        #7FA690;     /* 香草绿（成功/新鲜） */
+
+  /* ── 间距（8rpx 基准栅格） ── */
+  --sp-1:  8rpx;
+  --sp-2: 16rpx;
+  --sp-3: 24rpx;
+  --sp-4: 32rpx;
+  --sp-5: 40rpx;
+  --sp-6: 48rpx;
+  --sp-8: 64rpx;
+
+  /* ── 圆角 ── */
+  --r-sm:    12rpx;
+  --r-md:    20rpx;
+  --r-lg:    28rpx;
+  --r-xl:    36rpx;
+  --r-2xl:   44rpx;
+  --r-full: 999rpx;
+
+  /* ── 阴影 ── */
+  --shadow-sm:      0 2rpx 8rpx rgba(42, 33, 24, 0.04);
+  --shadow-md:      0 6rpx 24rpx rgba(42, 33, 24, 0.06), 0 1rpx 4rpx rgba(42, 33, 24, 0.04);
+  --shadow-lg:      0 14rpx 40rpx rgba(42, 33, 24, 0.10);
+  --shadow-primary: 0 14rpx 32rpx rgba(255, 107, 53, 0.28);
+  --shadow-float:   0 20rpx 48rpx rgba(255, 107, 53, 0.34);
+
+  /* ── 字号层级 ── */
+  --fs-display: 52rpx;   /* 页面超大标题 */
+  --fs-h1:      40rpx;
+  --fs-h2:      32rpx;
+  --fs-h3:      28rpx;
+  --fs-body:    28rpx;
+  --fs-small:   24rpx;
+  --fs-tiny:    22rpx;
+
+  /* ── 渐变（食欲感） ── */
+  --grad-primary: linear-gradient(135deg, #FF8A5B 0%, #FF5E3A 100%);
+  --grad-warm:    linear-gradient(135deg, #FFB38A 0%, #FF6B35 100%);
+  --grad-amber:   linear-gradient(135deg, #FFCA8A 0%, #FF8A3D 100%);
+  --grad-honey:   linear-gradient(135deg, #FFD59E 0%, #F4A261 100%);
+  --grad-bg-warm: linear-gradient(180deg, #FFEEDC 0%, rgba(250, 246, 240, 0) 100%);
+
+  /* ── 基础样式 ── */
+  background: var(--color-bg);
+  color: var(--color-text-1);
   font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-size: 28rpx;
+  font-size: var(--fs-body);
   line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-.container {
-  box-sizing: border-box;
+.container { box-sizing: border-box; }
+
+button { background: initial; }
+button:focus { outline: 0; }
+button::after { border: none; }
+
+/* ============================================================
+ *  通用工具类（跨页复用）
+ * ============================================================ */
+
+/* 卡片 */
+.u-card {
+  background: var(--color-surface);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-md);
 }
 
-button {
-  background: initial;
+/* 主按钮 */
+.u-btn-primary {
+  background: var(--grad-primary);
+  color: #fff;
+  box-shadow: var(--shadow-primary);
 }
 
-button:focus {
-  outline: 0;
+/* 幽灵按钮 */
+.u-btn-ghost {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1.5rpx solid var(--color-border-warm);
 }
 
-button::after {
-  border: none;
+/* 章节标题前的小色条 */
+.u-bar {
+  width: 6rpx;
+  height: 30rpx;
+  background: var(--grad-primary);
+  border-radius: 3rpx;
+}
+
+/* Chip / 标签 */
+.u-chip {
+  display: inline-block;
+  font-size: var(--fs-small);
+  color: var(--color-text-2);
+  background: var(--color-primary-bg);
+  padding: 10rpx 22rpx;
+  border-radius: var(--r-md);
+  border: 1rpx solid var(--color-border-warm);
+}
+
+/* 加载转圈 */
+@keyframes u-spin { to { transform: rotate(360deg); } }
+.u-spin {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  border: 4rpx solid #FFD4BF;
+  border-top-color: var(--color-primary);
+  animation: u-spin 0.8s linear infinite;
 }
