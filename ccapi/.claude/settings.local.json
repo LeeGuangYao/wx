@@ -20,7 +20,10 @@
       "Bash(curl -s -w \"HTTP %{http_code}\\\\n\" http://localhost:3000/api/meal/1)",
       "Bash(kill bz1gzorkn *)",
       "Bash(npm start *)",
-      "Bash(kill bos4lkg1c *)"
+      "Bash(kill bos4lkg1c *)",
+      "Bash(kill b85kf9ayr *)",
+      "Bash(kill bh96cfzid *)",
+      "Bash(npm run *)"
     ]
   }
 }

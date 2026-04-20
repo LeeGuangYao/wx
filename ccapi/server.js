@@ -6,6 +6,11 @@ const config = require('./src/config');
 migrate();
 
 app.listen(config.port, () => {
-  console.log(`[server] listening on ${config.baseUrl}`);
+  console.log(`[server] listening on port ${config.port}`);
   console.log(`[server] uploads dir: ${config.uploadDir}`);
+  if (config.baseUrl) {
+    console.log(`[server] baseUrl override: ${config.baseUrl}`);
+  } else {
+    console.log('[server] baseUrl: derived from request (Host/X-Forwarded-*)');
+  }
 });

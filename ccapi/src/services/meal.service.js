@@ -1,16 +1,18 @@
 // 数据层：封装 SQL，controller 只调用 service，不直接碰 db
+// DB 中 image_urls 存相对路径（/uploads/xxx.png），响应时由 baseUrl 动态拼成绝对 URL
 const fs = require('fs');
 const path = require('path');
 const db = require('../db');
 const config = require('../config');
+const { toAbsoluteUrl } = require('../utils/baseUrl');
 
-// 把上传的文件转成对外可访问的 URL
-function fileToUrl(file) {
-  return `${config.baseUrl}/uploads/${file.filename}`;
+// 上传文件 → 相对路径（存 DB 用）
+function fileToRelativePath(file) {
+  return `/uploads/${file.filename}`;
 }
 
-function create({ title, content, files }) {
-  const imageUrls = (files || []).map(fileToUrl);
+function create({ title, content, files }, baseUrl) {
+  const paths = (files || []).map(fileToRelativePath);
   const stmt = db.prepare(`
     INSERT INTO meal_record (title, content, image_urls)
     VALUES (?, ?, ?)
@@ -18,19 +20,17 @@ function create({ title, content, files }) {
   const result = stmt.run(
     title || null,
     content || null,
-    JSON.stringify(imageUrls)
+    JSON.stringify(paths)
   );
-  return findById(result.lastInsertRowid);
+  return findById(result.lastInsertRowid, baseUrl);
 }
 
-function findById(id) {
-  const row = db
-    .prepare(`SELECT * FROM meal_record WHERE id = ?`)
-    .get(id);
-  return row ? hydrate(row) : null;
+function findById(id, baseUrl) {
+  const row = db.prepare(`SELECT * FROM meal_record WHERE id = ?`).get(id);
+  return row ? hydrate(row, baseUrl) : null;
 }
 
-function list({ page = 1, pageSize = 10 }) {
+function list({ page = 1, pageSize = 10 }, baseUrl) {
   const p = Math.max(1, Number(page) || 1);
   const ps = Math.min(100, Math.max(1, Number(pageSize) || 10));
   const offset = (p - 1) * ps;
@@ -43,33 +43,14 @@ function list({ page = 1, pageSize = 10 }) {
     )
     .all(ps, offset);
 
-  const total = db
-    .prepare(`SELECT COUNT(*) AS c FROM meal_record`)
-    .get().c;
+  const total = db.prepare(`SELECT COUNT(*) AS c FROM meal_record`).get().c;
 
   return {
-    list: rows.map(hydrate),
+    list: rows.map((r) => hydrate(r, baseUrl)),
     page: p,
     pageSize: ps,
     total,
     totalPages: Math.ceil(total / ps),
-  };
-}
-
-// 把 DB 行转成 API 输出：image_urls 从 JSON 字符串解析回数组
-function hydrate(row) {
-  let imageUrls = [];
-  try {
-    imageUrls = JSON.parse(row.image_urls || '[]');
-  } catch (_e) {
-    imageUrls = [];
-  }
-  return {
-    id: row.id,
-    title: row.title,
-    content: row.content,
-    image_urls: imageUrls,
-    created_at: row.created_at,
   };
 }
 
@@ -81,24 +62,44 @@ function remove(id) {
 
   db.prepare(`DELETE FROM meal_record WHERE id = ?`).run(id);
 
-  let urls = [];
+  let urlsOrPaths = [];
   try {
-    urls = JSON.parse(row.image_urls || '[]');
+    urlsOrPaths = JSON.parse(row.image_urls || '[]');
   } catch (_e) {
-    urls = [];
+    urlsOrPaths = [];
   }
 
-  for (const url of urls) {
-    const filename = path.basename(url);
+  for (const item of urlsOrPaths) {
+    // 不论存的是相对路径还是遗留的绝对 URL，取 basename 即为文件名
+    const filename = path.basename(item);
     const filePath = path.join(config.uploadDir, filename);
-    // 防御：只删 uploads 目录下的文件，避免路径穿越
     if (path.dirname(filePath) !== config.uploadDir) continue;
     fs.promises.unlink(filePath).catch((err) => {
-      if (err.code !== 'ENOENT') console.warn('[meal.remove] unlink failed:', filePath, err.message);
+      if (err.code !== 'ENOENT') {
+        console.warn('[meal.remove] unlink failed:', filePath, err.message);
+      }
     });
   }
 
   return true;
+}
+
+// DB 行 → API 输出
+// image_urls：JSON 字符串 → 数组 → 每项补成当前环境的绝对 URL
+function hydrate(row, baseUrl) {
+  let items = [];
+  try {
+    items = JSON.parse(row.image_urls || '[]');
+  } catch (_e) {
+    items = [];
+  }
+  return {
+    id: row.id,
+    title: row.title,
+    content: row.content,
+    image_urls: items.map((x) => toAbsoluteUrl(x, baseUrl)),
+    created_at: row.created_at,
+  };
 }
 
 module.exports = { create, list, findById, remove };

@@ -9,6 +9,9 @@ const { errorHandler, notFound } = require('./middlewares/error');
 
 const app = express();
 
+// 反向代理（Nginx / ELB 等）下，读 X-Forwarded-* 得到真实协议和 host
+app.set('trust proxy', true);
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());

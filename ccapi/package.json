@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate": "node src/db/migrate.js"
+    "migrate": "node src/db/migrate.js",
+    "normalize-urls": "node src/db/normalize-urls.js"
   },
   "dependencies": {
     "better-sqlite3": "^11.3.0",
