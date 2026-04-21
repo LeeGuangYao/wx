@@ -4,19 +4,19 @@ Component({
     list: [
       {
         pagePath: '/pages/list/index',
-        text: '菜谱',
+        text: '找菜',
         icon: '/images/tabbar/recipe.svg',
         iconSel: '/images/tabbar/recipe-on.svg'
       },
       {
         pagePath: '/pages/category/index',
-        text: '精选',
+        text: '逛逛',
         icon: '/images/tabbar/category.svg',
         iconSel: '/images/tabbar/category-on.svg'
       },
       {
         pagePath: '/pages/recommend/index',
-        text: '今天吃什么',
+        text: '吃啥',
         icon: '/images/tabbar/pick.svg',
         iconSel: '/images/tabbar/pick-on.svg'
       },

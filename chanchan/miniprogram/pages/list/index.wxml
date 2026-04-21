@@ -3,7 +3,7 @@
 
   <view class="header">
     <view class="brand">
-      <text class="brand-title">今日菜谱</text>
+      <text class="brand-title">找道菜</text>
       <text class="brand-sub">挑一道菜，开启好胃口</text>
     </view>
     <view class="header-stat">

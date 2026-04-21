@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/liguangyao/Desktop/ai/wx/chanchan log --oneline -5)",
+      "Bash(git -C /Users/liguangyao/Desktop/ai/wx/chanchan diff miniprogram/config.js)"
+    ]
+  }
+}

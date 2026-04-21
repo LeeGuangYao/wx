@@ -3,7 +3,7 @@
 
   <view class="header">
     <view class="brand">
-      <text class="brand-title">精选分类</text>
+      <text class="brand-title">逛逛菜单</text>
       <text class="brand-sub">按口味探索，收进你的菜单</text>
     </view>
     <view wx:if="{{allnum > 0 && activeTypeId}}" class="header-stat">

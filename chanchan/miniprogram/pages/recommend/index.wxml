@@ -4,7 +4,7 @@
   <view class="topbar">
     <view class="topbar-left">
       <text class="topbar-date">{{today}} · {{weekday}}</text>
-      <text class="topbar-title">今天吃什么</text>
+      <text class="topbar-title">今天吃啥</text>
     </view>
     <view class="topbar-fav" bindtap="onTapFavList">
       <text class="topbar-fav-icon">♥</text>

@@ -178,7 +178,7 @@ Page({
   onShareAppMessage() {
     const { recipe } = this.data
     return {
-      title: recipe ? `今天吃${recipe.cp_name}吧！` : '今天吃什么',
+      title: recipe ? `今天吃${recipe.cp_name}吧！` : '今天吃啥',
       path: recipe ? `/pages/detail/index?id=${recipe.id}` : '/pages/recommend/index'
     }
   }
