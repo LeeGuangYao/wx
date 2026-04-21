@@ -23,7 +23,8 @@
       "Bash(kill bos4lkg1c *)",
       "Bash(kill b85kf9ayr *)",
       "Bash(kill bh96cfzid *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(git check-ignore *)"
     ]
   }
 }
