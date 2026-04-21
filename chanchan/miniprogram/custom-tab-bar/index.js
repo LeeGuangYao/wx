@@ -9,6 +9,12 @@ Component({
         iconSel: '/images/tabbar/recipe-on.svg'
       },
       {
+        pagePath: '/pages/category/index',
+        text: '精选',
+        icon: '/images/tabbar/category.svg',
+        iconSel: '/images/tabbar/category-on.svg'
+      },
+      {
         pagePath: '/pages/recommend/index',
         text: '今天吃什么',
         icon: '/images/tabbar/pick.svg',

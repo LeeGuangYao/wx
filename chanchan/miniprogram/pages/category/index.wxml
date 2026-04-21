@@ -1,0 +1,101 @@
+<view class="page">
+  <view class="top-bg"></view>
+
+  <view class="header">
+    <view class="brand">
+      <text class="brand-title">精选分类</text>
+      <text class="brand-sub">按口味探索，收进你的菜单</text>
+    </view>
+    <view wx:if="{{allnum > 0 && activeTypeId}}" class="header-stat">
+      <text class="stat-num">{{allnum}}</text>
+      <text class="stat-label">道菜</text>
+    </view>
+  </view>
+
+  <!-- 分类初始加载/失败 -->
+  <view wx:if="{{loadingCats}}" class="state state-full">
+    <view class="state-dot"></view>
+    <text class="state-text">正在加载分类…</text>
+  </view>
+
+  <view wx:elif="{{error && !categories.length}}" class="state state-full">
+    <text class="state-text error">{{error}}</text>
+    <view class="state-btn" bindtap="onRetry">重新加载</view>
+  </view>
+
+  <view wx:else class="body">
+    <!-- 左侧：分类导航 -->
+    <scroll-view class="side" scroll-y enhanced show-scrollbar="{{false}}">
+      <view
+        wx:for="{{categories}}"
+        wx:key="type_id"
+        class="side-item {{item.type_id === activeTypeId ? 'side-item-on' : ''}}"
+        data-type-id="{{item.type_id}}"
+        bindtap="onTapCategory"
+      >
+        <view wx:if="{{item.type_id === activeTypeId}}" class="side-bar"></view>
+        <view class="side-text-wrap">
+          <text class="side-name">{{item.type_name}}</text>
+          <text class="side-count">{{item.count}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 右侧：菜谱列表（懒加载） -->
+    <scroll-view
+      class="main"
+      scroll-y
+      enhanced
+      show-scrollbar="{{false}}"
+      bindscrolltolower="onLoadMore"
+      lower-threshold="120"
+      scroll-into-view="{{'top-' + activeTypeId}}"
+    >
+      <view id="top-{{activeTypeId}}" class="anchor"></view>
+
+      <view wx:if="{{loading}}" class="state">
+        <view class="state-dot"></view>
+        <text class="state-text">正在加载菜谱…</text>
+      </view>
+
+      <view wx:elif="{{error && categories.length}}" class="state">
+        <text class="state-text error">{{error}}</text>
+        <view class="state-btn" bindtap="onRetry">重新加载</view>
+      </view>
+
+      <view wx:elif="{{recipes.length === 0}}" class="empty">
+        <view class="empty-ico">⌀</view>
+        <text class="empty-title">该分类下暂无菜谱</text>
+      </view>
+
+      <view wx:else class="list">
+        <view
+          wx:for="{{recipes}}"
+          wx:key="id"
+          class="card"
+          data-id="{{item.id}}"
+          bindtap="onTapItem"
+        >
+          <view class="card-avatar" style="background: {{item._gradient}};">
+            <text class="card-initial">{{item._initial}}</text>
+          </view>
+          <view class="card-body">
+            <text class="card-name">{{item.cp_name}}</text>
+            <view wx:if="{{item.type_name}}" class="card-tag-row">
+              <text class="card-tag">{{item.type_name}}</text>
+            </view>
+            <text wx:if="{{item._desc}}" class="card-desc">{{item._desc}}</text>
+          </view>
+        </view>
+
+        <view wx:if="{{loadingMore}}" class="list-end">
+          <view class="state-dot small"></view>
+          <text class="list-end-text">加载中…</text>
+        </view>
+        <view wx:elif="{{!hasMore}}" class="list-end">
+          <text class="list-end-text">— 已显示全部 {{recipes.length}} 道菜 —</text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

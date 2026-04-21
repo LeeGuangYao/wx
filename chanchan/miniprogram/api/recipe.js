@@ -1,11 +1,11 @@
 const { request } = require('../utils/request')
+const { BASE_URL } = require('../config')
 
-const BASE_URL = 'https://apis.tianapi.com/caipu'
-const API_KEY = 'b3dacac137e96e9f4d0499d08b49e532'
+const API_BASE = `${BASE_URL}/api/caipu`
 
 function call(path, params = {}, { silent = false } = {}) {
   if (!silent) wx.showLoading({ title: '加载中', mask: true })
-  return request(`${BASE_URL}${path}`, { key: API_KEY, ...params })
+  return request(`${API_BASE}${path}`, params)
     .then((res) => {
       if (res && res.code === 200) return res.result
       const msg = (res && res.msg) || '请求失败'
@@ -24,15 +24,19 @@ function call(path, params = {}, { silent = false } = {}) {
 }
 
 function getRecipeList(params = {}, { silent = false } = {}) {
-  return call('/index', params, { silent }).then((result) => ({
+  return call('/list', params, { silent }).then((result) => ({
     list: result.list || [],
-    totalNum: result.totalNum || 0,
-    curPage: result.curPage || 1
+    allnum: result.allnum || 0,
+    curpage: result.curpage || 1
   }))
 }
 
 function getRecipeDetail(id) {
-  return call('/cpinfo', { id }).then((result) => (result.list || [])[0])
+  return call('/detail', { id }).then((result) => (result && result.list ? result.list[0] : result))
 }
 
-module.exports = { getRecipeList, getRecipeDetail }
+function getCategories({ silent = false } = {}) {
+  return call('/category', {}, { silent }).then((result) => Array.isArray(result) ? result : [])
+}
+
+module.exports = { getRecipeList, getRecipeDetail, getCategories }

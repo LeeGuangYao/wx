@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/list/index",
+    "pages/category/index",
     "pages/recommend/index",
     "pages/meal/index",
     "pages/meal-list/index",
@@ -16,6 +17,10 @@
       {
         "pagePath": "pages/list/index",
         "text": "菜谱"
+      },
+      {
+        "pagePath": "pages/category/index",
+        "text": "精选"
       },
       {
         "pagePath": "pages/recommend/index",
