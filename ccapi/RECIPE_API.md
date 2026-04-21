@@ -121,7 +121,9 @@ curl "http://localhost:3000/api/caipu/category"
 }
 ```
 
-`result` 为数组，按 `type_id` 升序。
+`result` 为数组，**按业务定义的展示顺序排列**（菜品/菜系 → 汤 → 蛋/主食 → 甜品 → 饮料酒水 → 其他/不明确），具体顺序见 `src/services/caipu.service.js` 中的 `CATEGORY_ORDER`。
+
+> 已剔除医疗/进补类分类（如肿瘤癌症、糖尿病人菜肴、各类系统疾病、补气补血、保健美容、孕产妇/更年期妇女 等），不会出现在本接口或 `/api/caipu/list` 中。
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
