@@ -56,7 +56,42 @@
 
 ---
 
-## 2. 创建食记
+## 2. 客户端配置（底部菜单权限）
+
+**`GET /api/config`**
+
+供小程序启动时拉取底部 Tab 配置，后端按需下发可见 Tab。
+`visible === false` 或未返回的项，前端不会渲染。
+
+**响应示例**
+```json
+{
+  "code": 0,
+  "message": "ok",
+  "data": {
+    "tabs": [
+      { "key": "list",      "text": "找菜", "pagePath": "/pages/list/index",      "visible": true },
+      { "key": "category",  "text": "逛逛", "pagePath": "/pages/category/index",  "visible": true },
+      { "key": "recommend", "text": "吃啥", "pagePath": "/pages/recommend/index", "visible": true }
+    ]
+  }
+}
+```
+
+**字段说明**
+
+| 字段 | 类型 | 说明 |
+|---|---|---|
+| `tabs[].key` | string | Tab 唯一标识，前端按此键映射本地图标 |
+| `tabs[].text` | string | Tab 文案 |
+| `tabs[].pagePath` | string | 目标页面路径，必须与 `app.json` 中 `tabBar.list` 的 `pagePath` 一致 |
+| `tabs[].visible` | boolean | 是否渲染，`false` 时前端过滤掉该项 |
+
+> 配置写死在 `src/controllers/config.controller.js` 的 `TABS` 常量中，放开或隐藏某个 Tab 直接改该常量并重启进程。
+
+---
+
+## 3. 创建食记
 
 **`POST /api/meal/create`**
 
@@ -108,7 +143,7 @@ curl -X POST http://localhost:3000/api/meal/create \
 
 ---
 
-## 3. 列表（分页）
+## 4. 列表（分页）
 
 **`GET /api/meal/list`**
 
@@ -151,7 +186,7 @@ curl "http://localhost:3000/api/meal/list?page=1&pageSize=10"
 
 ---
 
-## 4. 详情
+## 5. 详情
 
 **`GET /api/meal/:id`**
 
@@ -177,7 +212,7 @@ curl http://localhost:3000/api/meal/1
 
 ---
 
-## 5. 删除
+## 6. 删除
 
 **`DELETE /api/meal/:id`**
 
@@ -208,7 +243,7 @@ curl -X DELETE http://localhost:3000/api/meal/1
 
 ---
 
-## 6. 静态资源（图片访问）
+## 7. 静态资源（图片访问）
 
 **`GET /uploads/:filename`**
 

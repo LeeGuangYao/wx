@@ -18,7 +18,7 @@ Page({
   },
 
   onShow() {
-    // 从上传页返回后，自动拉取最新一页
+    // 返回时自动拉取最新一页
     if (this.data.list.length === 0) return
     this.fetch({ reset: true, silent: true })
   },

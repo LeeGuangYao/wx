@@ -49,7 +49,7 @@ Page({
       success: (res) => {
         const files = (res.tempFiles || []).filter((f) => {
           if (f.size > MAX_SIZE) {
-            wx.showToast({ title: '图片不能超过 10MB', icon: 'none' })
+            wx.showToast({ title: '\u56fe\u7247不能超过 10MB', icon: 'none' })
             return false
           }
           return true
@@ -92,7 +92,7 @@ Page({
     const { images, title, content } = this.data
 
     this.setData({ submitting: true })
-    wx.showLoading({ title: '上传中…', mask: true })
+    wx.showLoading({ title: '\u4e0a\u4f20中…', mask: true })
 
     createMeal({
       filePaths: images,
@@ -109,8 +109,8 @@ Page({
           submitting: false
         })
         wx.showModal({
-          title: '发布成功 🎉',
-          content: '是否查看我的食记？',
+          title: '\u53d1\u5e03成功 🎉',
+          content: '是否查看我的\u98df\u8bb0？',
           confirmText: '去看看',
           cancelText: '留在这里',
           confirmColor: '#FF5E3A',
@@ -125,7 +125,7 @@ Page({
       })
       .catch((err) => {
         wx.hideLoading()
-        wx.showToast({ title: err.message || '上传失败', icon: 'none' })
+        wx.showToast({ title: err.message || '\u4e0a\u4f20失败', icon: 'none' })
         this.setData({ submitting: false })
       })
   }

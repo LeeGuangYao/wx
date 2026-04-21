@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 *)",
+      "Bash(node -e \"require\\('./src/app'\\)\")",
+      "Bash(node --check /Users/liguangyao/Desktop/ai/wx/ccapi/src/controllers/config.controller.js)",
+      "Bash(node --check /Users/liguangyao/Desktop/ai/wx/ccapi/src/routes/config.route.js)",
+      "Bash(node --check /Users/liguangyao/Desktop/ai/wx/ccapi/src/routes/index.js)",
+      "Bash(node --check /Users/liguangyao/Desktop/ai/wx/chanchan/miniprogram/api/config.js)",
+      "Bash(node --check /Users/liguangyao/Desktop/ai/wx/chanchan/miniprogram/api/meal.js)",
+      "Bash(timeout 6 node *)",
+      "Bash(node *)"
+    ]
+  }
+}

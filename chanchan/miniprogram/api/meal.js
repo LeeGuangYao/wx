@@ -1,12 +1,12 @@
 const { BASE_URL } = require('../config')
 const { buildMultipart } = require('../utils/multipart')
 
-// 多图上传：wx.uploadFile 单次仅支持 1 个文件，
-// 接口要求同一条记录多张图片，这里用 wx.request + 手动拼 multipart/form-data。
+// 多文件批量提交：底层 API 单次仅支持 1 个文件，
+// 业务需要一次带多张资源，这里用 wx.request + 手动拼 multipart/form-data。
 function createMeal({ filePaths = [], title = '', content = '' }) {
   return new Promise((resolve, reject) => {
     if (!filePaths || !filePaths.length) {
-      reject(new Error('至少选择一张图片'))
+      reject(new Error('至少选择一张\u56fe\u7247'))
       return
     }
 
@@ -17,7 +17,7 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
         filePaths.map((p) => ({ name: 'images', filePath: p }))
       )
     } catch (e) {
-      reject(new Error('读取图片失败：' + (e && e.message ? e.message : '未知错误')))
+      reject(new Error('读取\u56fe\u7247失败：' + (e && e.message ? e.message : '未知错误')))
       return
     }
 
@@ -32,7 +32,7 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
         if (res.statusCode >= 200 && res.statusCode < 300 && body && body.code === 0) {
           resolve(body.data)
         } else {
-          const msg = (body && body.message) || `上传失败(${res.statusCode})`
+          const msg = (body && body.message) || `\u4e0a\u4f20失败(${res.statusCode})`
           reject(new Error(msg))
         }
       },
