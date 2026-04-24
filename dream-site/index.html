@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="人因梦想而伟大 — 关于成长、长期主义与自我驱动的思考。" />
+<title>DREAM. — 人因梦想而伟大</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles/base.css" />
+<link rel="stylesheet" href="styles/sections.css" />
+</head>
+<body>
+
+<div class="cursor" aria-hidden="true">
+  <div class="cursor__ring"></div>
+  <div class="cursor__dot"></div>
+</div>
+
+<div class="grid-overlay" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a href="#top" class="nav__logo">
+    <span class="nav__mark">◈</span>
+    <span>DREAM.</span>
+  </a>
+  <nav class="nav__links" aria-label="primary">
+    <a href="#why" data-nav>Why</a>
+    <a href="#reality" data-nav>Reality</a>
+    <a href="#method" data-nav>Method</a>
+    <a href="#time" data-nav>Time</a>
+  </nav>
+  <div class="nav__status">
+    <span class="nav__pulse"></span>
+    <span>ONLINE / 2026</span>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" aria-label="首屏">
+    <div id="particles" class="hero__particles"></div>
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="hero__scan" aria-hidden="true"></div>
+
+    <span class="hero__corner hero__corner--tl" aria-hidden="true"></span>
+    <span class="hero__corner hero__corner--tr" aria-hidden="true"></span>
+    <span class="hero__corner hero__corner--bl" aria-hidden="true"></span>
+    <span class="hero__corner hero__corner--br" aria-hidden="true"></span>
+
+    <div class="hero__rail" aria-hidden="true">
+      <span class="hero__rail-tick">— 0001</span>
+      <span class="hero__rail-tick">— 0042</span>
+      <span class="hero__rail-tick is-active">— 0108</span>
+      <span class="hero__rail-tick">— 1729</span>
+      <span class="hero__rail-tick">— ∞</span>
+    </div>
+
+    <div class="hero__ring" aria-hidden="true">
+      <svg viewBox="0 0 200 200" width="100%" height="100%">
+        <circle cx="100" cy="100" r="96" fill="none" stroke="rgba(124,92,255,0.18)" stroke-width="0.6" stroke-dasharray="2 6"/>
+        <circle cx="100" cy="100" r="76" fill="none" stroke="rgba(0,229,255,0.12)" stroke-width="0.5"/>
+        <circle cx="100" cy="100" r="56" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="0.5"/>
+        <line x1="100" y1="0" x2="100" y2="200" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <line x1="0" y1="100" x2="200" y2="100" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+      </svg>
+    </div>
+
+    <div class="hero__inner">
+      <div class="hero__eyebrow">
+        <span class="hero__eyebrow-line"></span>
+        <span class="hero__eyebrow-text">SYS // A NOTE ON LONG-TERMISM</span>
+        <span class="hero__eyebrow-line"></span>
+      </div>
+
+      <h1 class="hero__title" aria-label="人因梦想而伟大">
+        <span class="hero-char" data-char="人">人</span><span class="hero-char" data-char="因">因</span><span class="hero-char" data-char="梦">梦</span><span class="hero-char" data-char="想">想</span><span class="hero-char" data-char="而">而</span><span class="hero-char" data-char="伟">伟</span><span class="hero-char" data-char="大">大</span>
+      </h1>
+
+      <div class="hero__divider" aria-hidden="true">
+        <span class="hero__divider-bar"></span>
+        <span class="hero__divider-mark">◆</span>
+        <span class="hero__divider-bar"></span>
+      </div>
+
+      <p class="hero__sub">
+        <span class="hero__sub-en">GREATNESS / by-product of long bets</span>
+      </p>
+    </div>
+
+    <div class="hero__scroll" aria-hidden="true">
+      <span class="hero__scroll-label">scroll · 01</span>
+      <div class="hero__scroll-line"></div>
+    </div>
+
+    <div class="hero__meta" aria-hidden="true">
+      <div><span class="hero__meta-k">VER</span><span class="hero__meta-v">01.00</span></div>
+      <div><span class="hero__meta-k">LAT</span><span class="hero__meta-v">35.6N</span></div>
+      <div><span class="hero__meta-k">SIG</span><span class="hero__meta-v">STABLE</span></div>
+      <div><span class="hero__meta-k">SYS</span><span class="hero__meta-v">DREAM</span></div>
+    </div>
+  </section>
+
+  <!-- MODULE 1 · WHY -->
+  <section class="section section--why" id="why">
+    <div class="section__inner">
+      <header class="section__head section--why__head">
+        <span class="section__num">01 / WHY</span>
+        <h2 class="section__title">为什么要有梦想</h2>
+      </header>
+
+      <div class="why-equation" aria-label="时间 乘以 方向 等于 复利">
+        <span class="why-equation__term">时间</span>
+        <span class="why-equation__op">×</span>
+        <span class="why-equation__term">方向</span>
+        <span class="why-equation__op">=</span>
+        <span class="why-equation__term why-equation__term--accent">复利</span>
+      </div>
+
+      <p class="why-lead">梦想不是装饰 — 是一种 <em>结构</em>。</p>
+
+      <ul class="why-tiles">
+        <li class="why-tile" data-card>
+          <div class="why-tile__head">
+            <span class="why-tile__num">01</span>
+            <span class="why-tile__glyph" aria-hidden="true">◇</span>
+          </div>
+          <span class="why-tile__label">长期选择</span>
+          <span class="why-tile__meta">choice · direction</span>
+        </li>
+        <li class="why-tile" data-card>
+          <div class="why-tile__head">
+            <span class="why-tile__num">02</span>
+            <span class="why-tile__glyph" aria-hidden="true">◈</span>
+          </div>
+          <span class="why-tile__label">时间分配</span>
+          <span class="why-tile__meta">time · allocation</span>
+        </li>
+        <li class="why-tile" data-card>
+          <div class="why-tile__head">
+            <span class="why-tile__num">03</span>
+            <span class="why-tile__glyph" aria-hidden="true">◊</span>
+          </div>
+          <span class="why-tile__label">反脆弱</span>
+          <span class="why-tile__meta">anti · fragile</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MODULE 2 · REALITY -->
+  <section class="section section--reality" id="reality">
+    <div class="section__inner">
+      <header class="section__head">
+        <span class="section__num">02 / REALITY</span>
+        <h2 class="section__title">现实世界的约束</h2>
+        <p class="section__lead">在谈方法之前，先承认限制。</p>
+      </header>
+
+      <div class="reality-grid">
+        <article class="reality-card" data-card>
+          <span class="reality-card__tag">R-01</span>
+          <p class="reality-card__text">大多数人会被环境、信息噪音牵引。</p>
+          <footer class="reality-card__foot">
+            <span class="hairline"></span>
+            <span class="reality-card__meta">environment</span>
+          </footer>
+        </article>
+
+        <article class="reality-card" data-card>
+          <span class="reality-card__tag">R-02</span>
+          <p class="reality-card__text">注意力正在被产品化和切割。</p>
+          <footer class="reality-card__foot">
+            <span class="hairline"></span>
+            <span class="reality-card__meta">attention</span>
+          </footer>
+        </article>
+
+        <article class="reality-card" data-card>
+          <span class="reality-card__tag">R-03</span>
+          <p class="reality-card__text">长期目标很容易被短期反馈打断。</p>
+          <footer class="reality-card__foot">
+            <span class="hairline"></span>
+            <span class="reality-card__meta">feedback</span>
+          </footer>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 3 · METHOD -->
+  <section class="section section--method" id="method">
+    <div class="section__inner">
+      <header class="section__head">
+        <span class="section__num">03 / METHOD</span>
+        <h2 class="section__title">如何持续前进</h2>
+        <p class="section__lead">不是靠意志力，而是靠结构。</p>
+      </header>
+
+      <div class="method">
+        <ol class="method__steps" role="tablist">
+          <li class="method__step is-active" data-step="1" role="tab" aria-selected="true">
+            <span class="method__dot"></span>
+            <span class="method__num">01</span>
+            <span class="method__label">降低目标粒度</span>
+          </li>
+          <li class="method__step" data-step="2" role="tab" aria-selected="false">
+            <span class="method__dot"></span>
+            <span class="method__num">02</span>
+            <span class="method__label">建立可复用的节奏</span>
+          </li>
+          <li class="method__step" data-step="3" role="tab" aria-selected="false">
+            <span class="method__dot"></span>
+            <span class="method__num">03</span>
+            <span class="method__label">用系统替代意志力</span>
+          </li>
+        </ol>
+
+        <div class="method__panels">
+          <div class="method__panel is-active" data-panel="1">
+            <h3>降低目标粒度</h3>
+            <p>把「一年的目标」拆解成「一天能完成的最小动作」。当最小单位足够小，任何一天都没有理由缺席。</p>
+            <ul class="method__points">
+              <li>年 → 季 → 周 → 日 → 15 分钟</li>
+              <li>每天只问一件事：最小有效动作是什么</li>
+              <li>粒度越细，越能抵御情绪波动</li>
+            </ul>
+          </div>
+          <div class="method__panel" data-panel="2">
+            <h3>建立可复用的节奏</h3>
+            <p>节奏 &gt; 激情。激情会衰减，节奏不会。每天固定的 15 分钟，胜过每周突击一次的 3 小时。</p>
+            <ul class="method__points">
+              <li>固定时间 · 固定场景 · 固定动作</li>
+              <li>允许低水平完成，拒绝缺席</li>
+              <li>节奏本身就是复利</li>
+            </ul>
+          </div>
+          <div class="method__panel" data-panel="3">
+            <h3>用系统替代意志力</h3>
+            <p>把每次选择提前固化到环境、工具和时间段里 — 需要做决策的时刻越少，执行成本越低。</p>
+            <ul class="method__points">
+              <li>把选择变成默认值</li>
+              <li>让环境替你做一半的事</li>
+              <li>意志力只用来启动，不用来维持</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 4 · TIME -->
+  <section class="section section--time" id="time">
+    <div class="section__inner">
+      <header class="section__head">
+        <span class="section__num">04 / TIME</span>
+        <h2 class="section__title">时间维度</h2>
+        <p class="section__lead">成长不是线性的，它是延迟曝光的复利。</p>
+      </header>
+
+      <div class="timeline" id="timeline">
+        <div class="timeline__hud">
+          <span class="timeline__hud-dot"></span>
+          <span>TIMELINE · GROWTH CURVE</span>
+        </div>
+
+        <svg class="timeline__svg" viewBox="0 0 1200 420" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="curveGrad" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#3b82ff" stop-opacity="0.2"/>
+              <stop offset="55%" stop-color="#7c5cff" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#00e5ff" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00e5ff" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+
+          <!-- ticks -->
+          <g class="timeline__ticks" stroke="rgba(255,255,255,0.1)" stroke-width="1">
+            <line x1="0" y1="360" x2="1200" y2="360"/>
+            <line x1="200" y1="355" x2="200" y2="365"/>
+            <line x1="400" y1="355" x2="400" y2="365"/>
+            <line x1="600" y1="355" x2="600" y2="365"/>
+            <line x1="800" y1="355" x2="800" y2="365"/>
+            <line x1="1000" y1="355" x2="1000" y2="365"/>
+          </g>
+
+          <!-- area fill -->
+          <path id="timelineArea" d="M 40 340 C 360 320, 600 290, 780 210 S 1050 90, 1160 60 L 1160 360 L 40 360 Z" fill="url(#areaGrad)"/>
+
+          <!-- main curve -->
+          <path id="timelineCurve" d="M 40 340 C 360 320, 600 290, 780 210 S 1050 90, 1160 60"
+                fill="none" stroke="url(#curveGrad)" stroke-width="2.2" stroke-linecap="round" filter="url(#glow)"/>
+
+          <!-- nodes -->
+          <g class="timeline__nodes">
+            <g class="timeline__node" data-node="0" transform="translate(80, 332)">
+              <circle r="8" fill="#0a0d18" stroke="#7c5cff" stroke-width="1.5"/>
+              <circle r="3" fill="#7c5cff"/>
+            </g>
+            <g class="timeline__node" data-node="1" transform="translate(600, 258)">
+              <circle r="8" fill="#0a0d18" stroke="#00e5ff" stroke-width="1.5"/>
+              <circle r="3" fill="#00e5ff"/>
+            </g>
+            <g class="timeline__node" data-node="2" transform="translate(1120, 78)">
+              <circle r="10" fill="#0a0d18" stroke="#00e5ff" stroke-width="1.6"/>
+              <circle r="4" fill="#00e5ff"/>
+            </g>
+          </g>
+        </svg>
+
+        <div class="timeline__labels">
+          <div class="timeline__label" style="left: 6%;">
+            <span class="timeline__label-k">T-0</span>
+            <span class="timeline__label-title">起点</span>
+            <span class="timeline__label-desc">迷茫</span>
+          </div>
+          <div class="timeline__label" style="left: 48%;">
+            <span class="timeline__label-k">T-1</span>
+            <span class="timeline__label-title">中期</span>
+            <span class="timeline__label-desc">尝试 · 试错</span>
+          </div>
+          <div class="timeline__label" style="right: 2%;">
+            <span class="timeline__label-k">T-2</span>
+            <span class="timeline__label-title">后期</span>
+            <span class="timeline__label-desc">积累 · 放大</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULE 5 · ENDING -->
+  <section class="section section--ending" id="ending">
+    <div class="section__inner section__inner--center">
+      <p class="ending__kicker">— 收束 —</p>
+      <h2 class="ending__title">
+        <span>伟大不是结果，</span>
+        <span>而是持续选择的副产物。</span>
+      </h2>
+      <p class="ending__sub">Greatness is a by-product of consistent choices.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__left">
+      <span class="footer__mark">◈ DREAM.</span>
+      <span class="footer__meta">a note on long-termism</span>
+    </div>
+    <div class="footer__right">
+      <span>© 2026</span>
+      <span class="footer__dot">·</span>
+      <span>BUILT FOR THOSE WHO KEEP CHOOSING</span>
+    </div>
+  </div>
+</footer>
+
+<!-- third-party -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+
+<!-- app -->
+<script src="scripts/particles.js"></script>
+<script src="scripts/hero.js"></script>
+<script src="scripts/timeline.js"></script>
+<script src="scripts/scroll.js"></script>
+<script src="scripts/main.js"></script>
+
+</body>
+</html>

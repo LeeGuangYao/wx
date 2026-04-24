@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m http.server 8765)",
+      "Bash(echo \"server PID: $!\")",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} | size=%{size_download}\\\\n\" http://localhost:8765/index.html)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} | styles/sections.css\\\\n\" http://localhost:8765/styles/sections.css)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} | scripts/scroll.js\\\\n\" http://localhost:8765/scripts/scroll.js)",
+      "Bash(curl -s http://localhost:8765/index.html)",
+      "Bash(kill 27060)"
+    ]
+  }
+}

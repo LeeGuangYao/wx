@@ -9,7 +9,22 @@
       "Bash(node --check /Users/liguangyao/Desktop/ai/wx/chanchan/miniprogram/api/config.js)",
       "Bash(node --check /Users/liguangyao/Desktop/ai/wx/chanchan/miniprogram/api/meal.js)",
       "Bash(timeout 6 node *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code} · %{size_download} bytes · type=%{content_type}\\\\n\" http://localhost:5173/)",
+      "Bash(curl -s -o /dev/null -w \"styles/base.css       HTTP %{http_code}\\\\n\" http://localhost:5173/styles/base.css)",
+      "Bash(curl -s -o /dev/null -w \"styles/sections.css   HTTP %{http_code}\\\\n\" http://localhost:5173/styles/sections.css)",
+      "Bash(curl -s -o /dev/null -w \"scripts/main.js       HTTP %{http_code}\\\\n\" http://localhost:5173/scripts/main.js)",
+      "Bash(curl -s -o /dev/null -w \"scripts/hero.js       HTTP %{http_code}\\\\n\" http://localhost:5173/scripts/hero.js)",
+      "Bash(curl -s -o /dev/null -w \"index.html            HTTP %{http_code} · %{size_download} bytes\\\\n\" http://localhost:5184/)",
+      "Bash(curl -s -o /dev/null -w \"styles/base.css       HTTP %{http_code} · %{size_download} bytes\\\\n\" http://localhost:5184/styles/base.css)",
+      "Bash(curl -s -o /dev/null -w \"styles/sections.css   HTTP %{http_code} · %{size_download} bytes\\\\n\" http://localhost:5184/styles/sections.css)",
+      "Bash(curl -s -o /dev/null -w \"scripts/main.js       HTTP %{http_code} · %{size_download} bytes\\\\n\" http://localhost:5184/scripts/main.js)",
+      "Bash(curl -s -o /dev/null -w \"scripts/hero.js       HTTP %{http_code}\\\\n\" http://localhost:5184/scripts/hero.js)",
+      "Bash(curl -s -o /dev/null -w \"gsap                  HTTP %{http_code} · %{size_download} bytes\\\\n\" https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js)",
+      "Bash(curl -s -o /dev/null -w \"ScrollTrigger         HTTP %{http_code} · %{size_download} bytes\\\\n\" https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js)",
+      "Bash(curl -s -o /dev/null -w \"tsparticles bundle    HTTP %{http_code} · %{size_download} bytes\\\\n\" https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:5184/)",
+      "Bash(open *)"
     ]
   }
 }

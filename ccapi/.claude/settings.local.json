@@ -24,7 +24,9 @@
       "Bash(kill b85kf9ayr *)",
       "Bash(kill bh96cfzid *)",
       "Bash(npm run *)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "Bash(kill bzxejcaiq *)",
+      "Bash(pkill -f \"nodemon server.js\")"
     ]
   }
 }

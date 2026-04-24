@@ -5,7 +5,8 @@ const { ok } = require('../utils/response');
 const TABS = [
   { key: 'list',      text: '找菜', pagePath: '/pages/list/index',      visible: true },
   { key: 'category',  text: '逛逛', pagePath: '/pages/category/index',  visible: true },
-  { key: 'recommend', text: '吃啥', pagePath: '/pages/recommend/index', visible: true }
+  { key: 'recommend', text: '吃啥', pagePath: '/pages/recommend/index', visible: true },
+  // { key: 'meal',      text: '食记', pagePath: '/pages/meal/index',      visible: true }
 ];
 
 async function getConfig(_req, res, next) {
