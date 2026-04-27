@@ -1,0 +1,8 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "备忘录" [level=1] [ref=e6]
+    - textbox "搜索" [ref=e8]
+    - generic [ref=e10]: 暂无备忘录
+    - button "新建" [ref=e12] [cursor=pointer]
+  - main [ref=e13]:
+    - paragraph [ref=e16]: 选择或新建一个备忘录

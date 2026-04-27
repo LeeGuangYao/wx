@@ -1,0 +1,28 @@
+{
+  "name": "notes",
+  "version": "1.0.0",
+  "description": "备忘录 Web 应用",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"nodemon server.js\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "migrate": "node src/db/migrate.js",
+    "postinstall": "cd client && npm install"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "nodemon": "^3.1.7"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

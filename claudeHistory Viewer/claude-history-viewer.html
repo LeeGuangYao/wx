@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude CLI 对话历史</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f11;
+    --bg2: #18181c;
+    --bg3: #222228;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8ea;
+    --text2: #9898a8;
+    --text3: #5a5a6e;
+    --accent: #8b7cf6;
+    --accent2: #6d5de8;
+    --accent-glow: rgba(139,124,246,0.15);
+    --user-bubble: #2a2440;
+    --assistant-bubble: #1a1a22;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --radius: 10px;
+    --success: #34d399;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Top bar ── */
+  #topbar {
+    height: 44px;
+    min-height: 44px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    background: var(--bg);
+  }
+  #topbar .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+  }
+  #topbar .subtitle {
+    font-size: 12px;
+    color: var(--text3);
+  }
+  #topbar .spacer { flex: 1; }
+  #topbar .hint {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+
+  /* ── Layout ── */
+  #layout {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: 260px;
+    min-width: 260px;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  #sidebar-search {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  #search-input {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    font-family: var(--sans);
+    color: var(--text);
+    outline: none;
+    transition: border 0.15s;
+  }
+  #search-input:focus { border-color: var(--accent); }
+  #search-input::placeholder { color: var(--text3); }
+  #project-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px 0;
+  }
+  #project-list::-webkit-scrollbar { width: 4px; }
+  #project-list::-webkit-scrollbar-track { background: transparent; }
+  #project-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .project-group { margin-bottom: 4px; }
+  .project-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text3);
+    text-transform: uppercase;
+    padding: 8px 14px 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .project-label::before {
+    content: '';
+    display: block;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--text3);
+  }
+  .session-item {
+    padding: 8px 14px;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.1s;
+    position: relative;
+  }
+  .session-item:hover { background: var(--bg2); }
+  .session-item.active {
+    background: var(--bg2);
+    border-left-color: var(--accent);
+  }
+  .session-item.active::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0; width: 2px;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .session-title {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+  }
+  .session-meta {
+    font-size: 11px;
+    color: var(--text3);
+    margin-top: 2px;
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .session-meta .size-badge {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+
+  /* ── Main panel ── */
+  #main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: var(--bg);
+  }
+
+  /* ── Session header ── */
+  #session-header {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    display: none;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: var(--bg);
+  }
+  #session-header.visible { display: flex; }
+  .header-id {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text2);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 8px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .header-btn {
+    font-size: 12px;
+    font-family: var(--sans);
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    white-space: nowrap;
+    transition: all 0.12s;
+  }
+  .header-btn:hover { background: var(--bg3); color: var(--text); }
+  .header-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .header-btn.primary:hover { background: var(--accent2); }
+  .header-btn.success {
+    background: transparent;
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  /* ── Chat ── */
+  #chat-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  #chat-area::-webkit-scrollbar { width: 4px; }
+  #chat-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .msg { display: flex; flex-direction: column; gap: 4px; max-width: 82%; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.assistant { align-self: flex-start; align-items: flex-start; }
+
+  .msg-role {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .msg.user .msg-role { color: #a89bf8; }
+  .msg.assistant .msg-role { color: var(--text3); }
+
+  .msg-bubble {
+    font-size: 13.5px;
+    line-height: 1.65;
+    padding: 10px 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .msg.user .msg-bubble {
+    background: var(--user-bubble);
+    border: 1px solid rgba(139,124,246,0.25);
+    border-radius: 12px 12px 3px 12px;
+    color: #d8d4ff;
+  }
+  .msg.assistant .msg-bubble {
+    background: var(--assistant-bubble);
+    border: 1px solid var(--border);
+    border-radius: 12px 12px 12px 3px;
+    color: var(--text);
+  }
+
+  /* tool use blocks */
+  .tool-block {
+    font-family: var(--mono);
+    font-size: 11px;
+    background: #111118;
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--text3);
+    max-width: 480px;
+    word-break: break-all;
+  }
+  .tool-block .tool-name { color: var(--accent); font-weight: 500; }
+
+  /* ── Command bar ── */
+  #cmd-bar {
+    padding: 10px 16px;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  #cmd-bar-label {
+    font-size: 10px;
+    color: var(--text3);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  #cmd-display {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: #a8f0c0;
+    background: #0a0f0c;
+    border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 6px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  #cmd-display .prompt { color: var(--text3); user-select: none; }
+  #cmd-text { flex: 1; }
+
+  /* ── Empty state ── */
+  #empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text3);
+  }
+  #empty-state .icon {
+    font-size: 40px;
+    opacity: 0.4;
+  }
+  #empty-state p {
+    font-size: 14px;
+  }
+  #empty-state .tip {
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text3);
+    opacity: 0.6;
+    margin-top: 4px;
+  }
+
+  /* ── Loading ── */
+  #loading-overlay {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    z-index: 100;
+    transition: opacity 0.3s;
+  }
+  #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 2px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading-text {
+    font-size: 13px;
+    color: var(--text3);
+    font-family: var(--mono);
+  }
+
+  /* ── Error banner ── */
+  #error-banner {
+    display: none;
+    background: rgba(220,50,50,0.1);
+    border: 1px solid rgba(220,50,50,0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #ff9999;
+    margin: 12px 16px;
+  }
+
+  /* scrollbar everywhere */
+  * { scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div id="loading-text">读取对话历史...</div>
+</div>
+
+<div id="topbar">
+  <div class="dot"></div>
+  <div class="logo">claude-history</div>
+  <div class="subtitle">本地 CLI 对话查看器</div>
+  <div class="spacer"></div>
+  <div class="hint" id="stats-hint"></div>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <div id="sidebar-search">
+      <input id="search-input" type="text" placeholder="搜索项目或对话..." oninput="filterSessions(this.value)">
+    </div>
+    <div id="project-list"></div>
+  </div>
+
+  <div id="main">
+    <div id="error-banner" id="error-banner"></div>
+    <div id="session-header">
+      <div class="header-id" id="header-id">-</div>
+      <button class="header-btn" id="copy-id-btn" onclick="copyText('id')">复制 ID</button>
+      <button class="header-btn primary" id="copy-cmd-btn" onclick="copyText('cmd')">复制恢复命令</button>
+    </div>
+
+    <div id="empty-state">
+      <div class="icon">◈</div>
+      <p>选择左侧对话查看内容</p>
+      <div class="tip">~/.claude/projects/ 下的所有记录</div>
+    </div>
+
+    <div id="chat-area" style="display:none"></div>
+
+    <div id="cmd-bar" style="display:none">
+      <div id="cmd-bar-label">恢复命令</div>
+      <div id="cmd-display">
+        <span class="prompt">$</span>
+        <span id="cmd-text">-</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────
+const CLAUDE_DIR = (window.CLAUDE_DIR_OVERRIDE || (navigator.platform.includes('Win') ? '%USERPROFILE%\\.claude' : '~/.claude'));
+let allData = {}; // { projectName: { path, sessions: [{id, date, size, messages, preview}] } }
+let currentSessionId = null;
+let currentProjectPath = null;
+let filterText = '';
+
+// ─── Helpers ─────────────────────────────────────────
+function fmt(bytes) {
+  if (bytes < 1024) return bytes + 'B';
+  if (bytes < 1048576) return (bytes/1024).toFixed(0) + 'K';
+  return (bytes/1048576).toFixed(1) + 'M';
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function parseDate(ts) {
+  if (!ts) return '-';
+  try {
+    const d = new Date(ts);
+    const m = d.getMonth()+1;
+    const day = d.getDate();
+    const h = String(d.getHours()).padStart(2,'0');
+    const min = String(d.getMinutes()).padStart(2,'0');
+    return `${m}月${day}日 ${h}:${min}`;
+  } catch { return '-'; }
+}
+
+// ─── Parse JSONL ─────────────────────────────────────
+function parseJSONL(text) {
+  const lines = text.trim().split('\n');
+  const messages = [];
+  let firstTs = null, lastTs = null;
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    let obj;
+    try { obj = JSON.parse(line); } catch { continue; }
+
+    const ts = obj.timestamp || obj.ts;
+    if (ts) { if (!firstTs) firstTs = ts; lastTs = ts; }
+
+    // message wrapper
+    const msg = obj.message || obj;
+    const role = msg.role || obj.role || obj.type;
+    if (!role || !['user','assistant'].includes(role)) continue;
+
+    let content = msg.content;
+    if (!content) continue;
+
+    let text = '';
+    if (typeof content === 'string') {
+      text = content;
+    } else if (Array.isArray(content)) {
+      for (const block of content) {
+        if (!block || typeof block !== 'object') continue;
+        if (block.type === 'text') {
+          text += (block.text || '');
+        } else if (block.type === 'tool_use') {
+          text += `\n__TOOL__${block.name || 'tool'}__INPUT__${JSON.stringify(block.input||{}).slice(0,120)}`;
+        }
+      }
+    }
+
+    if (text.trim()) messages.push({ role, text: text.trim() });
+  }
+
+  return { messages, firstTs, lastTs };
+}
+
+// ─── Load data via fetch (when served) or demo mode ──
+async function tryFetch(path) {
+  try {
+    const r = await fetch(path);
+    if (!r.ok) return null;
+    return await r.text();
+  } catch { return null; }
+}
+
+// Demo data — shown when real files can't be read (e.g. opened directly as file://)
+function getDemoData() {
+  return {
+    'ai-wx': {
+      path: '~/Desktop/ai-wx',
+      sessions: [
+        {
+          id: '37c56c89-bce8-431c-8b51-a2fcaa24fd8f',
+          date: '4月24日 16:35',
+          size: '582K',
+          preview: '微信自动回复功能开发',
+          messages: [
+            { role: 'user', text: '帮我在这个项目里实现微信消息自动回复功能，用 itchat 库' },
+            { role: 'assistant', text: '好的，我来帮你实现微信消息自动回复。\n\n首先分析一下项目结构，然后实现核心逻辑：\n\n1. 监听消息事件\n2. 解析消息内容\n3. 生成回复并发送\n\n我先看看现有的文件结构...' },
+            { role: 'user', text: '好的，回复逻辑先简单一点，收到消息直接转发给 AI 处理' },
+            { role: 'assistant', text: '明白，我来实现一个简洁的转发-回复流程：\n\n```python\nimport itchat\nfrom ai_client import ask_ai\n\n@itchat.msg_register(itchat.content.TEXT)\ndef handle_msg(msg):\n    reply = ask_ai(msg.text)\n    msg.user.send(reply)\n\nitchat.auto_login(hotReload=True)\nitchat.run()\n```\n\n这样每条文本消息都会转发给 AI 处理后自动回复。' }
+          ]
+        },
+        {
+          id: '69270612-51d9-4db0-895f-f1da46f1ff5e',
+          date: '4月21日 16:25',
+          size: '468K',
+          preview: '初始化项目目录结构',
+          messages: [
+            { role: 'user', text: '帮我初始化这个 ai-wx 项目的目录结构，要清晰易维护' },
+            { role: 'assistant', text: '好的，我来为你创建一个清晰的项目结构：\n\n```\nai-wx/\n├── src/\n│   ├── bot.py          # 主入口\n│   ├── handlers/       # 消息处理器\n│   └── utils/          # 工具函数\n├── config/\n│   └── config.yaml     # 配置文件\n├── tests/\n└── requirements.txt\n```\n\n正在创建文件...' }
+          ]
+        },
+        {
+          id: '6f1fcd7b-22e0-4eae-acf6-93e77b3b0c77',
+          date: '4月24日 11:45',
+          size: '376K',
+          preview: '配置文件读取优化',
+          messages: [
+            { role: 'user', text: '配置文件读取这里有点问题，每次启动都要重新读，能不能缓存一下' },
+            { role: 'assistant', text: '可以用单例模式或模块级缓存来解决这个问题，我来帮你改造一下配置读取模块...' }
+          ]
+        }
+      ]
+    },
+    'ai-wx-notes': {
+      path: '~/Desktop/ai-wx-notes',
+      sessions: [
+        {
+          id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+          date: '4月27日 08:54',
+          size: '25K',
+          preview: 'Markdown 预览功能',
+          messages: [
+            { role: 'user', text: '给这个笔记应用加一个实时 markdown 预览功能' },
+            { role: 'assistant', text: '好的，我来集成 marked.js 实现实时 Markdown 预览，同时保持编辑体验流畅...' }
+          ]
+        }
+      ]
+    },
+    'Homsom-Mobile-Monorepo-Client': {
+      path: '~/Desktop/homsom/Homsom-Mobile-Monorepo-Client',
+      sessions: [
+        {
+          id: 'monorepo-b123-4567-89ab-cdef01234567',
+          date: '4月24日 16:38',
+          size: '1.2M',
+          preview: 'Monorepo 构建速度优化',
+          messages: [
+            { role: 'user', text: '构建太慢了，每次全量构建要 4 分钟，帮我看看怎么优化' },
+            { role: 'assistant', text: '我来分析一下构建配置，找出瓶颈...\n\n看了一下 webpack.config.js，有几个明显可以优化的地方：\n\n1. 开启 cache: { type: "filesystem" } 持久化缓存\n2. 限制 babel-loader 的处理范围\n3. 使用 thread-loader 并行处理\n\n预计可以把热构建时间压到 30 秒以内。' }
+          ]
+        }
+      ]
+    }
+  };
+}
+
+// ─── Render sidebar ───────────────────────────────────
+function renderSidebar(data, filter) {
+  const list = document.getElementById('project-list');
+  list.innerHTML = '';
+  let total = 0;
+
+  for (const [projName, projData] of Object.entries(data)) {
+    const sessions = projData.sessions.filter(s => {
+      if (!filter) return true;
+      const f = filter.toLowerCase();
+      return projName.toLowerCase().includes(f) ||
+             s.preview.toLowerCase().includes(f) ||
+             s.id.toLowerCase().includes(f);
+    });
+    if (!sessions.length) continue;
+
+    const group = document.createElement('div');
+    group.className = 'project-group';
+
+    const label = document.createElement('div');
+    label.className = 'project-label';
+    label.textContent = projName;
+    group.appendChild(label);
+
+    for (const s of sessions) {
+      total++;
+      const item = document.createElement('div');
+      item.className = 'session-item';
+      if (s.id === currentSessionId) item.classList.add('active');
+      item.dataset.id = s.id;
+      item.innerHTML = `
+        <div class="session-title">${escapeHtml(s.preview)}</div>
+        <div class="session-meta">
+          <span>${s.date}</span>
+          <span class="size-badge">${s.size}</span>
+        </div>`;
+      item.onclick = () => loadSession(projName, s, item);
+      group.appendChild(item);
+    }
+    list.appendChild(group);
+  }
+
+  document.getElementById('stats-hint').textContent = `${total} 个对话`;
+}
+
+// ─── Load session ─────────────────────────────────────
+function loadSession(projName, session, el) {
+  document.querySelectorAll('.session-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  currentSessionId = session.id;
+  currentProjectPath = allData[projName]?.path || '~';
+
+  // header
+  const hdr = document.getElementById('session-header');
+  hdr.classList.add('visible');
+  document.getElementById('header-id').textContent = session.id;
+
+  // cmd
+  const cmd = `cd ${currentProjectPath} && claude --resume ${session.id}`;
+  document.getElementById('cmd-text').textContent = cmd;
+
+  // show areas
+  document.getElementById('empty-state').style.display = 'none';
+  const chatArea = document.getElementById('chat-area');
+  chatArea.style.display = 'flex';
+  document.getElementById('cmd-bar').style.display = 'block';
+
+  // render messages
+  chatArea.innerHTML = '';
+  for (const msg of session.messages) {
+    const div = document.createElement('div');
+    div.className = `msg ${msg.role}`;
+
+    const roleLabel = msg.role === 'user' ? 'You' : 'Claude';
+    let bubbleContent = '';
+
+    // handle tool blocks
+    const parts = msg.text.split(/\n__TOOL__([^_]+)__INPUT__(.+)/);
+    if (parts.length === 1) {
+      bubbleContent = `<div class="msg-bubble">${escapeHtml(msg.text)}</div>`;
+    } else {
+      let html = '';
+      for (let i = 0; i < parts.length; i++) {
+        if (i % 3 === 0 && parts[i].trim()) {
+          html += `<div class="msg-bubble">${escapeHtml(parts[i].trim())}</div>`;
+        } else if (i % 3 === 1) {
+          const toolName = parts[i];
+          const toolInput = parts[i+1] || '';
+          html += `<div class="tool-block"><span class="tool-name">${escapeHtml(toolName)}</span> ${escapeHtml(toolInput)}</div>`;
+        }
+      }
+      bubbleContent = html;
+    }
+
+    div.innerHTML = `<div class="msg-role">${roleLabel}</div>${bubbleContent}`;
+    chatArea.appendChild(div);
+  }
+
+  // scroll to bottom
+  chatArea.scrollTop = chatArea.scrollHeight;
+
+  // reset buttons
+  document.getElementById('copy-id-btn').textContent = '复制 ID';
+  document.getElementById('copy-cmd-btn').textContent = '复制恢复命令';
+  document.getElementById('copy-cmd-btn').className = 'header-btn primary';
+}
+
+// ─── Filter ───────────────────────────────────────────
+function filterSessions(val) {
+  filterText = val;
+  renderSidebar(allData, val);
+}
+
+// ─── Copy ─────────────────────────────────────────────
+function copyText(type) {
+  let text = '';
+  let btnId = '';
+  if (type === 'id') {
+    text = currentSessionId || '';
+    btnId = 'copy-id-btn';
+  } else {
+    text = document.getElementById('cmd-text').textContent;
+    btnId = 'copy-cmd-btn';
+  }
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    const orig = btn.textContent;
+    const origClass = btn.className;
+    btn.textContent = '已复制 ✓';
+    btn.className = 'header-btn success';
+    setTimeout(() => { btn.textContent = orig; btn.className = origClass; }, 2000);
+  });
+}
+
+// ─── Init ─────────────────────────────────────────────
+async function init() {
+  const overlay = document.getElementById('loading-overlay');
+  const loadingText = document.getElementById('loading-text');
+
+  // Try to load real data from a companion JSON (if served by local server)
+  let loaded = false;
+  try {
+    const r = await fetch('claude-history-data.json');
+    if (r.ok) {
+      allData = await r.json();
+      loaded = true;
+      loadingText.textContent = '渲染界面...';
+    }
+  } catch {}
+
+  if (!loaded) {
+    // Use demo data
+    allData = getDemoData();
+    const note = document.getElementById('error-banner');
+    note.style.display = 'block';
+    note.innerHTML = `
+      <strong>演示模式</strong> — 当前显示的是示例数据（基于你的真实项目名）。<br>
+      运行下方命令启动本地服务器以读取真实对话记录：<br>
+      <code style="font-family:monospace;font-size:11px;opacity:0.8">python3 claude-history-server.py</code>
+      然后在浏览器打开 <code style="font-family:monospace;font-size:11px;opacity:0.8">http://localhost:7734</code>
+    `;
+  }
+
+  renderSidebar(allData, '');
+  overlay.classList.add('hidden');
+  setTimeout(() => overlay.style.display = 'none', 300);
+}
+
+init();
+</script>
+</body>
+</html>

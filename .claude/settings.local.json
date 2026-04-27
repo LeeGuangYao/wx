@@ -24,7 +24,9 @@
       "Bash(curl -s -o /dev/null -w \"ScrollTrigger         HTTP %{http_code} · %{size_download} bytes\\\\n\" https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js)",
       "Bash(curl -s -o /dev/null -w \"tsparticles bundle    HTTP %{http_code} · %{size_download} bytes\\\\n\" https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" http://localhost:5184/)",
-      "Bash(open *)"
+      "Bash(open *)",
+      "mcp__plugin_context7_context7__resolve-library-id",
+      "WebSearch"
     ]
   }
 }

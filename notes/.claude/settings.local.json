@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node server.js)",
+      "Bash(curl -s http://localhost:3175/api/notes)",
+      "Bash(kill %1)",
+      "Bash(npx concurrently *)",
+      "Bash(curl -s http://localhost:5175/api/notes)",
+      "Bash(curl -s http://localhost:5175/)",
+      "Bash(jobs -l)",
+      "mcp__plugin_playwright_playwright__browser_navigate",
+      "mcp__plugin_playwright_playwright__browser_take_screenshot"
+    ]
+  }
+}
