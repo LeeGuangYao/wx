@@ -44,12 +44,38 @@ Page({
     wx.chooseMedia({
       count: remain,
       mediaType: ['image'],
-      sourceType: ['album', 'camera'],
+      sourceType: ['album'],
       sizeType: ['compressed'],
       success: (res) => {
         const files = (res.tempFiles || []).filter((f) => {
           if (f.size > MAX_SIZE) {
-            wx.showToast({ title: '\u56fe\u7247不能超过 10MB', icon: 'none' })
+            wx.showToast({ title: '图片不能超过 10MB', icon: 'none' })
+            return false
+          }
+          return true
+        })
+        if (!files.length) return
+        const next = this.data.images.concat(files.map((f) => f.tempFilePath)).slice(0, MAX_COUNT)
+        this.setData({ images: next }, this.refreshCanSubmit)
+      }
+    })
+  },
+
+  onTakePhoto() {
+    const remain = MAX_COUNT - this.data.images.length
+    if (remain <= 0) {
+      wx.showToast({ title: `最多 ${MAX_COUNT} 张`, icon: 'none' })
+      return
+    }
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['camera'],
+      sizeType: ['compressed'],
+      success: (res) => {
+        const files = (res.tempFiles || []).filter((f) => {
+          if (f.size > MAX_SIZE) {
+            wx.showToast({ title: '图片不能超过 10MB', icon: 'none' })
             return false
           }
           return true

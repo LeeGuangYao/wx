@@ -5,14 +5,14 @@
 //   release → 正式版
 //
 // 发布前请把下方 trial / release 的 URL 改成真实线上域名（需 HTTPS，
-// 并在微信公众平台 → 开发 → 服务器域名 的 uploadFile / request 合法域名中配置）。
+// 并在微信公众平台 → 开发 → 服务器域名 的 uploadFile / request 合法域名中配置。
 // 本地开发http://localhost:3000
-// 线上地址http://119.45.40.29:3000
+// 线上地址https://vvcsclbb.com/
 
 const ENV_URLS = {
-  develop: 'http://119.45.40.29:3000',
-  trial: 'http://119.45.40.29:3000',
-  release: 'http://119.45.40.29:3000'
+  develop: 'https://vvcsclbb.com:3000',
+  trial: 'https://vvcsclbb.com:3000',
+  release: 'https://vvcsclbb.com:3000',
 };
 
 function resolveBaseUrl() {

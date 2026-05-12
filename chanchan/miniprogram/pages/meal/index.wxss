@@ -168,9 +168,19 @@ page {
   font-weight: 300;
 }
 
+.img-add-icon {
+  font-size: 52rpx;
+  line-height: 1;
+}
+
 .img-add-text {
   font-size: var(--fs-tiny);
   color: var(--color-text-4);
+}
+
+.img-add-camera {
+  border-color: #8EC5FC;
+  background: #EDF4FF;
 }
 
 .img-wrap {

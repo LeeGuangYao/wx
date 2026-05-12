@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+import sys
+import os
+
+pkg_dir = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "opencode_history"
+)
+sys.path.insert(0, pkg_dir)
+from opencode_history.__main__ import main
+
+main()

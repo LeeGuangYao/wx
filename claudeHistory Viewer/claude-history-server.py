@@ -69,7 +69,7 @@ def load_all_projects():
     if not CLAUDE_DIR.exists():
         return {}
 
-    result = {}
+    raw_projects = []
     for proj_dir in sorted(CLAUDE_DIR.iterdir()):
         if not proj_dir.is_dir() or proj_dir.name.startswith("."):
             continue
@@ -85,9 +85,13 @@ def load_all_projects():
         proj_name = proj_dir.name.split("-")[-1] if "-" in proj_dir.name else proj_dir.name
 
         sessions = []
+        latest_mtime = 0
         for jsonl_file in sorted(proj_dir.glob("*.jsonl"), key=lambda f: f.stat().st_mtime, reverse=True):
             session_id = jsonl_file.stem
             size_bytes = jsonl_file.stat().st_size
+            mtime = jsonl_file.stat().st_mtime
+            if mtime > latest_mtime:
+                latest_mtime = mtime
             messages, first_ts, last_ts = parse_jsonl(jsonl_file)
 
             if not messages:
@@ -126,7 +130,12 @@ def load_all_projects():
             })
 
         if sessions:
-            result[proj_name] = {"path": real_path, "sessions": sessions}
+            raw_projects.append((proj_name, real_path, sessions, latest_mtime))
+
+    raw_projects.sort(key=lambda x: x[3], reverse=True)
+    result = {}
+    for proj_name, real_path, sessions, _ in raw_projects:
+        result[proj_name] = {"path": real_path, "sessions": sessions}
 
     return result
 

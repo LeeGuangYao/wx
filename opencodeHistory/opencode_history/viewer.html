@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenCode 会话历史</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0f0f11;
+    --bg2: #18181c;
+    --bg3: #222228;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #e8e8ea;
+    --text2: #9898a8;
+    --text3: #5a5a6e;
+    --accent: #8b7cf6;
+    --accent2: #6d5de8;
+    --accent-glow: rgba(139,124,246,0.15);
+    --user-bubble: #2a2440;
+    --assistant-bubble: #1a1a22;
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --radius: 10px;
+    --success: #34d399;
+    --warning: #fbbf24;
+    --star: #fbbf24;
+    --star-empty: #3a3a48;
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top bar */
+  #topbar {
+    height: 44px; min-height: 44px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 16px; gap: 10px;
+    background: var(--bg);
+  }
+  #topbar .logo { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent); letter-spacing: 0.02em; }
+  #topbar .subtitle { font-size: 12px; color: var(--text3); }
+  #topbar .spacer { flex: 1; }
+  #topbar .hint { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); opacity: 0.6; }
+  #reindex-btn {
+    font-size: 11px; font-family: var(--mono); color: var(--text3);
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 5px;
+    padding: 3px 10px; cursor: pointer; transition: all 0.15s;
+  }
+  #reindex-btn:hover { color: var(--text); border-color: var(--border2); }
+
+  /* Layout */
+  #layout { display: flex; flex: 1; min-height: 0; }
+
+  /* Sidebar */
+  #sidebar {
+    width: 300px; min-width: 300px;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    background: var(--bg); overflow: hidden;
+  }
+  #sidebar-search { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; gap: 6px; }
+  #search-input {
+    flex: 1; background: var(--bg3); border: 1px solid var(--border); border-radius: 6px;
+    padding: 6px 10px; font-size: 12px; font-family: var(--sans); color: var(--text); outline: none; transition: border 0.15s;
+  }
+  #search-input:focus { border-color: var(--accent); }
+  #search-input::placeholder { color: var(--text3); }
+  #filter-btns { display: flex; gap: 4px; }
+  .filter-btn {
+    font-size: 10px; font-family: var(--mono); color: var(--text3);
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 4px;
+    padding: 2px 6px; cursor: pointer; transition: all 0.12s; white-space: nowrap;
+  }
+  .filter-btn:hover, .filter-btn.active { color: var(--accent); border-color: var(--accent); }
+
+  #project-list { flex: 1; overflow-y: auto; padding: 6px 0; }
+  #project-list::-webkit-scrollbar { width: 4px; }
+  #project-list::-webkit-scrollbar-track { background: transparent; }
+  #project-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .project-group { margin-bottom: 4px; }
+  .project-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+    color: var(--text3); text-transform: uppercase;
+    padding: 8px 14px 4px; display: flex; align-items: center; gap: 6px;
+  }
+  .project-label::before { content: ''; display: block; width: 3px; height: 3px; border-radius: 50%; background: var(--text3); }
+
+  .session-item {
+    padding: 8px 14px; cursor: pointer; border-left: 2px solid transparent;
+    transition: all 0.1s; position: relative;
+  }
+  .session-item:hover { background: var(--bg2); }
+  .session-item.active { background: var(--bg2); border-left-color: var(--accent); }
+  .session-item.active::after {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+    background: var(--accent); box-shadow: 0 0 8px var(--accent);
+  }
+  .session-title {
+    font-size: 13px; color: var(--text); font-weight: 400;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.4;
+  }
+  .session-meta {
+    font-size: 11px; color: var(--text3); margin-top: 3px;
+    font-family: var(--mono); display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+  .session-meta .tag { background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; padding: 0 4px; font-size: 10px; }
+  .session-meta .imp { color: var(--star); letter-spacing: -1px; }
+  .session-meta .model-badge { font-size: 10px; color: var(--accent); opacity: 0.7; }
+
+  /* Main panel */
+  #main { flex: 1; display: flex; flex-direction: column; min-width: 0; background: var(--bg); }
+
+  /* Session header */
+  #session-header {
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    display: none; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--bg);
+  }
+  #session-header.visible { display: flex; }
+  .header-info { flex: 1; min-width: 0; }
+  .header-title { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+  .header-summary { font-size: 12px; color: var(--text2); line-height: 1.5; }
+  .header-details { display: flex; gap: 12px; margin-top: 6px; font-size: 11px; color: var(--text3); font-family: var(--mono); flex-wrap: wrap; }
+  .header-details span { display: flex; align-items: center; gap: 4px; }
+  .header-id {
+    font-family: var(--mono); font-size: 11px; color: var(--text2);
+    background: var(--bg3); border: 1px solid var(--border); border-radius: 5px;
+    padding: 4px 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .header-btn {
+    font-size: 12px; font-family: var(--sans); font-weight: 500;
+    padding: 5px 12px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--border2); background: transparent; color: var(--text2);
+    white-space: nowrap; transition: all 0.12s;
+  }
+  .header-btn:hover { background: var(--bg3); color: var(--text); }
+  .header-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .header-btn.primary:hover { background: var(--accent2); }
+  .header-btn.success { background: transparent; border-color: var(--success); color: var(--success); }
+
+  /* Chat */
+  #chat-area {
+    flex: 1; overflow-y: auto; padding: 20px 20px 10px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  #chat-area::-webkit-scrollbar { width: 4px; }
+  #chat-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .msg { display: flex; flex-direction: column; gap: 4px; max-width: 82%; }
+  .msg.user { align-self: flex-end; align-items: flex-end; }
+  .msg.assistant { align-self: flex-start; align-items: flex-start; }
+
+  .msg-role { font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+  .msg.user .msg-role { color: #a89bf8; }
+  .msg.assistant .msg-role { color: var(--text3); }
+
+  .msg-bubble {
+    font-size: 13.5px; line-height: 1.65; padding: 10px 14px;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  .msg.user .msg-bubble {
+    background: var(--user-bubble); border: 1px solid rgba(139,124,246,0.25);
+    border-radius: 12px 12px 3px 12px; color: #d8d4ff;
+  }
+  .msg.assistant .msg-bubble {
+    background: var(--assistant-bubble); border: 1px solid var(--border);
+    border-radius: 12px 12px 12px 3px; color: var(--text);
+  }
+
+  .tool-block {
+    font-family: var(--mono); font-size: 11px;
+    background: #111118; border: 1px solid var(--border); border-left: 2px solid var(--accent);
+    border-radius: 6px; padding: 8px 12px; color: var(--text3); max-width: 560px;
+    word-break: break-all; margin-top: 4px;
+  }
+  .tool-block .tool-name { color: var(--accent); font-weight: 500; }
+  .tool-block .tool-output { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--border); max-height: 120px; overflow-y: auto; white-space: pre-wrap; font-size: 10px; color: var(--text3); }
+
+  /* Command bar */
+  #cmd-bar {
+    padding: 10px 16px; border-top: 1px solid var(--border); background: var(--bg2);
+  }
+  #cmd-bar-label { font-size: 10px; color: var(--text3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  #cmd-display {
+    font-family: var(--mono); font-size: 12px; color: #a8f0c0;
+    background: #0a0f0c; border: 1px solid rgba(52,211,153,0.2); border-radius: 6px;
+    padding: 8px 12px; display: flex; align-items: center; gap: 8px;
+  }
+  #cmd-display .prompt { color: var(--text3); user-select: none; }
+  #cmd-text { flex: 1; }
+
+  /* Empty state */
+  #empty-state {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px; color: var(--text3);
+  }
+  #empty-state .icon { font-size: 40px; opacity: 0.4; }
+  #empty-state p { font-size: 14px; }
+  #empty-state .tip { font-size: 12px; font-family: var(--mono); color: var(--text3); opacity: 0.6; margin-top: 4px; }
+
+  /* Loading */
+  #loading-overlay {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 12px; z-index: 100; transition: opacity 0.3s;
+  }
+  #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+  .spinner {
+    width: 28px; height: 28px; border: 2px solid var(--border2);
+    border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading-text { font-size: 13px; color: var(--text3); font-family: var(--mono); }
+
+  /* Error banner */
+  #error-banner {
+    display: none; background: rgba(220,50,50,0.1); border: 1px solid rgba(220,50,50,0.25);
+    border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #ff9999; margin: 12px 16px;
+  }
+
+  * { scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay">
+  <div class="spinner"></div>
+  <div id="loading-text">加载会话历史...</div>
+</div>
+
+<div id="topbar">
+  <div class="dot"></div>
+  <div class="logo">opencode-history</div>
+  <div class="subtitle">会话管理工具</div>
+  <div class="spacer"></div>
+  <button id="reindex-btn" onclick="reindex()">重新索引</button>
+  <div class="hint" id="stats-hint"></div>
+</div>
+
+<div id="layout">
+  <div id="sidebar">
+    <div id="sidebar-search">
+      <input id="search-input" type="text" placeholder="搜索会话..." oninput="onSearch(this.value)">
+      <div id="filter-btns">
+        <button class="filter-btn" data-filter="importance" onclick="toggleFilter(this)">★</button>
+      </div>
+    </div>
+    <div id="project-list"></div>
+  </div>
+
+  <div id="main">
+    <div id="error-banner"></div>
+    <div id="session-header">
+      <div class="header-info">
+        <div class="header-title" id="header-title">-</div>
+        <div class="header-summary" id="header-summary">-</div>
+        <div class="header-details" id="header-details"></div>
+      </div>
+      <div class="header-id" id="header-id">-</div>
+      <button class="header-btn" id="copy-id-btn" onclick="copyText('id')">复制 ID</button>
+      <button class="header-btn primary" id="copy-cmd-btn" onclick="copyText('cmd')">复制恢复命令</button>
+    </div>
+
+    <div id="empty-state">
+      <div class="icon">◈</div>
+      <p>选择左侧会话查看详情</p>
+      <div class="tip">~/.local/share/opencode/opencode.db</div>
+    </div>
+
+    <div id="chat-area" style="display:none"></div>
+
+    <div id="cmd-bar" style="display:none">
+      <div id="cmd-bar-label">恢复命令</div>
+      <div id="cmd-display">
+        <span class="prompt">$</span>
+        <span id="cmd-text">-</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let allSessions = [];
+let allProjects = [];
+let currentSessionId = null;
+let currentProjectPath = null;
+let filterText = '';
+let sortByImportance = false;
+
+function escapeHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatTime(ts) {
+  if (!ts) return '-';
+  const d = new Date(ts);
+  const now = new Date();
+  const diff = now - d;
+  const m = d.getMonth()+1, day = d.getDate();
+  const h = String(d.getHours()).padStart(2,'0'), min = String(d.getMinutes()).padStart(2,'0');
+  if (diff < 86400000) return `${h}:${min}`;
+  if (diff < 604800000) { const days = ['日','一','二','三','四','五','六']; return `周${days[d.getDay()]} ${h}:${min}`; }
+  return `${m}/${day} ${h}:${min}`;
+}
+
+function formatDuration(created, updated) {
+  if (!created || !updated) return '';
+  const sec = (updated - created) / 1000;
+  if (sec < 60) return `${Math.floor(sec)}s`;
+  if (sec < 3600) return `${Math.floor(sec/60)}m`;
+  return `${(sec/3600).toFixed(1)}h`;
+}
+
+function stars(n) {
+  return '<span style="color:var(--star)">' + '★'.repeat(n) + '</span>' + '<span style="color:var(--star-empty)">' + '☆'.repeat(5-n) + '</span>';
+}
+
+async function api(path) {
+  const r = await fetch(path);
+  if (!r.ok) throw new Error(`API error: ${r.status}`);
+  return await r.json();
+}
+
+async function loadData() {
+  try {
+    const data = await api('/api/sessions');
+    allSessions = [];
+    allProjects = [];
+    for (const [pname, pdata] of Object.entries(data)) {
+      allProjects.push({ name: pname, path: pdata.path });
+      for (const s of pdata.sessions) {
+        allSessions.push({ ...s, _project: pname, _projectPath: pdata.path });
+      }
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function renderSidebar(sessions, filter) {
+  const list = document.getElementById('project-list');
+  list.innerHTML = '';
+  const f = (filter || '').toLowerCase();
+
+  const grouped = {};
+  for (const s of sessions) {
+    if (f) {
+      const match = (s.title || '').toLowerCase().includes(f) ||
+                    (s.tags || '').toLowerCase().includes(f) ||
+                    (s.keywords || '').toLowerCase().includes(f) ||
+                    (s.summary || '').toLowerCase().includes(f) ||
+                    (s.first_user_message || '').toLowerCase().includes(f) ||
+                    (s._project || '').toLowerCase().includes(f);
+      if (!match) continue;
+    }
+    const pname = s._project || 'other';
+    if (!grouped[pname]) grouped[pname] = [];
+    grouped[pname].push(s);
+  }
+
+  let total = 0;
+  for (const [pname, items] of Object.entries(grouped)) {
+    const group = document.createElement('div');
+    group.className = 'project-group';
+
+    const label = document.createElement('div');
+    label.className = 'project-label';
+    label.textContent = pname;
+    group.appendChild(label);
+
+    for (const s of items) {
+      total++;
+      const item = document.createElement('div');
+      item.className = 'session-item';
+      if (s.id === currentSessionId) item.classList.add('active');
+      item.dataset.id = s.id;
+      const dur = formatDuration(s.time_created, s.time_updated);
+      const tags = (s.tags || '').split(',').filter(Boolean).slice(0,3).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+      item.innerHTML = `
+        <div class="session-title">${escapeHtml(s.title || s.slug || '-')}</div>
+        <div class="session-meta">
+          <span class="imp">${stars(s.importance || 2)}</span>
+          <span>${formatTime(s.time_updated)}</span>
+          ${dur ? `<span>(${dur})</span>` : ''}
+          ${tags}
+          ${s.model ? `<span class="model-badge">${escapeHtml(s.model)}</span>` : ''}
+        </div>`;
+      item.onclick = () => loadSession(s, item);
+      group.appendChild(item);
+    }
+    list.appendChild(group);
+  }
+
+  document.getElementById('stats-hint').textContent = `${total} 个会话`;
+}
+
+async function loadSession(sessionMeta, el) {
+  document.querySelectorAll('.session-item').forEach(i => i.classList.remove('active'));
+  if (el) el.classList.add('active');
+  currentSessionId = sessionMeta.id;
+  currentProjectPath = sessionMeta._projectPath || sessionMeta.project_path || '~';
+
+  const hdr = document.getElementById('session-header');
+  hdr.classList.add('visible');
+  document.getElementById('header-title').textContent = sessionMeta.title || sessionMeta.slug || '-';
+  document.getElementById('header-summary').textContent = sessionMeta.summary || '-';
+  document.getElementById('header-id').textContent = sessionMeta.id;
+
+  const details = document.getElementById('header-details');
+  const parts = [];
+  if (sessionMeta.model) parts.push(`<span>🤖 ${escapeHtml(sessionMeta.model)}</span>`);
+  if (sessionMeta.tool_count) parts.push(`<span>🔧 ${sessionMeta.tool_count} tools</span>`);
+  if (sessionMeta.message_count) parts.push(`<span>💬 ${sessionMeta.message_count} msgs</span>`);
+  if (sessionMeta.files_changed) parts.push(`<span>📝 ${sessionMeta.files_changed} files</span>`);
+  if (sessionMeta.time_created) parts.push(`<span>⏱ ${formatDuration(sessionMeta.time_created, sessionMeta.time_updated)}</span>`);
+  details.innerHTML = parts.join('');
+
+  const cmd = `opencode --session ${sessionMeta.id}`;
+  document.getElementById('cmd-text').textContent = cmd;
+
+  document.getElementById('empty-state').style.display = 'none';
+  const chatArea = document.getElementById('chat-area');
+  chatArea.style.display = 'flex';
+  chatArea.innerHTML = '<div style="color:var(--text3);font-family:var(--mono);font-size:12px;padding:8px">加载对话内容...</div>';
+  document.getElementById('cmd-bar').style.display = 'block';
+
+  try {
+    const detail = await api(`/api/session/${sessionMeta.id}`);
+    renderChat(detail);
+  } catch (e) {
+    chatArea.innerHTML = `<div style="color:#ff9999;font-size:13px;padding:8px">加载失败: ${escapeHtml(e.message)}</div>`;
+  }
+
+  document.getElementById('copy-id-btn').textContent = '复制 ID';
+  document.getElementById('copy-cmd-btn').textContent = '复制恢复命令';
+  document.getElementById('copy-cmd-btn').className = 'header-btn primary';
+}
+
+function renderChat(detail) {
+  const chatArea = document.getElementById('chat-area');
+  chatArea.innerHTML = '';
+
+  const messages = detail.messages || [];
+  if (!messages.length) {
+    chatArea.innerHTML = '<div style="color:var(--text3);font-family:var(--mono);font-size:12px;padding:8px">无对话内容</div>';
+    return;
+  }
+
+  for (const msg of messages) {
+    const div = document.createElement('div');
+    div.className = `msg ${msg.role}`;
+
+    const roleLabel = msg.role === 'user' ? 'You' : (msg.model || 'Assistant');
+    let bubbleHtml = '';
+
+    if (msg.text && msg.text.trim()) {
+      bubbleHtml += `<div class="msg-bubble">${escapeHtml(msg.text)}</div>`;
+    }
+
+    if (msg.tools && msg.tools.length) {
+      for (const tool of msg.tools) {
+        const inputStr = tool.input ? JSON.stringify(tool.input, null, 2) : '';
+        const outputHtml = tool.output ? `<div class="tool-output">${escapeHtml(tool.output)}</div>` : '';
+        bubbleHtml += `<div class="tool-block"><span class="tool-name">${escapeHtml(tool.name)}</span> ${escapeHtml(inputStr.slice(0,200))}${outputHtml}</div>`;
+      }
+    }
+
+    if (bubbleHtml) {
+      div.innerHTML = `<div class="msg-role">${escapeHtml(roleLabel)}</div>${bubbleHtml}`;
+      chatArea.appendChild(div);
+    }
+  }
+
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function onSearch(val) {
+  filterText = val;
+  renderSidebar(allSessions, filterText);
+}
+
+function toggleFilter(btn) {
+  sortByImportance = !sortByImportance;
+  btn.classList.toggle('active', sortByImportance);
+  if (sortByImportance) {
+    const sorted = [...allSessions].sort((a, b) => (b.importance || 0) - (a.importance || 0));
+    renderSidebar(sorted, filterText);
+  } else {
+    renderSidebar(allSessions, filterText);
+  }
+}
+
+async function reindex() {
+  const btn = document.getElementById('reindex-btn');
+  btn.textContent = '索引中...';
+  btn.disabled = true;
+  try {
+    const result = await api('/api/reindex');
+    await loadData();
+    renderSidebar(allSessions, filterText);
+    btn.textContent = `已索引 ${result.reindexed} 个`;
+    setTimeout(() => { btn.textContent = '重新索引'; }, 2000);
+  } catch (e) {
+    btn.textContent = '索引失败';
+    setTimeout(() => { btn.textContent = '重新索引'; }, 2000);
+  }
+  btn.disabled = false;
+}
+
+function copyText(type) {
+  let text = '', btnId = '';
+  if (type === 'id') { text = currentSessionId || ''; btnId = 'copy-id-btn'; }
+  else { text = document.getElementById('cmd-text').textContent; btnId = 'copy-cmd-btn'; }
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    const orig = btn.textContent, origClass = btn.className;
+    btn.textContent = '已复制 ✓';
+    btn.className = 'header-btn success';
+    setTimeout(() => { btn.textContent = orig; btn.className = origClass; }, 2000);
+  });
+}
+
+async function init() {
+  const overlay = document.getElementById('loading-overlay');
+  const loadingText = document.getElementById('loading-text');
+  const loaded = await loadData();
+  if (!loaded) {
+    const note = document.getElementById('error-banner');
+    note.style.display = 'block';
+    note.innerHTML = `<strong>无法加载数据</strong> — 请确保服务器正在运行。<br>
+      运行: <code style="font-family:monospace;font-size:11px;opacity:0.8">./opencode-history serve</code>
+      然后打开 <code style="font-family:monospace;font-size:11px;opacity:0.8">http://localhost:7780</code>`;
+  } else {
+    loadingText.textContent = '渲染界面...';
+  }
+  renderSidebar(allSessions, filterText);
+  overlay.classList.add('hidden');
+  setTimeout(() => overlay.style.display = 'none', 300);
+}
+
+init();
+</script>
+</body>
+</html>

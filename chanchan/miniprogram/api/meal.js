@@ -1,14 +1,15 @@
 const { BASE_URL } = require('../config')
 const { buildMultipart } = require('../utils/multipart')
 
-// 多文件批量提交：底层 API 单次仅支持 1 个文件，
-// 业务需要一次带多张资源，这里用 wx.request + 手动拼 multipart/form-data。
 function createMeal({ filePaths = [], title = '', content = '' }) {
   return new Promise((resolve, reject) => {
     if (!filePaths || !filePaths.length) {
       reject(new Error('至少选择一张\u56fe\u7247'))
       return
     }
+
+    const app = getApp()
+    const token = app ? app.getToken() : ''
 
     let payload
     try {
@@ -21,14 +22,22 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
       return
     }
 
+    const header = { 'content-type': payload.contentType }
+    if (token) header['Authorization'] = `Bearer ${token}`
+
     wx.request({
       url: `${BASE_URL}/api/meal/create`,
       method: 'POST',
-      header: { 'content-type': payload.contentType },
+      header,
       data: payload.body,
       timeout: 30000,
       success(res) {
         const body = res.data
+        if (res.statusCode === 401 && app && app.login) {
+          app.login()
+          reject(new Error('登录已过期，正在重新登录…'))
+          return
+        }
         if (res.statusCode >= 200 && res.statusCode < 300 && body && body.code === 0) {
           resolve(body.data)
         } else {
@@ -45,13 +54,24 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
 
 function listMeals({ page = 1, pageSize = 10 } = {}) {
   return new Promise((resolve, reject) => {
+    const app = getApp()
+    const token = app ? app.getToken() : ''
+    const header = {}
+    if (token) header['Authorization'] = `Bearer ${token}`
+
     wx.request({
       url: `${BASE_URL}/api/meal/list`,
       method: 'GET',
       data: { page, pageSize },
       timeout: 15000,
+      header,
       success(res) {
         const body = res.data
+        if (res.statusCode === 401 && app && app.login) {
+          app.login()
+          reject(new Error('登录已过期，正在重新登录…'))
+          return
+        }
         if (res.statusCode >= 200 && res.statusCode < 300 && body && body.code === 0) {
           resolve(body.data)
         } else {

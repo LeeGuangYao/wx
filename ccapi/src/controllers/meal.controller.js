@@ -17,7 +17,10 @@ async function create(req, res, next) {
       return res.status(400).json(fail('至少需要上传一张图片', 400));
     }
 
-    const record = mealService.create({ title, content, files }, getBaseUrl(req));
+    const record = mealService.create(
+      { title, content, files, openid: req.openid },
+      getBaseUrl(req)
+    );
     res.json(ok(record, '创建成功'));
   } catch (err) {
     next(err);
@@ -27,7 +30,12 @@ async function create(req, res, next) {
 async function list(req, res, next) {
   try {
     const { page, pageSize } = req.query;
-    const data = mealService.list({ page, pageSize }, getBaseUrl(req));
+    const data = mealService.list(
+      { page, pageSize },
+      getBaseUrl(req),
+      req.openid,
+      req.isAdmin
+    );
     res.json(ok(data));
   } catch (err) {
     next(err);
@@ -39,7 +47,7 @@ async function detail(req, res, next) {
     const id = parseId(req.params.id);
     if (!id) return res.status(400).json(fail('id 非法', 400));
 
-    const record = mealService.findById(id, getBaseUrl(req));
+    const record = mealService.findById(id, getBaseUrl(req), req.openid, req.isAdmin);
     if (!record) return res.status(404).json(fail('记录不存在', 404));
 
     res.json(ok(record));
@@ -53,8 +61,8 @@ async function remove(req, res, next) {
     const id = parseId(req.params.id);
     if (!id) return res.status(400).json(fail('id 非法', 400));
 
-    const removed = mealService.remove(id);
-    if (!removed) return res.status(404).json(fail('记录不存在', 404));
+    const removed = mealService.remove(id, req.openid, req.isAdmin);
+    if (!removed) return res.status(404).json(fail('记录不存在或无权删除', 404));
 
     res.json(ok(null, '删除成功'));
   } catch (err) {

@@ -10,7 +10,8 @@
       "Bash(curl -s http://localhost:5175/)",
       "Bash(jobs -l)",
       "mcp__plugin_playwright_playwright__browser_navigate",
-      "mcp__plugin_playwright_playwright__browser_take_screenshot"
+      "mcp__plugin_playwright_playwright__browser_take_screenshot",
+      "Bash(kill 2813 *)"
     ]
   }
 }

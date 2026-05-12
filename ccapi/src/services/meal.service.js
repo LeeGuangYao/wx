@@ -11,39 +11,56 @@ function fileToRelativePath(file) {
   return `/uploads/${file.filename}`;
 }
 
-function create({ title, content, files }, baseUrl) {
+function create({ title, content, files, openid }, baseUrl) {
   const paths = (files || []).map(fileToRelativePath);
   const stmt = db.prepare(`
-    INSERT INTO meal_record (title, content, image_urls)
-    VALUES (?, ?, ?)
+    INSERT INTO meal_record (title, content, image_urls, openid)
+    VALUES (?, ?, ?, ?)
   `);
   const result = stmt.run(
     title || null,
     content || null,
-    JSON.stringify(paths)
+    JSON.stringify(paths),
+    openid || null
   );
-  return findById(result.lastInsertRowid, baseUrl);
+  return findById(result.lastInsertRowid, baseUrl, openid, true);
 }
 
-function findById(id, baseUrl) {
+function findById(id, baseUrl, openid, isAdmin) {
   const row = db.prepare(`SELECT * FROM meal_record WHERE id = ?`).get(id);
-  return row ? hydrate(row, baseUrl) : null;
+  if (!row) return null;
+  if (!isAdmin && row.openid && row.openid !== openid) return null;
+  return hydrate(row, baseUrl);
 }
 
-function list({ page = 1, pageSize = 10 }, baseUrl) {
+function list({ page = 1, pageSize = 10 }, baseUrl, openid, isAdmin) {
   const p = Math.max(1, Number(page) || 1);
   const ps = Math.min(100, Math.max(1, Number(pageSize) || 10));
   const offset = (p - 1) * ps;
 
-  const rows = db
-    .prepare(
-      `SELECT * FROM meal_record
-       ORDER BY created_at DESC, id DESC
-       LIMIT ? OFFSET ?`
-    )
-    .all(ps, offset);
-
-  const total = db.prepare(`SELECT COUNT(*) AS c FROM meal_record`).get().c;
+  let rows, total;
+  if (isAdmin) {
+    rows = db
+      .prepare(
+        `SELECT * FROM meal_record
+         ORDER BY created_at DESC, id DESC
+         LIMIT ? OFFSET ?`
+      )
+      .all(ps, offset);
+    total = db.prepare(`SELECT COUNT(*) AS c FROM meal_record`).get().c;
+  } else {
+    rows = db
+      .prepare(
+        `SELECT * FROM meal_record
+         WHERE openid = ? OR openid IS NULL
+         ORDER BY created_at DESC, id DESC
+         LIMIT ? OFFSET ?`
+      )
+      .all(openid, ps, offset);
+    total = db
+      .prepare(`SELECT COUNT(*) AS c FROM meal_record WHERE openid = ? OR openid IS NULL`)
+      .get(openid).c;
+  }
 
   return {
     list: rows.map((r) => hydrate(r, baseUrl)),
@@ -54,11 +71,10 @@ function list({ page = 1, pageSize = 10 }, baseUrl) {
   };
 }
 
-// 删除记录，并尝试清理本地图片文件
-// 上云换对象存储时，这里把本地 unlink 替换成对应 SDK 的 delete 即可
-function remove(id) {
+function remove(id, openid, isAdmin) {
   const row = db.prepare(`SELECT * FROM meal_record WHERE id = ?`).get(id);
   if (!row) return false;
+  if (!isAdmin && row.openid && row.openid !== openid) return false;
 
   db.prepare(`DELETE FROM meal_record WHERE id = ?`).run(id);
 
