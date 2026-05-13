@@ -1,4 +1,4 @@
-const { BASE_URL } = require('../config')
+const { BASE_URL, API_PATH_PREFIX } = require('../config')
 const { buildMultipart } = require('../utils/multipart')
 
 function createMeal({ filePaths = [], title = '', content = '' }) {
@@ -26,7 +26,7 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
     if (token) header['Authorization'] = `Bearer ${token}`
 
     wx.request({
-      url: `${BASE_URL}/api/meal/create`,
+      url: `${BASE_URL}${API_PATH_PREFIX}/api/meal/create`,
       method: 'POST',
       header,
       data: payload.body,
@@ -60,7 +60,7 @@ function listMeals({ page = 1, pageSize = 10 } = {}) {
     if (token) header['Authorization'] = `Bearer ${token}`
 
     wx.request({
-      url: `${BASE_URL}/api/meal/list`,
+      url: `${BASE_URL}${API_PATH_PREFIX}/api/meal/list`,
       method: 'GET',
       data: { page, pageSize },
       timeout: 15000,

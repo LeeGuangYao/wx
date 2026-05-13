@@ -25,9 +25,9 @@ App({
           console.error("wx.login 失败", loginRes.errMsg);
           return;
         }
-        const { BASE_URL } = require("./config");
+        const { BASE_URL, API_PATH_PREFIX } = require("./config");
         wx.request({
-          url: `${BASE_URL}/api/auth/login`,
+          url: `${BASE_URL}${API_PATH_PREFIX}/api/auth/login`,
           method: "POST",
           data: { code: loginRes.code },
           timeout: 15000,

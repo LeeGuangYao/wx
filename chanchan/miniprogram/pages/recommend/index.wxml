@@ -122,7 +122,7 @@
     </view>
 
     <view class="tip-row">
-      <text class="tip-text">数据来源 · 天行菜谱 · 每次随机挑选</text>
+      <text class="tip-text">{{tipText}}</text>
     </view>
   </block>
 </view>

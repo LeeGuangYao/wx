@@ -1,7 +1,7 @@
 const { request } = require('../utils/request')
-const { BASE_URL } = require('../config')
+const { BASE_URL, API_PATH_PREFIX } = require('../config')
 
-const API_BASE = `${BASE_URL}/api/caipu`
+const API_BASE = `${BASE_URL}${API_PATH_PREFIX}/api/caipu`
 
 function call(path, params = {}, { silent = false } = {}) {
   if (!silent) wx.showLoading({ title: '加载中', mask: true })

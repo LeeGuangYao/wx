@@ -1,11 +1,11 @@
-const { BASE_URL } = require('../config')
+const { BASE_URL, API_PATH_PREFIX } = require('../config')
 
 // 拉取底部菜单权限；失败或接口异常时返回空数组，
 // 组件侧据此默认隐藏所有 tab（避免审核时意外暴露）。
 function getTabs() {
   return new Promise((resolve) => {
     wx.request({
-      url: `${BASE_URL}/api/config`,
+      url: `${BASE_URL}${API_PATH_PREFIX}/api/config`,
       method: 'GET',
       timeout: 8000,
       success(res) {
