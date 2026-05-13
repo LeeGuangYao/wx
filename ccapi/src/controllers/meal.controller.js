@@ -1,4 +1,5 @@
 const mealService = require('../services/meal.service');
+const { normalizeUploadedImages } = require('../services/upload-image.service');
 const { ok, fail } = require('../utils/response');
 const { getBaseUrl } = require('../utils/baseUrl');
 
@@ -16,6 +17,8 @@ async function create(req, res, next) {
     if (files.length === 0) {
       return res.status(400).json(fail('至少需要上传一张图片', 400));
     }
+
+    await normalizeUploadedImages(files);
 
     const record = mealService.create(
       { title, content, files, openid: req.openid },

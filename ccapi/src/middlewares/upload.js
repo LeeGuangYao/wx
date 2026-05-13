@@ -16,11 +16,21 @@ const storage = multer.diskStorage({
   },
 });
 
-const ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const ALLOWED_MIME = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/heic',
+  'image/heif',
+  'image/heic-sequence',
+  'image/heif-sequence',
+  'application/octet-stream',
+];
 
 function fileFilter(_req, file, cb) {
   if (ALLOWED_MIME.includes(file.mimetype)) return cb(null, true);
-  cb(new Error('仅支持 jpg/png/gif/webp 图片'));
+  cb(new Error('仅支持 jpg/png/gif/webp/heic/heif 图片'));
 }
 
 const upload = multer({

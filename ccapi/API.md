@@ -103,7 +103,7 @@
 |---|---|---|---|
 | `title` | string | 否 | 标题 |
 | `content` | string | 否 | 内容 |
-| `images` | file[] | **是** | 图片文件，字段名固定 `images`，支持多张（1–9 张），单张 ≤ 10MB，仅支持 `jpg / png / gif / webp` |
+| `images` | file[] | **是** | 图片文件，字段名固定 `images`，支持多张（1–9 张），单张 ≤ 10MB，支持 `jpg / png / gif / webp / heic / heif`。HEIC/HEIF 会在服务端转成 JPEG 后保存 |
 
 **curl 示例**
 ```bash
@@ -137,7 +137,8 @@ curl -X POST http://localhost:3000/api/meal/create \
 | HTTP | 场景 | 响应示例 |
 |---|---|---|
 | 400 | 未上传图片 | `{"code":400,"message":"至少需要上传一张图片","data":null}` |
-| 400 | 文件类型不支持 | `{"code":400,"message":"上传失败：仅支持 jpg/png/gif/webp 图片","data":null}` |
+| 400 | 文件类型不支持 | `{"code":400,"message":"上传失败：仅支持 jpg/png/gif/webp/heic/heif 图片","data":null}` |
+| 400 | HEIC 转换失败 | `{"code":400,"message":"上传失败：HEIC 图片转换失败","data":null}` |
 | 400 | 文件过大（>10MB） | `{"code":400,"message":"上传失败：File too large","data":null}` |
 | 400 | 图片超过 9 张 | `{"code":400,"message":"上传失败：Too many files","data":null}` |
 
