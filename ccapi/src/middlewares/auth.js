@@ -1,7 +1,7 @@
 const authService = require('../services/auth.service');
 const { fail } = require('../utils/response');
 
-const SKIP_PATHS = ['/api/auth/login', '/api/health', '/api/caipu', '/api/config'];
+const SKIP_PATHS = ['/api/auth/login', '/api/health', '/api/caipu', '/api/config', '/api/meal'];
 
 function authMiddleware(req, _res, next) {
   const path = req.path;

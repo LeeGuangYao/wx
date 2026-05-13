@@ -29,7 +29,6 @@ function create({ title, content, files, openid }, baseUrl) {
 function findById(id, baseUrl, openid, isAdmin) {
   const row = db.prepare(`SELECT * FROM meal_record WHERE id = ?`).get(id);
   if (!row) return null;
-  if (!isAdmin && row.openid && row.openid !== openid) return null;
   return hydrate(row, baseUrl);
 }
 
@@ -38,29 +37,14 @@ function list({ page = 1, pageSize = 10 }, baseUrl, openid, isAdmin) {
   const ps = Math.min(100, Math.max(1, Number(pageSize) || 10));
   const offset = (p - 1) * ps;
 
-  let rows, total;
-  if (isAdmin) {
-    rows = db
-      .prepare(
-        `SELECT * FROM meal_record
-         ORDER BY created_at DESC, id DESC
-         LIMIT ? OFFSET ?`
-      )
-      .all(ps, offset);
-    total = db.prepare(`SELECT COUNT(*) AS c FROM meal_record`).get().c;
-  } else {
-    rows = db
-      .prepare(
-        `SELECT * FROM meal_record
-         WHERE openid = ? OR openid IS NULL
-         ORDER BY created_at DESC, id DESC
-         LIMIT ? OFFSET ?`
-      )
-      .all(openid, ps, offset);
-    total = db
-      .prepare(`SELECT COUNT(*) AS c FROM meal_record WHERE openid = ? OR openid IS NULL`)
-      .get(openid).c;
-  }
+  const rows = db
+    .prepare(
+      `SELECT * FROM meal_record
+       ORDER BY created_at DESC, id DESC
+       LIMIT ? OFFSET ?`
+    )
+    .all(ps, offset);
+  const total = db.prepare(`SELECT COUNT(*) AS c FROM meal_record`).get().c;
 
   return {
     list: rows.map((r) => hydrate(r, baseUrl)),
@@ -74,7 +58,6 @@ function list({ page = 1, pageSize = 10 }, baseUrl, openid, isAdmin) {
 function remove(id, openid, isAdmin) {
   const row = db.prepare(`SELECT * FROM meal_record WHERE id = ?`).get(id);
   if (!row) return false;
-  if (!isAdmin && row.openid && row.openid !== openid) return false;
 
   db.prepare(`DELETE FROM meal_record WHERE id = ?`).run(id);
 
