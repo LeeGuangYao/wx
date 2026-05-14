@@ -31,7 +31,7 @@ function makeSharpFactory() {
   });
 }
 
-(async () => {
+async function testSharpConversion() {
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ccapi-heic-'));
   const originalPath = path.join(tempDir, 'meal-upload.heic');
 
@@ -59,4 +59,56 @@ function makeSharpFactory() {
   } finally {
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
+}
+
+async function testHeicConvertFallback() {
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ccapi-heic-fallback-'));
+  const originalPath = path.join(tempDir, 'meal-upload.heic');
+  let fallbackCalled = false;
+
+  try {
+    fs.writeFileSync(originalPath, makeHeicBuffer());
+
+    const files = [
+      {
+        path: originalPath,
+        filename: 'meal-upload.heic',
+        originalname: 'IMG_1002.HEIC',
+        mimetype: 'image/heic',
+        size: fs.statSync(originalPath).size,
+      },
+    ];
+
+    await normalizeUploadedImages(files, {
+      sharpFactory: () => ({
+        rotate() {
+          return this;
+        },
+        jpeg() {
+          return this;
+        },
+        async toFile() {
+          throw new Error('sharp cannot decode this HEIC');
+        },
+      }),
+      heicConvertFactory: async () => {
+        fallbackCalled = true;
+        return Buffer.from([0xff, 0xd8, 0xff, 0xd9]);
+      },
+    });
+
+    assert.equal(fallbackCalled, true, 'heic-convert fallback should be used');
+    assert.equal(files[0].filename, 'meal-upload.jpg');
+    assert.equal(files[0].originalname, 'IMG_1002.jpg');
+    assert.equal(files[0].mimetype, 'image/jpeg');
+    assert.equal(fs.existsSync(originalPath), false, 'original HEIC file should be removed');
+    assert.equal(fs.existsSync(files[0].path), true, 'fallback JPEG file should exist');
+  } finally {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  }
+}
+
+(async () => {
+  await testSharpConversion();
+  await testHeicConvertFallback();
 })();

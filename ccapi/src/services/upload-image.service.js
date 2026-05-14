@@ -112,7 +112,24 @@ async function renameToExt(file, ext, mimetype) {
   return file;
 }
 
-async function convertHeicToJpeg(file, sharpFactory) {
+async function convertWithSharp(filePath, outputPath, sharpFactory) {
+  await sharpFactory(filePath)
+    .rotate()
+    .jpeg({ quality: 90, mozjpeg: true })
+    .toFile(outputPath);
+}
+
+async function convertWithHeicConvert(filePath, outputPath, heicConvertFactory) {
+  const inputBuffer = await fs.promises.readFile(filePath);
+  const outputBuffer = await heicConvertFactory({
+    buffer: inputBuffer,
+    format: 'JPEG',
+    quality: 0.9,
+  });
+  await fs.promises.writeFile(outputPath, Buffer.from(outputBuffer));
+}
+
+async function convertHeicToJpeg(file, sharpFactory, heicConvertFactory) {
   const dirname = path.dirname(file.path);
   const outputFilename = replaceExt(file.filename, '.jpg');
   const outputPath = path.join(dirname, outputFilename);
@@ -121,12 +138,15 @@ async function convertHeicToJpeg(file, sharpFactory) {
     : outputPath;
 
   try {
-    await sharpFactory(file.path)
-      .rotate()
-      .jpeg({ quality: 90, mozjpeg: true })
-      .toFile(tempOutputPath);
-  } catch (err) {
-    throw createHttpError('上传失败：HEIC 图片转换失败', 400);
+    await convertWithSharp(file.path, tempOutputPath, sharpFactory);
+  } catch (_sharpErr) {
+    try {
+      await unlinkQuietly(tempOutputPath);
+      await convertWithHeicConvert(file.path, tempOutputPath, heicConvertFactory);
+    } catch (_heicConvertErr) {
+      await unlinkQuietly(tempOutputPath);
+      throw createHttpError('上传失败：HEIC 图片转换失败', 400);
+    }
   }
 
   await unlinkQuietly(file.path);
@@ -150,13 +170,14 @@ async function cleanupUploadedFiles(files) {
 
 async function normalizeUploadedImages(files, options = {}) {
   const sharpFactory = options.sharpFactory || ((inputPath) => require('sharp')(inputPath));
+  const heicConvertFactory = options.heicConvertFactory || require('heic-convert');
 
   try {
     for (const file of files || []) {
       const format = detectImageFormat(await readHeader(file.path));
 
       if (format === 'heic') {
-        await convertHeicToJpeg(file, sharpFactory);
+        await convertHeicToJpeg(file, sharpFactory, heicConvertFactory);
         continue;
       }
 
