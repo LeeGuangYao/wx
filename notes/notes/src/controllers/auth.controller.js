@@ -1,5 +1,6 @@
 const config = require('../config');
 const { createSessionToken, getSessionFromRequest } = require('../utils/session-token');
+const { clearLoginFailures, recordFailedLogin } = require('../utils/login-attempts');
 const { ok, fail } = require('../utils/response');
 
 function isSecureRequest(req) {
@@ -27,8 +28,11 @@ function login(req, res) {
   const password = String(req.body.password || '');
 
   if (username !== config.auth.username || password !== config.auth.password) {
+    recordFailedLogin(req);
     return res.status(401).json(fail('用户名或密码错误', 401));
   }
+
+  clearLoginFailures(req);
 
   const token = createSessionToken(username);
   const maxAge = config.auth.sessionDays * 24 * 60 * 60 * 1000;

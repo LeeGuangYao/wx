@@ -66,6 +66,46 @@ test('rejects invalid login credentials', async () => {
   assert.equal(json.message, '用户名或密码错误');
 });
 
+test('blocks an IP for a day after five failed login attempts', async () => {
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Forwarded-For': '203.0.113.10',
+  };
+
+  for (let i = 0; i < 5; i += 1) {
+    const attempt = await request('/api/auth/login', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ username: 'owner', password: `wrong-${i}` }),
+    });
+
+    assert.equal(attempt.res.status, 401);
+    assert.equal(attempt.json.code, 401);
+  }
+
+  const blocked = await request('/api/auth/login', {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ username: 'owner', password: 'secret-password' }),
+  });
+
+  assert.equal(blocked.res.status, 429);
+  assert.equal(blocked.json.code, 429);
+  assert.equal(blocked.json.message, '密码错误次数过多，请明天再试');
+
+  const otherIp = await request('/api/auth/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Forwarded-For': '203.0.113.11',
+    },
+    body: JSON.stringify({ username: 'owner', password: 'secret-password' }),
+  });
+
+  assert.equal(otherIp.res.status, 200);
+  assert.equal(otherIp.json.code, 0);
+});
+
 test('allows note API access after login and clears client session on logout', async () => {
   const login = await request('/api/auth/login', {
     method: 'POST',

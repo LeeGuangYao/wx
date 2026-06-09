@@ -13,6 +13,7 @@ function parsePositiveNumber(value, defaultValue) {
 
 const config = {
   port: Number(process.env.PORT) || 3175,
+  host: process.env.HOST || '0.0.0.0',
   dbPath: path.resolve(process.env.DB_PATH || './data/notes.db'),
   auth: {
     enabled: parseBool(process.env.NOTES_AUTH_ENABLED, true),
