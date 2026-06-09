@@ -6,13 +6,16 @@ const path = require('path');
 const config = require('./config');
 const routes = require('./routes');
 const { errorHandler, notFound } = require('./middlewares/error');
+const { scanProtection } = require('./middlewares/scan-protection');
 
 const app = express();
 
 config.validateAuthConfig();
 
+app.disable('x-powered-by');
 app.set('trust proxy', true);
 
+app.use(scanProtection);
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());

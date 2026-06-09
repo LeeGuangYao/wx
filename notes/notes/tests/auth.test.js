@@ -111,3 +111,12 @@ test('allows note API access after login and clears client session on logout', a
   assert.equal(afterLogout.res.status, 401);
   assert.equal(afterLogout.json.code, 401);
 });
+
+test('returns 404 for common scanner paths before SPA fallback', async () => {
+  const res = await fetch(`${baseUrl}/.env`);
+  const body = await res.text();
+
+  assert.equal(res.status, 404);
+  assert.equal(body, 'Not found');
+  assert.equal(res.headers.get('x-powered-by'), null);
+});
