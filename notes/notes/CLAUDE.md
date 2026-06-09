@@ -4,7 +4,7 @@
 
 ## 项目定位
 
-跨平台备忘录 Web 应用，类似苹果备忘录。浏览器打开即用，无需登录，所见即所得富文本编辑。
+跨平台备忘录 Web 应用，类似苹果备忘录。公网访问前先通过固定账号密码登录，登录后进入所见即所得富文本编辑。
 
 ## 技术栈
 
@@ -85,11 +85,19 @@ fail(message, code?)   // { code, message, data: null }
 |------|------|------|
 | PORT | 3175 | 监听端口 |
 | DB_PATH | ./data/notes.db | SQLite 文件 |
+| NOTES_AUTH_ENABLED | true | 是否开启登录保护，设为 false 可关闭 |
+| NOTES_AUTH_USERNAME | - | 登录用户名 |
+| NOTES_AUTH_PASSWORD | - | 登录密码 |
+| NOTES_SESSION_SECRET | - | Cookie 会话签名密钥，至少 32 字符 |
+| NOTES_SESSION_DAYS | 30 | 登录态有效天数 |
 
 ## API
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
+| POST | /api/auth/login | 登录，成功后写入 HttpOnly Cookie |
+| GET | /api/auth/session | 查询当前登录态 |
+| POST | /api/auth/logout | 退出登录，清理 Cookie |
 | GET | /api/notes | 列表（按更新时间倒序） |
 | GET | /api/notes/:id | 详情 |
 | POST | /api/notes | 创建 |
@@ -97,6 +105,8 @@ fail(message, code?)   // { code, message, data: null }
 | DELETE | /api/notes/:id | 删除 |
 
 POST/PUT body: `{ content: "..." }`，title 由后端从 content 自动提取。
+
+`/api/notes/*` 默认需要登录后访问；`/api/auth/*` 不需要登录。鉴权默认开启，缺少用户名、密码或 session secret 时服务会启动失败，避免公网环境误裸跑。
 
 ## 前端要点
 
@@ -127,7 +137,7 @@ npm run migrate       # 单独执行建表
 
 ## 不做的事
 
-- 不要引入用户登录/鉴权
+- 不要引入注册、多用户、权限分组或数据库用户表
 - 不要引入图片上传功能
 - 不要引入笔记分类/标签
 - 不要引入前端构建工具（Webpack/Vite）

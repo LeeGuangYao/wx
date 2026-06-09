@@ -4,7 +4,7 @@
 
 ## 项目简介
 
-跨平台备忘录 Web 应用，类似苹果备忘录。打开浏览器即可使用，无需登录，所见即所得富文本编辑。
+跨平台备忘录 Web 应用，类似苹果备忘录。公网访问前先通过固定账号密码登录，登录后进入所见即所得富文本编辑。
 
 ## 设计决策
 
@@ -13,7 +13,7 @@
 | 笔记格式 | 所得即所得富文本（Tiptap） | 接近苹果备忘录体验 |
 | 分类组织 | 无分类，只有列表 | 保持简单 |
 | 图片附件 | 不支持 | 专注纯文字记录 |
-| 用户体系 | 不需要登录 | 打开即用 |
+| 用户体系 | 固定账号密码登录 | 简单挡住公网扫描和陌生访问 |
 | 技术栈 | Vue 3 + Tiptap (CDN) + Express + SQLite | 沿用 ccapi 风格，零构建步骤 |
 | 端口 | 3175 | 用户指定 |
 
@@ -30,10 +30,14 @@ notes/
 │   ├── db/
 │   │   ├── index.js        # SQLite 单例 (WAL)
 │   │   └── migrate.js      # 建表
+│   ├── controllers/auth.controller.js
 │   ├── controllers/note.controller.js
+│   ├── routes/auth.route.js
 │   ├── services/note.service.js
 │   ├── routes/note.route.js
+│   ├── middlewares/auth.js
 │   ├── middlewares/error.js
+│   ├── utils/session-token.js
 │   └── utils/response.js
 ├── public/                  # 前端静态文件
 │   ├── index.html
@@ -60,11 +64,16 @@ notes/
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
+| POST | /api/auth/login | 登录，成功后写入 HttpOnly Cookie |
+| GET | /api/auth/session | 查询当前登录态 |
+| POST | /api/auth/logout | 退出登录，清理 Cookie |
 | GET | /api/notes | 列表（按更新时间倒序） |
 | GET | /api/notes/:id | 详情 |
 | POST | /api/notes | 创建 |
 | PUT | /api/notes/:id | 更新 |
 | DELETE | /api/notes/:id | 删除 |
+
+`/api/notes/*` 默认需要登录；`/api/auth/*` 不需要登录。登录态由后端签名 HttpOnly Cookie 保存，不新增数据库用户表。
 
 ## 前端 UI
 

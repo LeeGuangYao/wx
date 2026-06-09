@@ -3,10 +3,13 @@ const cors = require('cors');
 const morgan = require('morgan');
 const path = require('path');
 
+const config = require('./config');
 const routes = require('./routes');
 const { errorHandler, notFound } = require('./middlewares/error');
 
 const app = express();
+
+config.validateAuthConfig();
 
 app.set('trust proxy', true);
 
@@ -18,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.use('/api', routes);
+app.use('/api', notFound);
 
 // SPA fallback: non-API routes serve index.html
 app.get('*', (req, res) => {

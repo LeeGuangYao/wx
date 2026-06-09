@@ -6,9 +6,19 @@ function parseId(raw) {
   return Number.isInteger(n) && n > 0 ? n : null;
 }
 
+function getFolderValue(body) {
+  if (Object.prototype.hasOwnProperty.call(body, 'folder_id')) {
+    return { value: body.folder_id, hasValue: true };
+  }
+  if (Object.prototype.hasOwnProperty.call(body, 'folderId')) {
+    return { value: body.folderId, hasValue: true };
+  }
+  return { value: null, hasValue: false };
+}
+
 async function list(req, res, next) {
   try {
-    const data = noteService.list();
+    const data = noteService.list({ folderId: req.query.folderId });
     res.json(ok(data));
   } catch (err) {
     next(err);
@@ -32,7 +42,8 @@ async function detail(req, res, next) {
 async function create(req, res, next) {
   try {
     const { content } = req.body;
-    const note = noteService.create(content);
+    const folder = getFolderValue(req.body);
+    const note = noteService.create(content, folder.value);
     res.json(ok(note, '创建成功'));
   } catch (err) {
     next(err);
@@ -45,7 +56,8 @@ async function update(req, res, next) {
     if (!id) return res.status(400).json(fail('id 非法', 400));
 
     const { content } = req.body;
-    const note = noteService.update(id, content);
+    const folder = getFolderValue(req.body);
+    const note = noteService.update(id, content, folder.value, folder.hasValue);
     if (!note) return res.status(404).json(fail('笔记不存在', 404));
 
     res.json(ok(note, '更新成功'));
