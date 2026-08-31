@@ -14,6 +14,7 @@ export interface WeddingCopy {
   invitationTitle: string
   invitationLines: string[]
   detailsEyebrow: string
+  navigationLabel: string
   closingTitle: string
   closingEyebrow: string
 }

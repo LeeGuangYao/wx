@@ -28,6 +28,7 @@ export const weddingConfig: WeddingConfig = {
       '来见证我们的婚礼。',
     ],
     detailsEyebrow: 'WEDDING DAY',
+    navigationLabel: '导航前往',
     closingTitle: '期待与你相见',
     closingEyebrow: 'SEE YOU AT OUR WEDDING',
   },

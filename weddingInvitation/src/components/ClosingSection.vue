@@ -28,10 +28,15 @@ useReveal(content)
 .closing {
   display: grid;
   min-height: 72vh;
-  min-height: 72svh;
   padding-top: 72px;
   padding-bottom: max(40px, env(safe-area-inset-bottom));
   background: var(--wedding-bg);
+}
+
+@supports (min-height: 100svh) {
+  .closing {
+    min-height: 72svh;
+  }
 }
 
 .closing__content {

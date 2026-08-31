@@ -36,10 +36,15 @@ defineProps<Props>()
   position: relative;
   display: grid;
   min-height: 100vh;
-  min-height: 100svh;
   overflow: hidden;
   color: #fff;
   isolation: isolate;
+}
+
+@supports (min-height: 100svh) {
+  .hero {
+    min-height: 100svh;
+  }
 }
 
 .hero__image,

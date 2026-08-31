@@ -31,9 +31,14 @@ useReveal(content)
 .invitation {
   display: grid;
   min-height: 88vh;
-  min-height: 88svh;
   padding-block: clamp(96px, 18vh, 144px);
   background: var(--wedding-bg);
+}
+
+@supports (min-height: 100svh) {
+  .invitation {
+    min-height: 88svh;
+  }
 }
 
 .invitation__content {

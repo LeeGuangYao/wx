@@ -36,7 +36,7 @@ function navigate(): void {
         :aria-label="`在高德地图中搜索${config.venue.name}`"
         @click="navigate"
       >
-        导航前往
+        {{ config.copy.navigationLabel }}
       </button>
     </div>
   </section>
@@ -46,9 +46,14 @@ function navigate(): void {
 .details {
   display: grid;
   min-height: 96vh;
-  min-height: 96svh;
   padding-block: clamp(96px, 16vh, 136px);
   background: var(--wedding-surface);
+}
+
+@supports (min-height: 100svh) {
+  .details {
+    min-height: 96svh;
+  }
 }
 
 .details__content {
