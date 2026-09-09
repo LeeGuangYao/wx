@@ -12,6 +12,6 @@ import { weddingConfig } from '@/config/wedding'
     <HeroSection :config="weddingConfig" :cover-src="weddingCover" />
     <InvitationSection :config="weddingConfig" />
     <WeddingDetailsSection :config="weddingConfig" />
-    <ClosingSection :config="weddingConfig" />
+    <ClosingSection :config="weddingConfig" :cover-src="weddingCover" />
   </main>
 </template>

@@ -10,41 +10,46 @@ defineProps<Props>()
 </script>
 
 <template>
-  <section class="hero" aria-labelledby="hero-title">
+  <section id="cover" class="wedding-section hero" aria-labelledby="hero-title">
     <img
       class="hero__image"
       :src="coverSrc"
       :alt="`${config.couple.groom}与${config.couple.bride}的婚纱照`"
       fetchpriority="high"
+      width="1500"
+      height="2000"
     />
     <div class="hero__overlay" aria-hidden="true" />
+    <div class="hero__masthead" aria-hidden="true">
+      <span>婚礼邀请</span>
+      <span>{{ config.dateShort }}</span>
+    </div>
     <div class="hero__content">
       <p class="hero__eyebrow">{{ config.copy.heroEyebrow }}</p>
       <h1 id="hero-title" class="hero__names">
-        {{ config.couple.groom }} <span aria-hidden="true">&amp;</span> {{ config.couple.bride }}
+        <span>{{ config.couple.groom }}</span>
+        <em aria-hidden="true">&amp;</em>
+        <span>{{ config.couple.bride }}</span>
       </h1>
       <p class="hero__date">
         <time :datetime="config.dateISO">{{ config.dateShort }}</time>
       </p>
+    </div>
+    <div class="section-footer hero__footer">
+      <span aria-label="第 1 页，共 4 页">01 / 04</span>
+      <a class="page-turn" href="#invitation">向上滑动 · 开启请柬</a>
     </div>
   </section>
 </template>
 
 <style scoped lang="scss">
 .hero {
-  --hero-image-y: 40%;
-  position: relative;
-  display: grid;
-  min-height: 100vh;
+  --hero-image-y: 50%;
+  padding: 0;
   overflow: hidden;
-  color: #fff;
+  color: var(--wedding-text);
+  background: #9fbdce;
   isolation: isolate;
-}
-
-@supports (min-height: 100svh) {
-  .hero {
-    min-height: 100svh;
-  }
 }
 
 .hero__image,
@@ -58,20 +63,41 @@ defineProps<Props>()
 .hero__image {
   object-fit: cover;
   object-position: center var(--hero-image-y);
-  animation: hero-zoom 1.2s var(--ease-out) both;
+  animation: hero-zoom 1.6s var(--ease-out) both;
 }
 
 .hero__overlay {
   z-index: 1;
-  background: var(--wedding-overlay);
+  background: linear-gradient(
+    180deg,
+    rgba(18, 35, 44, 0.12),
+    transparent 14%,
+    transparent 72%,
+    rgba(18, 35, 44, 0.45)
+  );
+}
+
+.hero__masthead {
+  position: absolute;
+  z-index: 2;
+  top: max(24px, calc(12px + env(safe-area-inset-top)));
+  right: var(--page-gutter);
+  left: var(--page-gutter);
+  display: flex;
+  justify-content: space-between;
+  color: #f8f9f5;
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.2em;
 }
 
 .hero__content {
   z-index: 2;
-  align-self: end;
-  width: min(calc(100% - 48px), 360px);
+  align-self: start;
+  width: calc(100% - 40px);
   margin-inline: auto;
-  padding-bottom: max(52px, calc(32px + env(safe-area-inset-bottom)));
+  padding-top: clamp(88px, 14vh, 148px);
+  padding-top: clamp(88px, 14dvh, 148px);
   text-align: center;
 }
 
@@ -81,28 +107,43 @@ defineProps<Props>()
 }
 
 .hero__eyebrow {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   font-family: var(--font-sans);
-  font-size: 12px;
-  letter-spacing: 0.22em;
+  font-size: 10px;
+  letter-spacing: 0.3em;
   animation-delay: 120ms;
 }
 
 .hero__names {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
   margin: 0;
-  font-size: clamp(28px, 8vw, 34px);
+  font-size: clamp(27px, 7.6vw, 36px);
   font-weight: 400;
   line-height: 1.3;
   white-space: nowrap;
   animation-delay: 240ms;
 }
 
+.hero__names em {
+  font-family: var(--font-display);
+  font-size: 0.8em;
+  font-weight: 400;
+}
+
 .hero__date {
-  margin: 18px 0 0;
+  margin: 20px 0 0;
   font-family: var(--font-sans);
-  font-size: 14px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.24em;
   animation-delay: 360ms;
+}
+
+.hero__footer {
+  z-index: 2;
+  color: #fff;
 }
 
 @keyframes hero-zoom {
@@ -122,6 +163,12 @@ defineProps<Props>()
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-height: 520px) {
+  .hero {
+    --hero-image-y: 0%;
   }
 }
 
