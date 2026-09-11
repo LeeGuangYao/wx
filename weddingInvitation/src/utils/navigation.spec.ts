@@ -9,7 +9,7 @@ describe('createAmapSearchUrl', () => {
     expect(url.origin).toBe('https://uri.amap.com')
     expect(url.pathname).toBe('/search')
     expect(url.searchParams.get('keyword')).toBe(
-      '扬州狮子楼（瘦西湖店） 扬州市广陵区柳湖路 8 号（扬师院东门内，近瘦西湖南门）',
+      '扬州中青国际酒店(市政府店) 江苏省扬州市邗江区邗江中路631号',
     )
     expect(url.searchParams.get('view')).toBe('map')
     expect(url.searchParams.get('src')).toBe('wedding-invitation')

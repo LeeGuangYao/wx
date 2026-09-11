@@ -1,107 +1,127 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useReveal } from '@/composables/useReveal'
+import SectionFooter from '@/components/SectionFooter.vue'
+import WeddingPhoto from '@/components/WeddingPhoto.vue'
+import type { WeddingPhoto as Photo } from '@/types/photo'
 import type { WeddingConfig } from '@/types/wedding'
 
-defineProps<{ config: WeddingConfig; coverSrc: string }>()
-
+defineProps<{ config: WeddingConfig; photos: readonly [Photo, Photo, Photo] }>()
 const content = ref<HTMLElement | null>(null)
 useReveal(content)
 </script>
 
 <template>
   <section id="see-you" class="wedding-section closing" aria-labelledby="closing-title">
-    <div ref="content" class="section-shell reveal closing__content">
-      <img
-        class="closing__photo"
-        :src="coverSrc"
-        :alt="`${config.couple.groom}与${config.couple.bride}的婚纱照`"
-        loading="lazy"
-        width="1500"
-        height="2000"
-      />
-      <h2 id="closing-title">{{ config.copy.closingTitle }}</h2>
-      <p class="closing__names">
-        {{ config.couple.groom }} <span aria-hidden="true">&amp;</span> {{ config.couple.bride }}
-      </p>
-      <p class="eyebrow closing__eyebrow">{{ config.copy.closingEyebrow }}</p>
-      <p class="closing__date">
-        <time :datetime="config.dateISO">{{ config.dateShort }}</time>
-      </p>
+    <div ref="content" class="section-content reveal closing__content">
+      <p class="eyebrow">With love, always</p>
+      <div class="closing__gallery">
+        <WeddingPhoto class="closing__photo closing__photo--main" :photo="photos[0]" sizes="(max-width: 560px) 50vw, 280px" />
+        <WeddingPhoto class="closing__photo" :photo="photos[1]" sizes="(max-width: 560px) 34vw, 190px" />
+        <WeddingPhoto class="closing__photo" :photo="photos[2]" sizes="(max-width: 560px) 34vw, 190px" />
+      </div>
+      <p class="closing__script" aria-hidden="true">You are invited.</p>
+      <h2 id="closing-title" class="section-heading">{{ config.copy.closingTitle }}</h2>
+      <div class="closing__invitation">
+        <template v-for="(line, index) in config.copy.invitationLines" :key="index">
+          <p v-if="line">{{ line }}</p>
+          <div v-else class="closing__spacer" aria-hidden="true" />
+        </template>
+      </div>
+      <p class="closing__names">{{ config.couple.groom }}<span aria-hidden="true">&amp;</span>{{ config.couple.bride }}</p>
+      <p class="closing__date"><time :datetime="config.dateISO">{{ config.dateShort }}</time></p>
     </div>
-    <div class="section-footer closing__footer">
-      <span aria-label="第 4 页，共 4 页">04 / 04</span>
-      <a class="page-turn" href="#cover">回到封面</a>
-    </div>
+    <SectionFooter :page="4" href="#cover" label="回到封面" />
   </section>
 </template>
 
 <style scoped lang="scss">
 .closing {
-  color: var(--wedding-bg);
-  background: var(--wedding-deep);
+  background: #e5eceb;
 }
 
 .closing__content {
-  place-self: center;
   text-align: center;
 }
 
-.closing__photo {
-  width: min(56vw, 236px);
-  height: min(36vh, 300px);
-  height: min(36dvh, 300px);
-  margin: 0 auto 36px;
-  border: 6px solid var(--wedding-bg);
-  object-fit: cover;
-  object-position: center 45%;
+.closing__content > .eyebrow {
+  text-align: left;
+  color: var(--wedding-muted);
 }
 
-h2 {
+.closing__gallery {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  height: clamp(240px, 32svh, 320px);
+  margin: 22px 0 28px;
+}
+
+.closing__photo {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+
+.closing__photo--main {
+  grid-row: span 2;
+}
+
+.closing__script {
   margin: 0;
-  font-size: clamp(27px, 7vw, 31px);
-  font-weight: 400;
-  letter-spacing: 0.1em;
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 9vw, 2.8rem);
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.closing .section-heading {
+  margin-top: 10px;
+  font-size: clamp(1.7rem, 7vw, 2rem);
+}
+
+.closing__invitation {
+  margin-top: 20px;
+  font-size: 1rem;
+  line-height: 1.9;
+  letter-spacing: .04em;
+}
+
+.closing__invitation p {
+  margin: 0;
+}
+
+.closing__spacer {
+  height: 10px;
 }
 
 .closing__names {
-  margin: 22px 0 30px;
-  font-size: 16px;
-  letter-spacing: 0.08em;
+  margin: 22px 0 0;
+  font-size: 1rem;
+  letter-spacing: .08em;
 }
 
 .closing__names span {
-  margin-inline: 6px;
+  margin-inline: 12px;
   font-family: var(--font-display);
   font-style: italic;
-}
-
-.closing__eyebrow {
-  color: #bacdd4;
-  font-size: 9px;
+  color: var(--wedding-muted);
 }
 
 .closing__date {
-  margin: 14px 0 0;
-  color: #bacdd4;
+  margin: 10px 0 0;
+  color: var(--wedding-muted);
   font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: 0.16em;
+  font-size: .75rem;
+  letter-spacing: .16em;
 }
 
-.closing__footer {
-  color: #bacdd4;
-}
-
-@media (max-height: 680px) {
-  .closing__photo {
-    height: 31vh;
-    height: 31dvh;
-    margin-bottom: 24px;
-  }
-
-  .closing__names {
-    margin-block: 18px 24px;
+@media (max-height: 720px) {
+  .closing__gallery {
+    height: 230px;
+    margin-block: 18px 22px;
   }
 }
 </style>

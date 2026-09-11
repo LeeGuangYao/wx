@@ -1,183 +1,164 @@
 <script setup lang="ts">
+import SectionFooter from '@/components/SectionFooter.vue'
+import WeddingPhoto from '@/components/WeddingPhoto.vue'
 import type { WeddingConfig } from '@/types/wedding'
+import type { WeddingPhoto as Photo } from '@/types/photo'
 
-interface Props {
-  config: WeddingConfig
-  coverSrc: string
-}
-
-defineProps<Props>()
+defineProps<{ config: WeddingConfig; photo: Photo }>()
 </script>
 
 <template>
   <section id="cover" class="wedding-section hero" aria-labelledby="hero-title">
-    <img
-      class="hero__image"
-      :src="coverSrc"
-      :alt="`${config.couple.groom}与${config.couple.bride}的婚纱照`"
-      fetchpriority="high"
-      width="1500"
-      height="2000"
-    />
-    <div class="hero__overlay" aria-hidden="true" />
-    <div class="hero__masthead" aria-hidden="true">
-      <span>婚礼邀请</span>
-      <span>{{ config.dateShort }}</span>
+    <div class="hero__masthead">
+      <span>婚 礼 邀 请</span>
+      <time :datetime="config.dateISO">{{ config.dateSlash }}</time>
     </div>
-    <div class="hero__content">
-      <p class="hero__eyebrow">{{ config.copy.heroEyebrow }}</p>
-      <h1 id="hero-title" class="hero__names">
-        <span>{{ config.couple.groom }}</span>
-        <em aria-hidden="true">&amp;</em>
-        <span>{{ config.couple.bride }}</span>
-      </h1>
-      <p class="hero__date">
-        <time :datetime="config.dateISO">{{ config.dateShort }}</time>
-      </p>
+    <div class="hero__frame">
+      <WeddingPhoto class="hero__image" :photo="photo" priority />
+      <div class="hero__shade" aria-hidden="true" />
+      <div class="hero__heading">
+        <p class="eyebrow">{{ config.copy.heroEyebrow }}</p>
+        <p class="hero__announcement">{{ config.copy.invitationTitle }}</p>
+        <p class="hero__script" aria-hidden="true">The Wedding</p>
+      </div>
+      <div class="hero__content">
+        <h1 id="hero-title" class="hero__names">
+          <span>{{ config.couple.groom }}</span>
+          <em aria-hidden="true">&amp;</em>
+          <span>{{ config.couple.bride }}</span>
+        </h1>
+        <p class="hero__date"><time :datetime="config.dateISO">{{ config.dateShort }}</time><span> {{ config.weekday }}</span></p>
+      </div>
     </div>
-    <div class="section-footer hero__footer">
-      <span aria-label="第 1 页，共 4 页">01 / 04</span>
-      <a class="page-turn" href="#invitation">向上滑动 · 开启请柬</a>
-    </div>
+    <SectionFooter :page="1" href="#countdown" label="向上滑动 · 开启请柬" />
   </section>
 </template>
 
 <style scoped lang="scss">
 .hero {
-  --hero-image-y: 50%;
-  padding: 0;
-  overflow: hidden;
-  color: var(--wedding-text);
-  background: #9fbdce;
-  isolation: isolate;
+  padding: 0 14px;
 }
 
-.hero__image,
-.hero__overlay {
+.hero__masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 62px;
+  padding: max(18px, env(safe-area-inset-top)) 8px 18px;
+  font-family: var(--font-sans);
+  font-size: .75rem;
+  letter-spacing: .12em;
+}
+
+.hero__frame {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 540px;
+  isolation: isolate;
+  overflow: hidden;
+  background: #adc8d9;
+}
+
+.hero__image, .hero__shade {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  z-index: -1;
 }
 
 .hero__image {
-  object-fit: cover;
-  object-position: center var(--hero-image-y);
-  animation: hero-zoom 1.6s var(--ease-out) both;
+  animation: arrive 1.4s var(--ease-out) both;
 }
 
-.hero__overlay {
-  z-index: 1;
-  background: linear-gradient(
-    180deg,
-    rgba(18, 35, 44, 0.12),
-    transparent 14%,
-    transparent 72%,
-    rgba(18, 35, 44, 0.45)
-  );
+.hero__shade {
+  background: linear-gradient(180deg, rgba(210, 231, 243, .12) 10%, transparent 40%, transparent 62%, rgba(11, 30, 39, .78));
 }
 
-.hero__masthead {
-  position: absolute;
-  z-index: 2;
-  top: max(24px, calc(12px + env(safe-area-inset-top)));
-  right: var(--page-gutter);
-  left: var(--page-gutter);
-  display: flex;
-  justify-content: space-between;
-  color: #f8f9f5;
-  font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-}
-
-.hero__content {
-  z-index: 2;
-  align-self: start;
-  width: calc(100% - 40px);
-  margin-inline: auto;
-  padding-top: clamp(88px, 14vh, 148px);
-  padding-top: clamp(88px, 14dvh, 148px);
+.hero__heading {
+  // 为宽屏裁切后靠近上方的人脸留出空间。
+  padding: clamp(48px, 7svh, 76px) 12px 0;
   text-align: center;
 }
 
-.hero__content > * {
-  opacity: 0;
-  animation: hero-copy 700ms var(--ease-out) forwards;
+.hero__heading .eyebrow {
+  font-size: .75rem;
+  letter-spacing: .22em;
 }
 
-.hero__eyebrow {
-  margin: 0 0 20px;
-  font-family: var(--font-sans);
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  animation-delay: 120ms;
+.hero__announcement {
+  margin: 12px 0 4px;
+  font-size: clamp(2rem, 8.5vw, 2.75rem);
+  line-height: 1.2;
+  letter-spacing: .16em;
+}
+
+.hero__script {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 7vw, 2.25rem);
+  font-style: italic;
+  line-height: 1.15;
+}
+
+.hero__content {
+  padding: 170px 16px 32px;
+  color: #fff;
+  text-align: center;
 }
 
 .hero__names {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
   margin: 0;
-  font-size: clamp(27px, 7.6vw, 36px);
+  font-size: clamp(1.7rem, 7vw, 2.15rem);
   font-weight: 400;
-  line-height: 1.3;
-  white-space: nowrap;
-  animation-delay: 240ms;
+  line-height: 1.4;
+  letter-spacing: .06em;
 }
 
 .hero__names em {
   font-family: var(--font-display);
-  font-size: 0.8em;
   font-weight: 400;
+  font-size: .8em;
 }
 
 .hero__date {
-  margin: 20px 0 0;
+  margin: 14px 0 0;
   font-family: var(--font-sans);
-  font-size: 11px;
-  letter-spacing: 0.24em;
-  animation-delay: 360ms;
+  font-size: .8125rem;
+  line-height: 1.7;
+  letter-spacing: .12em;
 }
 
-.hero__footer {
-  z-index: 2;
-  color: #fff;
+.hero__date span {
+  margin-left: 12px;
 }
 
-@keyframes hero-zoom {
+.hero :deep(.section-footer) {
+  margin-inline: 8px;
+  border: 0;
+}
+
+@keyframes arrive {
   from {
-    transform: scale(1.03);
+    transform: scale(1.025);
   }
   to {
     transform: scale(1);
   }
 }
 
-@keyframes hero-copy {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (max-height: 520px) {
-  .hero {
-    --hero-image-y: 0%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero__image,
-  .hero__content > * {
-    opacity: 1;
-    transform: none;
-    animation: none;
+@media (min-width: 480px) {
+  .hero__frame {
+    min-height: 640px;
   }
 }
 </style>

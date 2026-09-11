@@ -1,13 +1,13 @@
 :root {
-  --wedding-bg: #f8f9f5;
-  --wedding-surface: #e1ecf0;
-  --wedding-text: #2b4856;
-  --wedding-muted: #637d88;
-  --wedding-line: rgba(60, 94, 110, 0.24);
-  --wedding-deep: #294652;
-  --page-gutter: 24px;
-  --content-max-width: 360px;
-  --page-max-width: 480px;
+  --wedding-bg: #f7f5ef;
+  --wedding-surface: #dce5e6;
+  --wedding-text: #253f49;
+  --wedding-muted: #53696d;
+  --wedding-line: #c9d0cd;
+  --wedding-deep: #233e48;
+  --page-gutter: clamp(22px, 6vw, 36px);
+  --content-max-width: 488px;
+  --page-max-width: 560px;
   --font-serif: 'Songti SC', 'STSong', 'Noto Serif SC', serif;
   --font-display: 'Baskerville', 'Palatino Linotype', 'Times New Roman', serif;
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

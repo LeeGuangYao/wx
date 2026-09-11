@@ -13,7 +13,11 @@ export interface WeddingCopy {
   invitationEyebrow: string
   invitationTitle: string
   invitationLines: string[]
+  countdownEyebrow: string
+  countdownTitle: string
+  countdownPrefix: string
   detailsEyebrow: string
+  detailsTitle: string
   navigationLabel: string
   closingTitle: string
   closingEyebrow: string

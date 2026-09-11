@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import weddingCover from '@/assets/images/wedding-cover.jpg'
 import ClosingSection from '@/components/ClosingSection.vue'
+import CountdownSection from '@/components/CountdownSection.vue'
 import HeroSection from '@/components/HeroSection.vue'
-import InvitationSection from '@/components/InvitationSection.vue'
 import WeddingDetailsSection from '@/components/WeddingDetailsSection.vue'
 import { weddingConfig } from '@/config/wedding'
+import { weddingPhotos } from '@/config/photos'
 </script>
 
 <template>
   <main class="wedding-page">
-    <HeroSection :config="weddingConfig" :cover-src="weddingCover" />
-    <InvitationSection :config="weddingConfig" />
-    <WeddingDetailsSection :config="weddingConfig" />
-    <ClosingSection :config="weddingConfig" :cover-src="weddingCover" />
+    <HeroSection :config="weddingConfig" :photo="weddingPhotos.cover" />
+    <CountdownSection :config="weddingConfig" :photos="weddingPhotos.countdown" />
+    <WeddingDetailsSection :config="weddingConfig" :photo="weddingPhotos.details" />
+    <ClosingSection :config="weddingConfig" :photos="weddingPhotos.closing" />
   </main>
 </template>
