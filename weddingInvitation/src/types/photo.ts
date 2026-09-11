@@ -6,3 +6,11 @@ export interface WeddingPhoto {
   alt: string
   position?: string
 }
+
+export interface PhotoChapter {
+  id: string
+  eyebrow: string
+  title: string
+  description: string
+  photos: readonly WeddingPhoto[]
+}

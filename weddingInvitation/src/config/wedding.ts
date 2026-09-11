@@ -25,6 +25,7 @@ export const weddingConfig: WeddingConfig = {
     heroEyebrow: 'WEDDING INVITATION',
     invitationEyebrow: 'OUR WEDDING',
     invitationTitle: '我们结婚啦',
+    heroDescription: '一封请柬，邀你共赴我们的幸福。',
     invitationLines: [
       '诚挚邀请您',
       '来见证我们的婚礼。',
@@ -34,7 +35,8 @@ export const weddingConfig: WeddingConfig = {
     countdownPrefix: '还有',
     detailsEyebrow: 'Wedding Details',
     detailsTitle: '婚礼信息',
-    navigationLabel: '点击查看地图 · 开始导航',
+    detailsDescription: '这一刻，想与你一同珍藏。',
+    navigationLabel: '开始导航',
     closingTitle: '期待与你相见',
     closingEyebrow: 'SEE YOU AT OUR WEDDING',
   },

@@ -14,12 +14,14 @@ export interface WeddingCopy {
   heroEyebrow: string
   invitationEyebrow: string
   invitationTitle: string
+  heroDescription: string
   invitationLines: string[]
   countdownEyebrow: string
   countdownTitle: string
   countdownPrefix: string
   detailsEyebrow: string
   detailsTitle: string
+  detailsDescription: string
   navigationLabel: string
   closingTitle: string
   closingEyebrow: string

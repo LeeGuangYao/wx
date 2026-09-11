@@ -25,7 +25,7 @@ describe('weddingConfig', () => {
           '来见证我们的婚礼。',
         ],
         detailsEyebrow: 'Wedding Details',
-        navigationLabel: '点击查看地图 · 开始导航',
+        navigationLabel: '开始导航',
         closingTitle: '期待与你相见',
         closingEyebrow: 'SEE YOU AT OUR WEDDING',
       },
