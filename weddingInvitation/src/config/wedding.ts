@@ -15,6 +15,11 @@ export const weddingConfig: WeddingConfig = {
   venue: {
     name: '扬州中青国际酒店(市政府店)',
     address: '江苏省扬州市邗江区邗江中路631号',
+    // GCJ-02, checked against Amap's same-address hotel and Ctrip hotel 133540105.
+    // Amap's record here is named 扬州天润华美达广场酒店, at 邗江中路631号.
+    // https://www.amap.com/ssr/search/poi_detail?id=B0I36S88Z8
+    latitude: 32.390294,
+    longitude: 119.397407,
   },
   copy: {
     heroEyebrow: 'WEDDING INVITATION',

@@ -1,15 +1,26 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { useReveal } from '@/composables/useReveal'
 import SectionFooter from '@/components/SectionFooter.vue'
 import WeddingPhoto from '@/components/WeddingPhoto.vue'
 import type { WeddingPhoto as Photo } from '@/types/photo'
 import type { WeddingConfig } from '@/types/wedding'
-import { createAmapSearchUrl } from '@/utils/navigation'
+import { createWeddingNavigationUrl, openWeddingNavigation } from '@/utils/navigation'
 
-defineProps<{ config: WeddingConfig; photo: Photo }>()
+const props = defineProps<{ config: WeddingConfig; photo: Photo }>()
 const content = ref<HTMLElement | null>(null)
+const navigationUrl = computed(() => createWeddingNavigationUrl(props.config.venue, navigator.userAgent, navigator.maxTouchPoints))
+let cancelNavigation: (() => void) | undefined
 useReveal(content)
+
+function navigate(event: MouseEvent) {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
+  event.preventDefault()
+  cancelNavigation?.()
+  cancelNavigation = openWeddingNavigation(props.config.venue)
+}
+
+onBeforeUnmount(() => cancelNavigation?.())
 </script>
 
 <template>
@@ -34,7 +45,7 @@ useReveal(content)
           <dd>{{ config.venue.name }}<p class="details__address">{{ config.venue.address }}</p></dd>
         </div>
       </dl>
-      <a class="details__navigation" :href="createAmapSearchUrl(config.venue)" :aria-label="`在高德地图中搜索${config.venue.name}`">
+      <a class="details__navigation" :href="navigationUrl" :aria-label="`导航到${config.venue.name}`" @click="navigate">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="10" r="2.5" stroke="currentColor" stroke-width="1.4"/></svg>
         <span>{{ config.copy.navigationLabel }}</span>
         <span aria-hidden="true">↗</span>

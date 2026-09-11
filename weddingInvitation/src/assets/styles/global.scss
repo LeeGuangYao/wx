@@ -12,7 +12,8 @@ html {
   background: #dce3e3;
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
+  // Root scroll snap can cancel anchor navigation after a manual scroll in iOS Safari.
+  // Keep native smooth anchor scrolling without snap points (WebKit bug 272079).
 }
 
 body {
@@ -61,7 +62,6 @@ a:focus-visible {
   min-height: 100svh;
   min-height: 100dvh;
   padding: max(34px, env(safe-area-inset-top)) var(--page-gutter) 0;
-  scroll-snap-align: start;
 }
 
 .section-content {

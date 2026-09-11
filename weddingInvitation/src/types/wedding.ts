@@ -6,6 +6,8 @@ export interface WeddingCouple {
 export interface WeddingVenue {
   name: string
   address: string
+  latitude: number
+  longitude: number
 }
 
 export interface WeddingCopy {
