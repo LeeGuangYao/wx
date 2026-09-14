@@ -31,7 +31,7 @@ onBeforeUnmount(() => cancelNavigation?.())
         <span class="details__date-large" aria-hidden="true">{{ config.dateISO.slice(5, 7) }}<em>/</em>{{ config.dateISO.slice(8, 10) }}</span>
         <div class="details__date-copy"><time :datetime="config.dateISO">{{ config.dateLong }}</time><span>{{ config.weekday }}</span></div>
       </div>
-      <WeddingPhoto class="details__photo" :photo="photo" :active="active" fit="contain" motion="drift-left" sizes="(max-width: 560px) 88vw, 488px" />
+      <WeddingPhoto class="details__photo" :photo="photo" :active="active" fit="contain" motion="fade" :duration="1100" sizes="(max-width: 560px) 88vw, 488px" />
       <CountdownSection :config="config" />
       <dl class="details__info">
         <div class="details__row">

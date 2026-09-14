@@ -7,7 +7,8 @@ const props = withDefaults(defineProps<{
   sizes?: string
   priority?: boolean
   delay?: number
-  motion?: 'reveal' | 'drift-left' | 'drift-right'
+  duration?: number
+  motion?: 'reveal' | 'drift-left' | 'drift-right' | 'unveil-right' | 'unveil-up' | 'float-up' | 'settle-left' | 'settle-right' | 'soft-zoom' | 'cinematic' | 'fade'
   active?: boolean
   fit?: 'cover' | 'contain'
 }>(), {
@@ -24,7 +25,10 @@ const image = ref<HTMLImageElement | null>(null)
 const imageStyle = computed(() => ({
   objectPosition: props.photo.position ?? 'center',
   objectFit: props.fit,
-  '--photo-motion-delay': `${Math.min(240, Math.max(0, Number.isFinite(props.delay) ? props.delay : 0))}ms`,
+  '--photo-motion-delay': `${Math.max(0, Number.isFinite(props.delay) ? props.delay : 0)}ms`,
+  '--photo-motion-duration': props.duration !== undefined && Number.isFinite(props.duration) && props.duration > 0
+    ? `${props.duration}ms`
+    : undefined,
 }))
 
 let observer: IntersectionObserver | undefined
@@ -194,7 +198,7 @@ onBeforeUnmount(() => {
 }
 
 .wedding-photo.is-photo-animating:not(.is-photo-priority) img {
-  animation: photo-reveal 2400ms var(--ease-out) var(--photo-motion-delay) both;
+  animation: photo-reveal var(--photo-motion-duration, 2400ms) cubic-bezier(.25, .1, .25, 1) var(--photo-motion-delay) both;
 }
 
 .wedding-photo.is-photo-animating.is-photo-priority img {
@@ -214,9 +218,12 @@ onBeforeUnmount(() => {
 }
 
 /* Uncropped collages enter from a slightly smaller size, preserving every edge. */
+.wedding-photo.is-fit-contain.is-photo-animating {
+  overflow: visible;
+}
 .wedding-photo.is-fit-contain.is-photo-animating img {
   animation-name: photo-contained-reveal;
-  animation-duration: 1400ms;
+  animation-duration: var(--photo-motion-duration, 1400ms);
 }
 .wedding-photo.is-fit-contain.is-motion-drift-left.is-photo-animating img {
   animation-name: photo-contained-left;
@@ -225,6 +232,53 @@ onBeforeUnmount(() => {
   animation-name: photo-contained-right;
 }
 .wedding-photo.is-fit-contain.is-photo-priority:not(.is-photo-animating) img { transform: none; }
+
+.wedding-photo.is-photo-animating.is-motion-unveil-right img { animation-name: photo-unveil-right; }
+.wedding-photo.is-photo-animating.is-motion-unveil-up img { animation-name: photo-unveil-up; }
+.wedding-photo.is-photo-animating.is-motion-float-up img { animation-name: photo-float-up; }
+.wedding-photo.is-photo-animating.is-motion-settle-left img { animation-name: photo-settle-left; }
+.wedding-photo.is-photo-animating.is-motion-settle-right img { animation-name: photo-settle-right; }
+.wedding-photo.is-photo-animating.is-motion-soft-zoom img { animation-name: photo-soft-zoom; }
+.wedding-photo.is-photo-animating.is-motion-cinematic img { animation-name: photo-cinematic; }
+.wedding-photo.is-photo-animating.is-motion-fade img { animation-name: photo-fade; }
+
+/* Keep the final framing when animationend removes the animation class. */
+.wedding-photo.is-photo-settled.is-motion-cinematic img { transform: scale(1.025); }
+
+@keyframes photo-unveil-right {
+  from { opacity: 0; clip-path: inset(0 100% 0 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+@keyframes photo-unveil-up {
+  from { opacity: 0; clip-path: inset(100% 0 0 0); }
+  to { opacity: 1; clip-path: inset(0); }
+}
+@keyframes photo-float-up {
+  from { opacity: 0; transform: translate3d(0, 12px, 0) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes photo-settle-left {
+  from { opacity: 0; transform: translate3d(0, -10px, 0) rotate(-1.8deg) scale(.965); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes photo-settle-right {
+  from { opacity: 0; transform: translate3d(0, -10px, 0) rotate(1.8deg) scale(.965); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes photo-soft-zoom {
+  from { opacity: 0; transform: scale(.97); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes photo-cinematic {
+  from { opacity: 0; transform: scale(1); }
+  60% { opacity: 1; }
+  to { opacity: 1; transform: scale(1.025); }
+}
+@keyframes photo-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 @keyframes photo-contained-reveal {
   from { opacity: 0; transform: translate3d(0, 6%, 0) scale(.96); }
   to { opacity: 1; transform: none; }

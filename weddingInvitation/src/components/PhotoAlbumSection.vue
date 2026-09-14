@@ -6,6 +6,34 @@ import type { WeddingPhoto as Photo } from '@/types/photo'
 
 const props = defineProps<{ chapter: AlbumPage; page: number; active: boolean; nextHref: string; previousHref: string }>()
 
+// Timings follow each composition; neighboring photos overlap as they settle.
+const photoAnimations = {
+  panorama: [
+    { motion: 'unveil-right', delay: 0, duration: 1300 },
+    { motion: 'float-up', delay: 650, duration: 1200 },
+    { motion: 'float-up', delay: 1250, duration: 1200 },
+    { motion: 'fade', delay: 1800, duration: 1000 },
+    { motion: 'fade', delay: 2300, duration: 1000 },
+    { motion: 'fade', delay: 2800, duration: 1000 },
+  ],
+  editorial: [
+    { motion: 'soft-zoom', delay: 0, duration: 1300 },
+    { motion: 'settle-left', delay: 650, duration: 1200 },
+    { motion: 'settle-right', delay: 1250, duration: 1200 },
+    { motion: 'unveil-up', delay: 1850, duration: 1200 },
+    { motion: 'settle-left', delay: 2450, duration: 1000 },
+    { motion: 'settle-right', delay: 2950, duration: 1000 },
+  ],
+  cinematic: [
+    { motion: 'cinematic', delay: 0, duration: 1300 },
+    { motion: 'float-up', delay: 1250, duration: 1200 },
+    { motion: 'soft-zoom', delay: 650, duration: 1300 },
+    { motion: 'float-up', delay: 1850, duration: 1200 },
+    { motion: 'fade', delay: 2450, duration: 1100 },
+    { motion: 'fade', delay: 3000, duration: 1100 },
+  ],
+} as const satisfies Record<AlbumPage['layout'], readonly Pick<InstanceType<typeof WeddingPhoto>['$props'], 'motion' | 'delay' | 'duration'>[]>
+
 function isBanner(index: number): boolean {
   return props.chapter.layout === 'editorial' ? index === 3 : index === 0
 }
@@ -31,11 +59,10 @@ function displayPhoto(photo: Photo, index: number): Photo {
           :class="{ 'album__frame--banner': isBanner(index), 'album__frame--portrait': photo.width < photo.height }"
         >
           <WeddingPhoto
+            v-bind="photoAnimations[chapter.layout][index]"
             :photo="displayPhoto(photo, index)"
             :active="active"
             :fit="isBanner(index) ? 'cover' : 'contain'"
-            :motion="index % 3 === 0 ? 'reveal' : index % 2 === 0 ? 'drift-right' : 'drift-left'"
-            :delay="index * 70"
             :sizes="isBanner(index) ? '(max-width: 560px) 100vw, 560px' : '(max-width: 560px) 55vw, 300px'"
           />
         </figure>
