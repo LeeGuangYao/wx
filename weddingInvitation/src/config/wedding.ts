@@ -1,6 +1,6 @@
 import type { WeddingConfig } from '@/types/wedding'
 
-export const weddingConfig: WeddingConfig = {
+const defaultWeddingConfig: WeddingConfig = {
   couple: {
     groom: '李光耀',
     bride: '方紫薇',
@@ -41,3 +41,31 @@ export const weddingConfig: WeddingConfig = {
     closingEyebrow: 'SEE YOU AT OUR WEDDING',
   },
 }
+
+const shangshuiWeddingConfig: WeddingConfig = {
+  ...defaultWeddingConfig,
+  dateISO: '2026-10-02',
+  dateShort: '2026.10.02',
+  dateSlash: '2026 / 10 / 02',
+  dateLong: '2026年10月2日',
+  weekday: '星期五',
+  time: '中午 12:00',
+  time24: '12:00',
+  venue: {
+    name: '桑尼贝尔连锁酒店(商水富商路店)',
+    address: '河南省周口市商水县富商路',
+    // GCJ-02, converted from Ctrip's BD-09 hotelPositionInfo on 2026-09-14.
+    // Original BD-09: longitude 114.612645, latitude 33.572104, mapType "bd".
+    // https://hotels.ctrip.com/hotels/104721675.html
+    latitude: 33.565783,
+    longitude: 114.606259,
+  },
+}
+
+export function getWeddingConfig(search: string): WeddingConfig {
+  return new URLSearchParams(search).get('venue') === 'shangshui'
+    ? shangshuiWeddingConfig
+    : defaultWeddingConfig
+}
+
+export const weddingConfig = getWeddingConfig(typeof window === 'undefined' ? '' : window.location.search)

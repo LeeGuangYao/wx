@@ -30,6 +30,15 @@ src/config/wedding.ts
 
 不要把固定婚礼信息直接写入组件。按照修改范围执行定向验证；全项目测试、类型检查或构建只在明确需要时执行。
 
+通过 URL 查询参数选择场次：
+
+- 默认链接 `https://vvcsclbb.com/wedding/`：2026 年 10 月 11 日（星期日）20:00，扬州中青国际酒店(市政府店)。
+- 商水链接 `https://vvcsclbb.com/wedding/?venue=shangshui`：2026 年 10 月 2 日（星期五）中午 12:00，河南省周口市商水县富商路桑尼贝尔连锁酒店(商水富商路店)。
+
+只有 `venue=shangshui` 才切换到商水场次；缺少、为空或未知的 `venue` 值都使用默认场次，微信附加的其他参数不影响选择。查询参数放在 `#` 锚点之前；翻页和刷新会保留查询参数。封面日期、婚礼详情、星期、倒计时和所有导航入口使用同一份选中配置。
+
+商水酒店坐标来源为[携程酒店 104721675](https://hotels.ctrip.com/hotels/104721675.html)，地址为富商路与汝阳路交叉口东 100 米。2026-09-14 读取的 `hotelPositionInfo` 使用百度 BD-09（经度 `114.612645`、纬度 `33.572104`），按 [coordtransform 的 BD-09 → GCJ-02 算法](https://github.com/wandergis/coordtransform)转换为 GCJ-02（经度 `114.606259`、纬度 `33.565783`），供高德导航与腾讯地图位置页使用。
+
 ## 背景音乐
 
 使用 PaulYudin 的《Romantic Wedding Piano》，原始 MP3 位于 `src/assets/audio/romantic-wedding-piano.mp3`，来源与授权记录见同目录 `README.md`。音频通过 Vite 打包为本地静态资源，适配部署子路径，无需依赖第三方音乐外链。
@@ -46,7 +55,7 @@ src/config/wedding.ts
 
 页面高度优先读取未缩放状态下的 `visualViewport.height`，回退至 `innerHeight`，随视口变化更新；浏览器放大手势不会触发翻页。三页相册分别使用全宽横幅配双竖照、左侧高竖照配错落小图、深色影集配倾斜竖照的独立排版。每页挑选一张横图铺满宽度，并调整焦点位置保留人脸；其他照片保留原始比例。横屏使用各自的紧凑布局。桌面保持居中的邀请函版面，最大宽度 560px。内部链接由翻页控制器接管，不依赖根页面的滚动吸附或原生锚点平滑滚动。
 
-倒计时以北京时间 `2026-10-11 20:00` 为目标，每秒更新，到时归零，页面恢复前台时校正时间。最后一页展示日期、照片、倒计时、时间、酒店与完整地址；“开始导航”按钮位于酒店地址下方。`#countdown` 和 `#navigation` 在请柬开启后兼容定位到婚礼信息页。导航继续复用 `utils/navigation.ts`：手机浏览器尝试唤起高德导航并保留网页回退，微信和桌面浏览器直接打开腾讯地图位置页。
+倒计时以选中场次的北京时间为目标（默认 `2026-10-11 20:00`，商水 `2026-10-02 12:00`），每秒更新，到时归零，页面恢复前台时校正时间。最后一页展示日期、照片、倒计时、时间、酒店与完整地址；“开始导航”按钮位于酒店地址下方。`#countdown` 和 `#navigation` 在请柬开启后兼容定位到婚礼信息页。导航继续复用 `utils/navigation.ts`：手机浏览器尝试唤起高德导航并保留网页回退，微信和桌面浏览器直接打开腾讯地图位置页。
 
 兼容性实现参考 [MDN VisualViewport](https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport)、[触摸手势控制](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/touch-action) 和 [inert](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inert)。当前已在内置 Chromium 预览中检查 390×844、320×568 和 844×390 的布局、拆信锁定、滚轮整页翻动、图片重入和末页刷新回首页；触摸和减少动态效果的控制逻辑有自动化测试。真实 iOS Safari、Android Chrome、微信浏览器仍需设备回归：特别检查地址栏收缩、旋转屏幕、双指缩放、滑动惯性、短屏内部滚动及地图返回。
 
@@ -92,7 +101,7 @@ src/config/wedding.ts
 - `public/favicon-192x192.png`：192px PNG 图标，供较大尺寸的图标展示使用。
 - `public/apple-touch-icon.png`：180px 手机主屏幕收藏图标。
 
-`index.html` 中图标使用相对路径，适配 `/wedding/` 等部署子目录。标题、简介、Open Graph 和 Twitter 卡片信息也在该文件维护；更改姓名、婚礼日期、时间或地点时，应与 `src/config/wedding.ts` 同步。分享缩略图继续使用 `public/share-cover.jpg`（300 × 300）；更换图片尺寸时同步更新 Open Graph 的宽高。公开地址与分享图片的绝对地址目前配置为 `https://vvcsclbb.com/wedding/`，更换域名或部署路径时一并更新。
+`index.html` 中图标使用相对路径，适配 `/wedding/` 等部署子目录。标题、Open Graph 和 Twitter 卡片信息在该文件维护；更改姓名时应与 `src/config/wedding.ts` 同步。静态简介使用不含场次的通用邀请文案，避免不执行 JavaScript 的分享抓取器读取错误日期或酒店。`src/main.ts` 在页面启动时从选中配置同步四处简介，并生成保留查询参数、去掉翻页锚点的 `og:url` 和 canonical；因此静态 HTML 不写死默认场次链接。分享平台的具体卡片样式与缓存仍以实际平台为准，当前没有接入微信 JSSDK。分享缩略图继续使用 `public/share-cover.jpg`（300 × 300）；更换图片尺寸时同步更新 Open Graph 的宽高。分享图片的绝对地址目前使用 `https://vvcsclbb.com/wedding/`，更换域名或部署路径时一并更新。
 
 ## 构建和部署
 
