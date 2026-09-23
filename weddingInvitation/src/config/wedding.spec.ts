@@ -10,8 +10,8 @@ describe('weddingConfig', () => {
       dateSlash: '2026 / 10 / 11',
       dateLong: '2026年10月11日',
       weekday: '星期日',
-      time: '晚上 8:00',
-      time24: '20:00',
+      time: '中午 12:00',
+      time24: '12:00',
       venue: {
         name: '扬州中青国际酒店(市政府店)',
         address: '江苏省扬州市邗江区邗江中路631号',

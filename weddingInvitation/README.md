@@ -32,7 +32,7 @@ src/config/wedding.ts
 
 通过 URL 查询参数选择场次：
 
-- 默认链接 `https://vvcsclbb.com/wedding/`：2026 年 10 月 11 日（星期日）20:00，扬州中青国际酒店(市政府店)。
+- 默认链接 `https://vvcsclbb.com/wedding/`：2026 年 10 月 11 日（星期日）中午 12:00，扬州中青国际酒店(市政府店)。
 - 商水链接 `https://vvcsclbb.com/wedding/?venue=shangshui`：2026 年 10 月 2 日（星期五）中午 12:00，河南省周口市商水县富商路桑尼贝尔连锁酒店(商水富商路店)。
 
 只有 `venue=shangshui` 才切换到商水场次；缺少、为空或未知的 `venue` 值都使用默认场次，微信附加的其他参数不影响选择。查询参数放在 `#` 锚点之前；翻页和刷新会保留查询参数。封面日期、婚礼详情、星期、倒计时和所有导航入口使用同一份选中配置。
@@ -55,7 +55,7 @@ src/config/wedding.ts
 
 页面高度优先读取未缩放状态下的 `visualViewport.height`，回退至 `innerHeight`，随视口变化更新；浏览器放大手势不会触发翻页。三页相册分别使用全宽横幅配双竖照、左侧高竖照配错落小图、深色影集配倾斜竖照的独立排版。每页挑选一张横图铺满宽度，并调整焦点位置保留人脸；其他照片保留原始比例。横屏使用各自的紧凑布局。桌面保持居中的邀请函版面，最大宽度 560px。内部链接由翻页控制器接管，不依赖根页面的滚动吸附或原生锚点平滑滚动。
 
-倒计时以选中场次的北京时间为目标（默认 `2026-10-11 20:00`，商水 `2026-10-02 12:00`），每秒更新，到时归零，页面恢复前台时校正时间。最后一页展示日期、照片、倒计时、时间、酒店与完整地址；“开始导航”按钮位于酒店地址下方。`#countdown` 和 `#navigation` 在请柬开启后兼容定位到婚礼信息页。导航继续复用 `utils/navigation.ts`：手机浏览器尝试唤起高德导航并保留网页回退，微信和桌面浏览器直接打开腾讯地图位置页。
+倒计时以选中场次的北京时间为目标（默认 `2026-10-11 12:00`，商水 `2026-10-02 12:00`），每秒更新，到时归零，页面恢复前台时校正时间。最后一页展示日期、照片、倒计时、时间、酒店与完整地址；“开始导航”按钮位于酒店地址下方。`#countdown` 和 `#navigation` 在请柬开启后兼容定位到婚礼信息页。导航继续复用 `utils/navigation.ts`：手机浏览器尝试唤起高德导航并保留网页回退，微信和桌面浏览器直接打开腾讯地图位置页。
 
 兼容性实现参考 [MDN VisualViewport](https://developer.mozilla.org/en-US/docs/Web/API/VisualViewport)、[触摸手势控制](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/touch-action) 和 [inert](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inert)。当前已在内置 Chromium 预览中检查 390×844、320×568 和 844×390 的布局、拆信锁定、滚轮整页翻动、图片重入和末页刷新回首页；触摸和减少动态效果的控制逻辑有自动化测试。真实 iOS Safari、Android Chrome、微信浏览器仍需设备回归：特别检查地址栏收缩、旋转屏幕、双指缩放、滑动惯性、短屏内部滚动及地图返回。
 
