@@ -1,5 +1,6 @@
 const { BASE_URL, API_PATH_PREFIX } = require('../config')
 const { buildMultipart } = require('../utils/multipart')
+const { getPasswordHeader, handlePasswordUnauthorized } = require('../utils/password-access')
 
 function createMeal({ filePaths = [], title = '', content = '' }) {
   return new Promise((resolve, reject) => {
@@ -22,7 +23,10 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
       return
     }
 
-    const header = { 'content-type': payload.contentType }
+    const header = Object.assign(
+      { 'content-type': payload.contentType },
+      getPasswordHeader()
+    )
     if (token) header['Authorization'] = `Bearer ${token}`
 
     wx.request({
@@ -33,6 +37,10 @@ function createMeal({ filePaths = [], title = '', content = '' }) {
       timeout: 30000,
       success(res) {
         const body = res.data
+        if (handlePasswordUnauthorized(res, app)) {
+          reject(new Error('密码校验已过期，正在重新校验…'))
+          return
+        }
         if (res.statusCode === 401 && app && app.login) {
           app.login()
           reject(new Error('登录已过期，正在重新登录…'))
@@ -56,7 +64,7 @@ function listMeals({ page = 1, pageSize = 10 } = {}) {
   return new Promise((resolve, reject) => {
     const app = getApp()
     const token = app ? app.getToken() : ''
-    const header = {}
+    const header = getPasswordHeader()
     if (token) header['Authorization'] = `Bearer ${token}`
 
     wx.request({
@@ -67,6 +75,10 @@ function listMeals({ page = 1, pageSize = 10 } = {}) {
       header,
       success(res) {
         const body = res.data
+        if (handlePasswordUnauthorized(res, app)) {
+          reject(new Error('密码校验已过期，正在重新校验…'))
+          return
+        }
         if (res.statusCode === 401 && app && app.login) {
           app.login()
           reject(new Error('登录已过期，正在重新登录…'))

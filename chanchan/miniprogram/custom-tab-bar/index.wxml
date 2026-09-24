@@ -1,3 +1,7 @@
+<view class="album-return album-return-{{list.length ? 'above' : 'bottom'}}" bindtap="backToAlbum">
+  <text class="album-return-mark">✧</text><text>婚纱相册</text>
+</view>
+
 <view class="tab-bar" wx:if="{{list.length}}">
   <view class="tab-bar-bg"></view>
   <view

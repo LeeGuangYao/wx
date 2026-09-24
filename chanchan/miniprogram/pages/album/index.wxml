@@ -1,0 +1,72 @@
+<view wx:if="{{ready}}" class="album-page chapter-{{chapter.id}}" style="background: {{chapter.background}}; color: {{chapter.foreground}};">
+  <view class="album-top" style="padding-top: {{navTop}}px; height: {{navHeight}}px;">
+    <view class="brand-mark" bindtap="openDirectory">
+      <text class="brand-kicker">A WEDDING ALBUM</text>
+      <text class="brand-name">光的折页</text>
+    </view>
+    <view class="top-actions">
+      <view class="directory-trigger" bindtap="openDirectory"><text class="directory-glyph">☷</text><text>目录</text></view>
+    </view>
+  </view>
+
+  <view class="chapter-tabs">
+    <view wx:for="{{chapters}}" wx:key="id" class="chapter-tab {{chapter.id === item.id ? 'chapter-tab-active' : ''}}" data-id="{{item.id}}" bindtap="onSelectChapter">
+      <text class="chapter-tab-number">{{item.number}}</text>
+      <text class="chapter-tab-title">{{item.title}}</text>
+      <view wx:if="{{chapter.id === item.id}}" class="chapter-tab-rule"></view>
+    </view>
+  </view>
+
+  <view class="chapter-heading">
+    <text class="chapter-subtitle">{{chapter.subtitle}}</text>
+    <text class="chapter-current">{{chapter.number}} / 04</text>
+  </view>
+
+  <swiper class="folio-swiper" vertical="true" current="{{pageIndex}}" duration="360" bindchange="onPageChange">
+    <swiper-item wx:for="{{chapter.pages}}" wx:key="id">
+      <album-spread wx:if="{{index >= pageIndex - 1 && index <= pageIndex + 1}}" page="{{item}}" chapter="{{chapter}}" active="{{index === pageIndex}}" bind:photo="onPhotoTap" bind:ready="onSpreadReady"></album-spread>
+    </swiper-item>
+  </swiper>
+
+  <view class="album-footer" style="padding-bottom: {{safeBottom + 10}}px;">
+    <view class="folio-counter">
+      <text class="folio-current">{{pageIndex + 1 < 10 ? '0' + (pageIndex + 1) : pageIndex + 1}}</text>
+      <view class="counter-line"></view>
+      <text class="folio-total">{{chapter.pages.length < 10 ? '0' + chapter.pages.length : chapter.pages.length}}</text>
+      <text class="folio-caption">PAGE · PHOTO {{photoIndex + 1}}/{{chapter.photos.length}}</text>
+      <text class="swipe-hint">上下滑动翻页</text>
+    </view>
+    <scroll-view class="thumb-strip" scroll-x="true" enhanced="true" show-scrollbar="false" scroll-into-view="{{'thumb-' + photoIndex}}" bindscroll="onThumbScroll">
+      <view class="thumb-track">
+        <view wx:for="{{thumbs}}" wx:key="file" id="thumb-{{item.index}}" class="thumb-item {{item.index === photoIndex ? 'thumb-current' : ''}}" data-file="{{item.file}}" bindtap="onSelectThumb">
+          <image wx:if="{{item.src}}" class="thumb-image" src="{{item.src}}" mode="aspectFill" lazy-load="true"></image>
+          <view wx:else class="thumb-placeholder"></view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view wx:if="{{directoryOpen}}" class="directory-mask" catchtap="closeDirectory">
+    <view class="directory-panel" catchtap="noop">
+      <view class="directory-handle"></view>
+      <view class="directory-heading"><view><text class="directory-overline">THE ALBUM</text><text class="directory-title">翻阅目录</text></view><text class="directory-close" bindtap="closeDirectory">×</text></view>
+      <view class="directory-switch"><text class="directory-switch-item {{directoryTab === 'chapters' ? 'switch-on' : ''}}" data-tab="chapters" bindtap="onDirectoryTab">风格</text><text class="directory-switch-item {{directoryTab === 'photos' ? 'switch-on' : ''}}" data-tab="photos" bindtap="onDirectoryTab">全部照片</text></view>
+      <scroll-view wx:if="{{directoryTab === 'chapters'}}" class="directory-scroll" scroll-y="true">
+        <view wx:for="{{chapters}}" wx:key="id" class="directory-chapter chapter-{{item.id}} {{chapter.id === item.id ? 'directory-chapter-current' : ''}}" data-id="{{item.id}}" bindtap="onSelectChapter">
+          <view class="directory-chapter-copy"><text class="directory-chapter-number">{{item.number}} / 04</text><text class="directory-chapter-title">{{item.title}}</text><text class="directory-chapter-subtitle">{{item.subtitle}}</text></view>
+          <text class="directory-chapter-count">{{item.count}} 张</text>
+        </view>
+      </scroll-view>
+      <view wx:else class="directory-photo-browser">
+        <scroll-view class="directory-chapter-filters" scroll-x="true" show-scrollbar="false">
+          <text wx:for="{{chapters}}" wx:key="id" class="filter-pill {{directoryChapterId === item.id ? 'filter-pill-on' : ''}}" data-id="{{item.id}}" bindtap="onDirectoryChapter">{{item.title}}</text>
+        </scroll-view>
+        <scroll-view class="directory-scroll directory-grid-scroll" scroll-y="true" lower-threshold="100" bindscrolltolower="loadMoreDirectoryPhotos">
+          <view class="directory-grid"><view wx:for="{{directoryPhotos}}" wx:key="file" class="directory-photo" data-file="{{item.file}}" bindtap="onDirectoryPhoto"><image src="{{item.src}}" mode="aspectFill" lazy-load="true"></image></view></view>
+          <view class="directory-more">{{directoryHasMore ? '继续向下，发现更多照片' : '这一章的照片已全部呈现'}}</view>
+        </scroll-view>
+      </view>
+      <view class="directory-bottom"><text class="directory-edition">70 PHOTOGRAPHS · 4 CHAPTERS</text><view class="vvdc-button" bindtap="onRecipeTap"><text class="vvdc-dot"></text><text>vvdc</text></view></view>
+    </view>
+  </view>
+</view>

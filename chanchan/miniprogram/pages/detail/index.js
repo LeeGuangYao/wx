@@ -30,12 +30,14 @@ Page({
     gradient: ''
   },
 
-  async onLoad({ id }) {
-    this.recipeId = id
+  async onLoad(options) {
+    if (!getApp().guardPage(this, options)) return
+    this.recipeId = options && options.id
     await this.fetchDetail()
   },
 
   onShow() {
+    if (!getApp().guardPage(this)) return
     if (this.recipeId) {
       this.setData({ favorited: isFavorite(this.recipeId) })
     }
@@ -89,6 +91,10 @@ Page({
       icon: 'none',
       duration: 1200
     })
+  },
+
+  onGoAlbum() {
+    wx.reLaunch({ url: '/pages/album/index' })
   },
 
   onShareAppMessage() {

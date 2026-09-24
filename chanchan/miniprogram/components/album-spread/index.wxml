@@ -1,0 +1,33 @@
+<view class="spread-wrap" style="color: {{chapter.foreground}};">
+  <view class="folio-header">
+    <text class="folio-title chapter-{{chapter.id}}">{{page.copy.header || chapter.header}}</text>
+    <text class="folio-aside chapter-{{chapter.id}}">{{chapter.english}}</text>
+  </view>
+  <view class="spread-canvas">
+    <view wx:if="{{chapter.id === 'mountains' && page.kind === 'landscapeSequence'}}" class="sequence-line"></view>
+    <view wx:if="{{chapter.id === 'mountains' && page.kind === 'landscapeStory'}}" class="mountain-note">
+      <view class="note-rule"></view>
+      <text wx:for="{{page.copy.lines}}" wx:key="*this">{{item}}</text>
+      <text class="note-number">{{page.number}}</text>
+    </view>
+    <view wx:if="{{chapter.id === 'palace'}}" class="palace-wash"></view>
+    <view wx:if="{{chapter.id === 'palace'}}" class="palace-divider"></view>
+    <text wx:if="{{chapter.id === 'white'}}" class="white-page-number">{{page.number}}</text>
+    <view wx:if="{{chapter.id === 'golden'}}" class="golden-glow"></view>
+
+    <view
+      wx:for="{{placements}}"
+      wx:key="file"
+      class="photo-paper chapter-{{chapter.id}} {{item.visible ? 'photo-visible' : ''}}"
+      style="left: {{item.left}}; top: {{item.top}}; width: {{item.width}}; height: {{item.height}}; z-index: {{item.zIndex}}; transform: rotate({{item.rotation}}deg);"
+      data-file="{{item.file}}"
+      bindtap="onTapPhoto"
+    >
+      <image wx:if="{{item.src}}" class="spread-photo {{item.visible ? 'photo-loaded' : ''}}" src="{{item.src}}" mode="aspectFit" data-file="{{item.file}}" bindload="onImageLoad" binderror="onImageError"></image>
+      <view wx:if="{{!item.src && !item.failed}}" class="photo-placeholder"></view>
+      <view wx:if="{{item.failed}}" class="photo-failed" data-file="{{item.file}}" catchtap="retryPhoto">
+        <text>轻触重试</text>
+      </view>
+    </view>
+  </view>
+</view>

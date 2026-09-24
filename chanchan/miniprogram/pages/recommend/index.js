@@ -175,6 +175,7 @@ Page({
   _cache: [],
 
   async onLoad() {
+    if (!getApp().guardPage(this)) return
     this.setData({
       slot: currentSlot(),
       today: todayStr(),
@@ -185,6 +186,7 @@ Page({
   },
 
   onShow() {
+    if (!getApp().guardPage(this)) return
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 2 })
     }

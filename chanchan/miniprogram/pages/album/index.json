@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "enableShareAppMessage": true,
+  "enableShareTimeline": true,
+  "disableScroll": true,
+  "usingComponents": {
+    "album-spread": "/components/album-spread/index"
+  }
+}

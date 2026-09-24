@@ -56,7 +56,25 @@
 
 ---
 
-## 2. 客户端配置（底部菜单权限）
+## 2. 小程序密码验证
+
+服务端通过 PASSWORD_LOGIN_ENABLED 控制密码验证，默认关闭。开启后，除健康检查和下面两个密码接口外，所有 /api/* 请求都必须携带 X-App-Access-Token。正确密码会返回有效期为 7 天的访问凭证。每个来源地址 15 分钟内最多允许 10 次错误尝试。
+
+### 查询是否开启
+
+GET /api/auth/password/status
+
+响应示例：{ "code": 0, "message": "ok", "data": { "enabled": true } }
+
+### 校验密码
+
+POST /api/auth/password/verify
+
+请求示例：{ "password": "四位数字密码" }
+
+成功响应中的 data.token 作为 X-App-Access-Token 请求头发送给业务接口。它与微信登录使用的 Authorization: Bearer 凭证相互独立。
+
+## 3. 客户端配置（底部菜单权限）
 
 **`GET /api/config`**
 
@@ -91,7 +109,7 @@
 
 ---
 
-## 3. 创建食记
+## 4. 创建食记
 
 **`POST /api/meal/create`**
 
@@ -144,7 +162,7 @@ curl -X POST http://localhost:3000/api/meal/create \
 
 ---
 
-## 4. 列表（分页）
+## 5. 列表（分页）
 
 **`GET /api/meal/list`**
 
@@ -187,7 +205,7 @@ curl "http://localhost:3000/api/meal/list?page=1&pageSize=10"
 
 ---
 
-## 5. 详情
+## 6. 详情
 
 **`GET /api/meal/:id`**
 
@@ -213,7 +231,7 @@ curl http://localhost:3000/api/meal/1
 
 ---
 
-## 6. 删除
+## 7. 删除
 
 **`DELETE /api/meal/:id`**
 
@@ -244,7 +262,7 @@ curl -X DELETE http://localhost:3000/api/meal/1
 
 ---
 
-## 7. 静态资源（图片访问）
+## 8. 静态资源（图片访问）
 
 **`GET /uploads/:filename`**
 

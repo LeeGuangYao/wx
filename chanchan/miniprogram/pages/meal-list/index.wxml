@@ -6,9 +6,12 @@
       <text class="topbar-sub">FOOD DIARY</text>
       <text class="topbar-title">我的食记</text>
     </view>
-    <view class="topbar-count" wx:if="{{total > 0}}">
-      <text class="topbar-count-num">{{total}}</text>
-      <text class="topbar-count-label">条</text>
+    <view class="topbar-tools">
+      <view class="topbar-count" wx:if="{{total > 0}}">
+        <text class="topbar-count-num">{{total}}</text>
+        <text class="topbar-count-label">条</text>
+      </view>
+      <view class="meal-album-link" bindtap="onGoAlbum"><text>✧</text><text>婚纱相册</text></view>
     </view>
   </view>
 

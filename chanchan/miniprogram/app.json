@@ -1,5 +1,8 @@
 {
   "pages": [
+    "pages/password/index",
+    "pages/album/index",
+    "pages/album-photo/index",
     "pages/list/index",
     "pages/category/index",
     "pages/recommend/index",
@@ -38,6 +41,11 @@
     "navigationBarBackgroundColor": "#FF6B35",
     "navigationBarTitleText": "馋馋",
     "navigationBarTextStyle": "white"
+  },
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "用于保存婚纱相册原片到系统相册"
+    }
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",

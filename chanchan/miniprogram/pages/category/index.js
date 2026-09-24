@@ -1,4 +1,5 @@
 const { getCategories, getRecipeList } = require('../../api/recipe')
+const { shareAlbumHome } = require('../../utils/album-media')
 
 const PAGE_SIZE = 20
 
@@ -45,12 +46,19 @@ Page({
   _cache: {},
 
   onShow() {
+    if (!getApp().guardPage(this)) return
+    wx.showShareMenu({ menus: ['shareAppMessage'] })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 1 })
     }
   },
 
+  onShareAppMessage() {
+    return shareAlbumHome()
+  },
+
   async onLoad() {
+    if (!getApp().guardPage(this)) return
     await this.fetchCategories()
   },
 

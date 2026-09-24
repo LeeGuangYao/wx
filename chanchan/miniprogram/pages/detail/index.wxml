@@ -6,6 +6,7 @@
     <view class="hero" style="background: {{gradient}};">
       <view class="hero-top">
         <view wx:if="{{recipe.type_name}}" class="hero-tag">{{recipe.type_name}}</view>
+        <view class="hero-album-link" bindtap="onGoAlbum"><text>✧</text><text>婚纱相册</text></view>
         <view class="fav-btn {{favorited ? 'fav-on' : ''}}" bindtap="onToggleFavorite">
           <text class="fav-icon">{{favorited ? '♥' : '♡'}}</text>
         </view>

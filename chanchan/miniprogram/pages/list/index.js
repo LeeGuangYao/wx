@@ -1,5 +1,6 @@
 const { getRecipeList } = require('../../api/recipe')
 const { getFavorites, isFavorite, toggleFavorite } = require('../../utils/favorites')
+const { shareAlbumHome } = require('../../utils/album-media')
 
 const POOL_SIZE = 1000
 const PICK_SIZE = 500
@@ -95,10 +96,13 @@ Page({
   _searchTimer: null,
 
   async onLoad() {
+    if (!getApp().guardPage(this)) return
     await this.loadPool()
   },
 
   onShow() {
+    if (!getApp().guardPage(this)) return
+    wx.showShareMenu({ menus: ['shareAppMessage'] })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 0 })
     }
@@ -111,6 +115,10 @@ Page({
       return
     }
     this.syncFavoritesIntoPicked(favIds)
+  },
+
+  onShareAppMessage() {
+    return shareAlbumHome()
   },
 
   syncFavoritesIntoPicked(favIds) {

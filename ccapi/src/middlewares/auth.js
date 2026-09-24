@@ -1,13 +1,35 @@
 const authService = require('../services/auth.service');
+const config = require('../config');
 const { fail } = require('../utils/response');
 
-const SKIP_PATHS = ['/api/auth/login', '/api/health', '/api/caipu', '/api/config', '/api/meal'];
+const PASSWORD_GATE_EXEMPT_PATHS = [
+  '/api/health',
+  '/api/auth/password/status',
+  '/api/auth/password/verify',
+];
+const SKIP_PATHS = [
+  ...PASSWORD_GATE_EXEMPT_PATHS,
+  '/api/auth/login',
+  '/api/caipu',
+  '/api/config',
+  '/api/meal',
+];
 
 function authMiddleware(req, _res, next) {
   const path = req.path;
   if (!path.startsWith('/api')) {
     return next();
   }
+
+  if (config.passwordLoginEnabled && !PASSWORD_GATE_EXEMPT_PATHS.includes(path)) {
+    const passwordToken = req.headers['x-app-access-token'] || '';
+    const passwordPayload = authService.verifyPasswordToken(passwordToken);
+    if (!passwordPayload) {
+      return _res.status(401).json(fail('密码验证凭证无效', 401));
+    }
+    req.passwordVerified = true;
+  }
+
   if (SKIP_PATHS.some((p) => path === p || path.startsWith(p + '/'))) {
     return next();
   }

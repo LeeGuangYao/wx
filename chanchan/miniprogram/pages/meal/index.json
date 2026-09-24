@@ -1,5 +1,6 @@
 {
   "usingComponents": {},
+  "enableShareAppMessage": true,
   "navigationBarTitleText": "食记",
   "navigationBarBackgroundColor": "#FF6B35",
   "navigationBarTextStyle": "white"

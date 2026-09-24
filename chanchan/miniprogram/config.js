@@ -16,6 +16,7 @@ const ENV_URLS = {
 };
 
 const API_PATH_PREFIX = '/app3000'
+const ALBUM_ASSET_BASE_URL = 'https://vvcsclbb.com/photos'
 
 function resolveBaseUrl() {
   try {
@@ -28,4 +29,4 @@ function resolveBaseUrl() {
 
 const BASE_URL = resolveBaseUrl()
 
-module.exports = { BASE_URL, ENV_URLS, API_PATH_PREFIX }
+module.exports = { BASE_URL, ENV_URLS, API_PATH_PREFIX, ALBUM_ASSET_BASE_URL }

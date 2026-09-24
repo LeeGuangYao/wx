@@ -1,0 +1,19 @@
+<view class="photo-viewer">
+  <view class="viewer-nav" style="padding-top: {{navTop}}px; height: {{navHeight}}px;">
+    <view class="back-button" bindtap="onBack"><view class="back-arrow"></view><text>返回</text></view>
+    <text class="viewer-name">{{photo.file}}</text>
+  </view>
+  <movable-area class="photo-stage" scale-area="true">
+    <movable-view class="photo-zoom" direction="all" scale="true" scale-min="1" scale-max="4" out-of-bounds="true">
+      <image wx:if="{{photo && !originalReady}}" class="original-photo" src="{{photo.previewUrl}}" mode="aspectFit" bindload="onPreviewLoad" binderror="onPreviewError"></image>
+      <image wx:if="{{imagePath}}" class="original-photo {{originalReady ? '' : 'photo-pending'}}" src="{{imagePath}}" data-path="{{imagePath}}" mode="aspectFit" bindload="onOriginalLoad" binderror="onOriginalError"></image>
+    </movable-view>
+  </movable-area>
+  <view wx:if="{{loading && !previewReady}}" class="viewer-state"><view class="loading-ring"></view><text>{{downloadText}}</text></view>
+  <view wx:if="{{error && !previewReady}}" class="viewer-state"><text class="viewer-error">{{error}}</text><text class="retry-button" bindtap="onRetry">再试一次</text></view>
+  <view class="viewer-bottom" style="padding-bottom: {{safeBottom + 24}}px;">
+    <view wx:if="{{previewReady && !originalReady}}" class="original-status"><text>{{loading ? downloadText : error}}</text><text wx:if="{{error}}" class="original-retry" bindtap="onRetry">重试原图</text></view>
+    <text class="zoom-hint">{{previewReady && !originalReady ? '预览图 · ' : ''}}双指缩放 · {{photo.file}}</text>
+    <view class="save-button {{saving ? 'save-disabled' : ''}}" bindtap="onSave"><text>{{saving ? (loading && !imagePath ? downloadText : '保存中…') : '保存原图'}}</text></view>
+  </view>
+</view>

@@ -1,0 +1,42 @@
+<view class="lock-page">
+  <view class="lock-content">
+    <view class="brand-mark">馋</view>
+    <text wx:if="{{gateEnabled}}" class="title">输入密码</text>
+    <text wx:if="{{gateEnabled}}" class="subtitle">请输入 4 位数字密码</text>
+
+    <view wx:if="{{gateEnabled}}" class="password-dots">
+      <view
+        wx:for="{{dots}}"
+        wx:key="*this"
+        class="password-dot {{digits.length > index ? 'filled' : ''}}"
+      ></view>
+    </view>
+
+    <view class="feedback">
+      <text wx:if="{{checking}}">正在检查密码设置…</text>
+      <text wx:elif="{{submitting}}">正在验证…</text>
+      <text wx:elif="{{error}}" class="error">{{error}}</text>
+      <text wx:else></text>
+    </view>
+
+    <view wx:if="{{networkError || lockedOut}}" class="retry" bindtap="retry">{{lockedOut ? '稍后重试' : '重试连接'}}</view>
+  </view>
+
+  <view wx:if="{{gateEnabled}}" class="keypad">
+    <view class="key-row" wx:for="{{rows}}" wx:for-item="row" wx:key="index">
+      <view
+        class="key"
+        wx:for="{{row}}"
+        wx:for-item="digit"
+        wx:key="*this"
+        data-digit="{{digit}}"
+        bindtap="tapDigit"
+      >{{digit}}</view>
+    </view>
+    <view class="key-row">
+      <view class="key spacer"></view>
+      <view class="key" data-digit="0" bindtap="tapDigit">0</view>
+      <view class="key delete-key" bindtap="deleteDigit">⌫</view>
+    </view>
+  </view>
+</view>

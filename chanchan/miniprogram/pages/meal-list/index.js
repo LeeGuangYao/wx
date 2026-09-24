@@ -1,4 +1,5 @@
 const { listMeals } = require('../../api/meal')
+const { shareAlbumHome } = require('../../utils/album-media')
 
 const PAGE_SIZE = 10
 
@@ -14,13 +15,24 @@ Page({
   },
 
   onLoad() {
+    if (!getApp().guardPage(this)) return
     this.fetch({ reset: true })
   },
 
   onShow() {
+    if (!getApp().guardPage(this)) return
+    wx.showShareMenu({ menus: ['shareAppMessage'] })
     // 返回时自动拉取最新一页
     if (this.data.list.length === 0) return
     this.fetch({ reset: true, silent: true })
+  },
+
+  onGoAlbum() {
+    wx.reLaunch({ url: '/pages/album/index' })
+  },
+
+  onShareAppMessage() {
+    return shareAlbumHome()
   },
 
   onPullDownRefresh() {

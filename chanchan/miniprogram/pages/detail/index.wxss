@@ -75,6 +75,22 @@ page {
   letter-spacing: 0.5rpx;
 }
 
+.hero-album-link {
+  margin-left: auto;
+  margin-right: 16rpx;
+  padding: 11rpx 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 7rpx;
+  border: 1rpx solid rgba(255, 255, 255, 0.48);
+  border-radius: 30rpx;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 18rpx;
+  letter-spacing: 1rpx;
+}
+
+.hero-album-link text:first-child { color: #ffe2bf; }
+
 .fav-btn {
   width: 76rpx;
   height: 76rpx;

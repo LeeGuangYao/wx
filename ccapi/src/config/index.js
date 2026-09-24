@@ -14,6 +14,7 @@ const config = {
   wxSecret: process.env.WX_SECRET || '',
   jwtSecret: process.env.JWT_SECRET || 'dev-secret-change-me',
   adminOpenids: (process.env.ADMIN_OPENIDS || '').split(',').map((s) => s.trim()).filter(Boolean),
+  passwordLoginEnabled: String(process.env.PASSWORD_LOGIN_ENABLED || '').toLowerCase() === 'true',
 };
 
 module.exports = config;

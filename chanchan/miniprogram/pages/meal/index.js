@@ -1,4 +1,5 @@
 const { createMeal } = require('../../api/meal')
+const { shareAlbumHome } = require('../../utils/album-media')
 
 const MAX_COUNT = 9
 const MAX_SIZE = 10 * 1024 * 1024
@@ -22,13 +23,20 @@ Page({
   },
 
   onLoad() {
+    if (!getApp().guardPage(this)) return
     this.setData({ today: formatToday() })
   },
 
   onShow() {
+    if (!getApp().guardPage(this)) return
+    wx.showShareMenu({ menus: ['shareAppMessage'] })
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({ selected: 3 })
     }
+  },
+
+  onShareAppMessage() {
+    return shareAlbumHome()
   },
 
   goList() {

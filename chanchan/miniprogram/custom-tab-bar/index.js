@@ -22,12 +22,15 @@ Component({
 
   pageLifetimes: {
     show() {
+      if (!this.data.list.length) this.loadTabs()
       this.syncSelected()
     }
   },
 
   methods: {
     loadTabs() {
+      if (this._loadingTabs) return
+      this._loadingTabs = true
       getTabs().then((tabs) => {
         const list = tabs
           .filter((t) => t && t.visible !== false && ICONS[t.key])
@@ -39,6 +42,8 @@ Component({
             iconSel: ICONS[t.key].iconSel
           }))
         this.setData({ list }, () => this.syncSelected())
+      }).finally(() => {
+        this._loadingTabs = false
       })
     },
 
@@ -58,6 +63,10 @@ Component({
       if (this.data.selected === index) return
       wx.switchTab({ url: path })
       this.setData({ selected: index })
+    },
+
+    backToAlbum() {
+      wx.reLaunch({ url: '/pages/album/index' })
     }
   }
 })

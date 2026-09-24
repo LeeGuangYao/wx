@@ -1,0 +1,121 @@
+page {
+  min-height: 100%;
+  background: #f4f4f6;
+  color: #171719;
+}
+
+.lock-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 110rpx 56rpx 42rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lock-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.brand-mark {
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 24rpx;
+  margin-bottom: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ff6b35;
+  color: #fff;
+  font-size: 48rpx;
+  font-weight: 600;
+}
+
+.title {
+  font-size: 38rpx;
+  font-weight: 600;
+  letter-spacing: 1rpx;
+}
+
+.subtitle {
+  margin-top: 18rpx;
+  color: #85858b;
+  font-size: 26rpx;
+}
+
+.password-dots {
+  display: flex;
+  gap: 30rpx;
+  margin-top: 58rpx;
+}
+
+.password-dot {
+  width: 22rpx;
+  height: 22rpx;
+  border: 2rpx solid #a8a8ae;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.password-dot.filled {
+  border-color: #ff6b35;
+  background: #ff6b35;
+}
+
+.feedback {
+  min-height: 54rpx;
+  margin-top: 28rpx;
+  color: #88888e;
+  font-size: 24rpx;
+  text-align: center;
+}
+
+.feedback .error {
+  color: #db4b3e;
+}
+
+.retry {
+  margin-top: 4rpx;
+  color: #ff6b35;
+  font-size: 26rpx;
+}
+
+.keypad {
+  width: 100%;
+  max-width: 570rpx;
+}
+
+.key-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 18rpx;
+}
+
+.key {
+  width: 150rpx;
+  height: 112rpx;
+  border-radius: 24rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  color: #242428;
+  font-size: 42rpx;
+  font-weight: 500;
+}
+
+.key:active {
+  background: #e4e4e8;
+}
+
+.spacer {
+  background: transparent;
+}
+
+.delete-key {
+  background: transparent;
+  font-size: 42rpx;
+}

@@ -4,5 +4,6 @@
   "backgroundColor": "#F7F4EF",
   "backgroundTextStyle": "dark",
   "navigationBarBackgroundColor": "#FF6B35",
-  "navigationBarTextStyle": "white"
+  "navigationBarTextStyle": "white",
+  "enableShareAppMessage": true
 }

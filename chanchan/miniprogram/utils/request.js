@@ -1,8 +1,13 @@
+const { getPasswordHeader, handlePasswordUnauthorized } = require('./password-access')
+
 function request(url, data = {}, method = 'GET') {
   return new Promise((resolve, reject) => {
     const app = getApp()
     const token = app ? app.getToken() : ''
-    const header = { 'content-type': 'application/json' }
+    const header = Object.assign(
+      { 'content-type': 'application/json' },
+      getPasswordHeader()
+    )
     if (token) header['Authorization'] = `Bearer ${token}`
 
     wx.request({
@@ -12,6 +17,10 @@ function request(url, data = {}, method = 'GET') {
       timeout: 15000,
       header,
       success(res) {
+        if (handlePasswordUnauthorized(res, app)) {
+          reject(new Error('密码校验已过期，正在重新校验…'))
+          return
+        }
         if (res.statusCode === 401 && app && app.login) {
           app.login()
           reject(new Error('登录已过期，正在重新登录…'))
