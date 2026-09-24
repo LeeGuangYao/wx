@@ -32,7 +32,7 @@ const defaultWeddingConfig: WeddingConfig = {
       '来见证我们的婚礼。',
     ],
     countdownEyebrow: 'Countdown',
-    countdownTitle: '距离我们的婚礼',
+    countdownTitle: '距离与您见面还有',
     countdownPrefix: '还有',
     detailsEyebrow: 'Wedding Details',
     detailsTitle: '诚邀您来参加我们的回门宴',
