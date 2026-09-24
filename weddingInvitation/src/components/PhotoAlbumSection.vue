@@ -6,31 +6,31 @@ import type { WeddingPhoto as Photo } from '@/types/photo'
 
 const props = defineProps<{ chapter: AlbumPage; page: number; active: boolean; nextHref: string; previousHref: string }>()
 
-// Reveal one photo every three seconds; the sixth settles at 17 seconds.
+// Reveal one photo every two seconds; the sixth settles at 11.6 seconds.
 const photoAnimations = {
   panorama: [
-    { motion: 'unveil-right', delay: 0, duration: 2000 },
-    { motion: 'float-up', delay: 3000, duration: 2000 },
-    { motion: 'float-up', delay: 6000, duration: 2000 },
-    { motion: 'fade', delay: 9000, duration: 2000 },
-    { motion: 'fade', delay: 12000, duration: 2000 },
-    { motion: 'fade', delay: 15000, duration: 2000 },
+    { motion: 'unveil-right', delay: 0, duration: 1300 },
+    { motion: 'float-up', delay: 2000, duration: 1200 },
+    { motion: 'float-up', delay: 4000, duration: 1200 },
+    { motion: 'fade', delay: 6000, duration: 1000 },
+    { motion: 'fade', delay: 8000, duration: 1000 },
+    { motion: 'fade', delay: 10000, duration: 1600 },
   ],
   editorial: [
-    { motion: 'soft-zoom', delay: 0, duration: 2000 },
-    { motion: 'settle-left', delay: 3000, duration: 2000 },
-    { motion: 'settle-right', delay: 6000, duration: 2000 },
-    { motion: 'unveil-up', delay: 9000, duration: 2000 },
-    { motion: 'settle-left', delay: 12000, duration: 2000 },
-    { motion: 'settle-right', delay: 15000, duration: 2000 },
+    { motion: 'soft-zoom', delay: 0, duration: 1300 },
+    { motion: 'settle-left', delay: 2000, duration: 1200 },
+    { motion: 'settle-right', delay: 4000, duration: 1200 },
+    { motion: 'unveil-up', delay: 6000, duration: 1200 },
+    { motion: 'settle-left', delay: 8000, duration: 1000 },
+    { motion: 'settle-right', delay: 10000, duration: 1600 },
   ],
   cinematic: [
-    { motion: 'cinematic', delay: 0, duration: 2000 },
-    { motion: 'float-up', delay: 3000, duration: 2000 },
-    { motion: 'soft-zoom', delay: 6000, duration: 2000 },
-    { motion: 'float-up', delay: 9000, duration: 2000 },
-    { motion: 'fade', delay: 12000, duration: 2000 },
-    { motion: 'fade', delay: 15000, duration: 2000 },
+    { motion: 'cinematic', delay: 0, duration: 1300 },
+    { motion: 'float-up', delay: 2000, duration: 1200 },
+    { motion: 'soft-zoom', delay: 4000, duration: 1300 },
+    { motion: 'float-up', delay: 6000, duration: 1200 },
+    { motion: 'fade', delay: 8000, duration: 1100 },
+    { motion: 'fade', delay: 10000, duration: 1600 },
   ],
 } as const satisfies Record<AlbumPage['layout'], readonly Pick<InstanceType<typeof WeddingPhoto>['$props'], 'motion' | 'delay' | 'duration'>[]>
 
