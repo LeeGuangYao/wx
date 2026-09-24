@@ -40,7 +40,7 @@ onBeforeUnmount(() => cancelNavigation?.())
         </div>
         <div class="details__row">
           <dt>地点</dt>
-          <dd>{{ config.venue.name }}<p class="details__address">{{ config.venue.address }}</p></dd>
+          <dd>{{ config.venue.name }}<p v-if="config.venue.room" class="details__room">{{ config.venue.room }}</p><p class="details__address">{{ config.venue.address }}</p></dd>
         </div>
       </dl>
       <a id="navigation" class="details__navigation" :href="navigationUrl" :aria-label="`导航到${config.venue.name}`" @click="navigate">
@@ -139,6 +139,11 @@ onBeforeUnmount(() => cancelNavigation?.())
 .details__address {
   margin: 6px 0 0;
   color: var(--wedding-muted);
+  font-size: .875rem;
+  line-height: 1.6;
+}
+.details__room {
+  margin: 6px 0 0;
   font-size: .875rem;
   line-height: 1.6;
 }

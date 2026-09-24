@@ -15,6 +15,7 @@ const defaultWeddingConfig: WeddingConfig = {
   venue: {
     name: '扬州中青国际酒店(市政府店)',
     address: '江苏省扬州市邗江区邗江中路631号',
+    room: '四楼怡和厅',
     // GCJ-02, checked against Amap's same-address hotel and Ctrip hotel 133540105.
     // Amap's record here is named 扬州天润华美达广场酒店, at 邗江中路631号.
     // https://www.amap.com/ssr/search/poi_detail?id=B0I36S88Z8
@@ -34,7 +35,7 @@ const defaultWeddingConfig: WeddingConfig = {
     countdownTitle: '距离我们的婚礼',
     countdownPrefix: '还有',
     detailsEyebrow: 'Wedding Details',
-    detailsTitle: '婚礼信息',
+    detailsTitle: '诚邀您来参加我们的回门宴',
     detailsDescription: '这一刻，想与你一同珍藏。',
     navigationLabel: '开始导航',
     closingTitle: '期待与你相见',
@@ -59,6 +60,10 @@ const shangshuiWeddingConfig: WeddingConfig = {
     // https://hotels.ctrip.com/hotels/104721675.html
     latitude: 33.565783,
     longitude: 114.606259,
+  },
+  copy: {
+    ...defaultWeddingConfig.copy,
+    detailsTitle: '婚礼信息',
   },
 }
 

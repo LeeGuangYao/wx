@@ -6,6 +6,7 @@ export interface WeddingCouple {
 export interface WeddingVenue {
   name: string
   address: string
+  room?: string
   latitude: number
   longitude: number
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
-import musicUrl from '@/assets/audio/romantic-wedding-piano.mp3'
+import musicUrl from '@/assets/audio/gentle-heartbeat.mp3'
 
 const audio = ref<HTMLAudioElement | null>(null)
 

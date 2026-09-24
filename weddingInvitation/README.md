@@ -41,7 +41,7 @@ src/config/wedding.ts
 
 ## 背景音乐
 
-使用 PaulYudin 的《Romantic Wedding Piano》，原始 MP3 位于 `src/assets/audio/romantic-wedding-piano.mp3`，来源与授权记录见同目录 `README.md`。音频通过 Vite 打包为本地静态资源，适配部署子路径，无需依赖第三方音乐外链。
+使用 Arden Coley 的《Gentle Heartbeat》，用户提供的 MP3 文件副本位于 `src/assets/audio/gentle-heartbeat.mp3`，曲目信息见同目录 `README.md`。音频通过 Vite 打包为本地静态资源，适配部署子路径，无需依赖第三方音乐外链。
 
 `BackgroundMusic.vue` 在页面挂载时尝试有声自动播放并循环播放，翻页时不会重建播放器。不显示播放、暂停、音量等控件；浏览器拒绝自动播放或音频加载失败时保持静音，不弹提示，也不监听点击、触摸来补播。组件卸载时停止播放。是否允许自动播放由访问者的浏览器策略决定。
 
