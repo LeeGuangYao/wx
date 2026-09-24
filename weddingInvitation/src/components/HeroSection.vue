@@ -15,7 +15,7 @@ defineEmits<{ open: [] }>()
     <div class="hero__veil" aria-hidden="true" />
     <div class="hero__scroll" data-page-scroll>
       <header class="hero__heading">
-        <p class="hero__masthead">THE WEDDING OF</p>
+        <p class="hero__masthead">THE WEDDING OF L&amp;F</p>
         <h1 id="hero-title" class="hero__announcement" data-page-title tabindex="-1">{{ config.copy.invitationTitle }}</h1>
         <p class="section-description">{{ config.copy.heroDescription }}</p>
         <InvitationEnvelope :opening="opening" :opened="opened" @open="$emit('open')" />

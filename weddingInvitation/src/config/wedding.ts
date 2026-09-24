@@ -26,7 +26,7 @@ const defaultWeddingConfig: WeddingConfig = {
     heroEyebrow: 'WEDDING INVITATION',
     invitationEyebrow: 'OUR WEDDING',
     invitationTitle: '我们结婚啦',
-    heroDescription: '一封请柬，邀你共赴我们的幸福。',
+    heroDescription: '一封请柬，邀您共赴我们的幸福。',
     invitationLines: [
       '诚挚邀请您',
       '来见证我们的婚礼。',
@@ -36,7 +36,7 @@ const defaultWeddingConfig: WeddingConfig = {
     countdownPrefix: '还有',
     detailsEyebrow: 'Wedding Details',
     detailsTitle: '诚邀您来参加我们的回门宴',
-    detailsDescription: '这一刻，想与你一同珍藏。',
+    detailsDescription: '这一刻，想与您一同珍藏。',
     navigationLabel: '开始导航',
     closingTitle: '期待与你相见',
     closingEyebrow: 'SEE YOU AT OUR WEDDING',
